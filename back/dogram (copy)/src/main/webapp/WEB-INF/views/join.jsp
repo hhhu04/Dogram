@@ -8,10 +8,14 @@
 </head>
 <body>
 
-<form id="joinform" method="post">
+<form id="joinform" name="joinform" method="POST">
 <input type="text" id="id" name="id" placeholder="id"><br>
 <input type="text" id="password" name="password" placeholder="password"><br>
 <input type="text" id="email" name="email" placeholder="email"><br>
+<input type="text" id="address" name="address" placeholder="address"><br>
+<input type="text" id="phoneNumber" name="phoneNumber" placeholder="phone"><br>
+<input type="text" id="petName" name="petName" placeholder="pet"><br>
+<input type="text" id="img" name="img" placeholder="img"><br>
 <input type="button" id="add" value="버튼">
 </form>
 <script
@@ -21,22 +25,21 @@
 </script>
 
 <script>
-    $(document).ready(function(){
-
-        $( "#add" ).click(function(e) {
-            e.preventDefault();
-			
-            var str = $("#inForm").serialize();
-
-            $.ajax({
+$(function(){
+	
+           	 $('#add').on('click', function(e) {
+           	 	var str = $("#joinform").serialize();
+           	 	console.log(str);
+           	 	$.ajax({
                 type: "POST",
                 url: "/register",
-                data: str,
-                success: function(response) {
-                    $('#in_result').text(response);
+                data : JSON.stringify(str),  
+                contentType : 'application/json',    
+                success: function(data) {
+                	alert(data);
                 },
                 error: function(err) {
-                    console.log("error!");
+                    console.log(err);
                 }
             });
         });

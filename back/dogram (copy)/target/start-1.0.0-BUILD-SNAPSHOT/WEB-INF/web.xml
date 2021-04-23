@@ -40,4 +40,14 @@
     <servlet-name>werwer</servlet-name>
     <url-pattern>/werwer</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>asd</display-name>
+    <servlet-name>asd</servlet-name>
+    <servlet-class>servlet.asd</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>asd</servlet-name>
+    <url-pattern>/asd</url-pattern>
+  </servlet-mapping>
 </web-app>
