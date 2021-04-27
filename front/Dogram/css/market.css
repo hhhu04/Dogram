@@ -61,9 +61,7 @@ html {
   padding-left: 20px;
   padding-right: 20px;
 }
-.feed_item {
-  margin-bottom: 40px;
-}
+
 .upload_btn {
   position: fixed;
   font-size: 30px;
@@ -82,8 +80,8 @@ html {
 }
 
 /*
-     * Header
-     */
+       * Header
+       */
 .feed_header {
   display: flex;
   margin-bottom: 20px;
@@ -179,8 +177,8 @@ html {
 }
 
 /*
-       * Cover
-       */
+         * Cover
+         */
 
 .cover {
   padding: 0 33px;
@@ -193,63 +191,63 @@ html {
   font-weight: bold;
 }
 /*
-       * Content Header 
-       */
-.header_section {
-  background-color: #fff;
-  display: flex;
-  /* justify-content: space-between; */
-  color: #222;
-  padding: 5%;
-  border-bottom: 10px solid #aaa;
-  border-radius: 8px;
+         * Content - item
+         */
+.title {
+  margin-bottom: 20px;
 }
-.icon {
-  margin-right: 4%;
+h1.title {
+  border-bottom: 3px solid #aaa;
+  padding-bottom: 10px;
 }
-.name_area {
-  margin-right: 7%;
+h2.title {
+  font-size: 16px;
 }
-.btn_area {
-  text-align: left;
-  /* margin-left: auto; */
-}
-.level_check {
-  margin-bottom: 40px;
-}
-/*
-       * Content Desc 
-       */
-.btn_area {
+.item {
   position: relative;
+  display: flex;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #aaa;
+  margin-bottom: 30px;
 }
-.message_btn {
+.product_img {
+  margin-right: 40px;
+}
+.price {
+  font-size: 30px;
+}
+.btn_area {
   position: absolute;
   right: 0;
+  bottom: 0;
+  display: flex;
 }
-.desc_title {
-  margin-bottom: 10px;
+.cart_area {
+  margin-left: 10px;
+}
+.count {
+  margin-left: 5px;
 }
 
 /*
-       * Footer
-       */
+         * Footer
+         */
 
 .mastfoot {
   color: #999; /* IE8 proofing */
   color: rgba(255, 255, 255, 0.5);
 }
 /*
-     * Affix and center
-     */
+       * Affix and center
+       */
 @media (min-width: 768px) {
   /* Pull out the header and footer */
   /* .masthead-brand {
-    float: left;
-  }
-  .masthead-nav {
-    float: right;
-  } */
+      float: left;
+    }
+    .masthead-nav {
+      float: right;
+    } */
   .masthead {
     position: fixed;
     top: 0;
@@ -280,9 +278,9 @@ html {
 }
 
 /* @media (min-width: 992px) {
-  .masthead,
-  .mastfoot,
-  .cover-container {
-    width: 700px;
-  }
-} */
+    .masthead,
+    .mastfoot,
+    .cover-container {
+      width: 700px;
+    }
+  } */

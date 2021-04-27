@@ -9,6 +9,7 @@ body {
   font-family: "Rubik Mono One", sans-serif;
   font-family: "Gamja Flower", cursive;
   font-family: godo;
+  background-color: rgba(35, 59, 39, 0.5);
 }
 a {
   text-decoration: none;
