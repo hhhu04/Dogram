@@ -1,0 +1,20 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h3>메일 전송 연습</h3>
+<form th:action="@{/user/findid}" method="post">
+
+
+        <input name="email" placeholder="주소">
+  
+    <button>발송</button>
+
+</form>
+</body>
+</html>
