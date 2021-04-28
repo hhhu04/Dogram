@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import model.DBHandler;
 import model.DataBase;
 import model.dao.daol.LikeListDaoI;
+import model.dto.LikeListDto;
 import model.dto.UserDto;
 
 @Component
@@ -21,7 +22,7 @@ public class LikeListDao implements LikeListDaoI{
 		
 	}
 	
-	 public int create(UserDto dto) throws ClassNotFoundException, SQLException{
+	 public int create(LikeListDto dto) throws ClassNotFoundException, SQLException{
 	        Connection c = db.connect();
 
 	        PreparedStatement preparedStatement = c.prepareStatement(
@@ -36,6 +37,11 @@ public class LikeListDao implements LikeListDaoI{
 	        db.disconnect();
 	        return 0;
 	    }
+
+	public Long checkCookie(String cookie) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }
