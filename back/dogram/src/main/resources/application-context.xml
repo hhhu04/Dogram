@@ -21,6 +21,25 @@
         <constructor-arg ref="communityDao" ></constructor-arg>
     </bean>
     
+     <bean id="store" class="service.StoreService">
+        <constructor-arg ref="storeDao" ></constructor-arg>
+    </bean>
+    
+    <bean id="manager" class="service.ManagerService">
+        <constructor-arg ref="managerDao" ></constructor-arg>
+    </bean>
+    
+     <bean id="likeList" class="service.LikeListService">
+        <constructor-arg ref="likeListDao" ></constructor-arg>
+    </bean>
+    
+    	
+    	
+    	
+    
+    
+    
+    
     <bean id="datenow" class="configuration.DateNow"></bean>
     
     <bean id="mail2" class="configuration.MailConfig"></bean>

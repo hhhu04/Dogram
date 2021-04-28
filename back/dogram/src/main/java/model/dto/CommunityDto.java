@@ -34,6 +34,7 @@ public class CommunityDto {
 
     private LocalDateTime updatedAt;
 
+    private String address;
 
 	
 }
