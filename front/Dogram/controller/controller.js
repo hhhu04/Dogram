@@ -16,14 +16,13 @@ class Controller {
     this.router = router;
     console.log(this.router);
     console.log(this.router.view);
+    // this.service.API.getUserimg();
 
-    // intro HTML렌더링 + 요소업데이트
-    console.log(navBarTemp());
-    this.router.addRoute("intro", "^#/$", introTemp(navBarTemp("asd", "done")));
-    this.router.addRoute("feed", "^#/feed$", feedTemp(navBarTemp()));
-    this.router.addRoute("login", "^#/auth/login$", loginTemp(navBarTemp()));
-    this.router.addRoute("join", "^#/auth/join$", joinTemp(navBarTemp()));
-    this.router.addRoute("store", "^#/store$", storeTemp(navBarTemp()));
+    this.router.addRoute("intro", "#/", introTemp(navBarTemp("asd", "done")));
+    this.router.addRoute("feed", "#/feed", feedTemp(navBarTemp()));
+    this.router.addRoute("login", "#/auth/login", loginTemp(navBarTemp()));
+    this.router.addRoute("join", "#/auth/join", joinTemp(navBarTemp()));
+    this.router.addRoute("store", "#/store", storeTemp(navBarTemp()));
     this.router.hashChange();
     this.didRenderMount();
     // this.router.view.setCssUrl("css/intro.css");
@@ -45,6 +44,7 @@ class Controller {
     this.router.view.bindLinkStore(this.linkStore);
     this.router.view.bindLinkLogin(this.linkLogin);
     this.router.view.bindLinkJoin(this.linkJoin);
+    this.router.view.bindPostJoin(this.postJoin);
   };
   // 데이터를 받고
   showNav = () => {
@@ -74,6 +74,7 @@ class Controller {
     e.preventDefault();
     window.location.hash = "#/feed";
     // this.didRenderMount();
+    // addrouter
   };
   linkStore = (e) => {
     e.preventDefault();
@@ -89,6 +90,10 @@ class Controller {
     e.preventDefault();
     window.location.hash = "#/auth/join";
     // this.didRenderMount();
+  };
+  postJoin = (e) => {
+    e.preventDefault();
+    this.service.API.postJoin();
   };
 }
 export default Controller;
