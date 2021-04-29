@@ -1,8 +1,9 @@
 import API from "/api/api.js";
+import FeedService from "/service/feed.service.js";
 
 class Service {
   constructor() {
-    this.todolist = [];
+    console.log(FeedService.a);
   }
 }
 
