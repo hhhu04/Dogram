@@ -1,6 +1,7 @@
 package com.dogram.start;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import model.dto.CommunityDto;
 import model.dto.StoreDto;
+import model.dto.UserDto;
 import service.CommunityService;
 import service.StoreService;
 
@@ -28,9 +31,40 @@ public class StoreController {
 	}
 
 	
+	@PostMapping("/")
+	@ResponseBody
+	public List<StoreDto> read(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody StoreDto dto,UserDto userDto) {
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		StoreService comm = ctx.getBean("store",StoreService.class);
+		
+		List<StoreDto> list =null ;
+		if(cookie.getName() != null) {
+			try {
+				Long userNum = comm.ckeckCookie(cookie.getValue());
+				userDto.setNum(userNum);
+				dto.setUserNum(userNum);
+				list = comm.read(userDto,dto);
+				
+				return list;
+				
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			
+			}
+		
+		}
+		
+		
+		
+		
+		return list;
+	}
+	
+	
 	@PostMapping("newproduct")
 	@ResponseBody
-	public int newPeoduct(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody StoreDto dto) {
+	public String newPeoduct(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody StoreDto dto) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		StoreService comm = ctx.getBean("store",StoreService.class);
 		
@@ -39,16 +73,16 @@ public class StoreController {
 				Long userNum = comm.ckeckCookie(cookie.getValue());
 				int num = comm.create(dto, userNum);
 				
-				return num;
+				return Integer.toString(num);
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return -2;
+				return "-2";
 			}
 		}
 		
 		
-		return -1;
+		return "-1";
 		
 		
 	}

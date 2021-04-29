@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import model.dao.MailDao;
 import model.dao.StoreDao;
+import model.dto.CommunityDto;
 import model.dto.StoreDto;
+import model.dto.UserDto;
 import service.servicei.StoreI;
 
 @Component
@@ -39,6 +42,15 @@ public class StoreService implements StoreI{
          System.out.println("create Community Success");
 		 return 1;
 	 }
+
+
+	public List<StoreDto> read(UserDto userDto, StoreDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<StoreDto> list = dao.read(dto);
+		
+		
+		return list;
+	}
 	 
 	 
 	 

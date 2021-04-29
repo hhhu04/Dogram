@@ -1,35 +1,22 @@
 package model.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class LikeListDto {
 
 	 private Long num;
 
-	    private Long communityNum;
+	 private Long communityNum;
 
-	    private Long userNum;
+	 private Long userNum;
 
-		public Long getNum() {
-			return num;
-		}
-
-		public void setNum(Long num) {
-			this.num = num;
-		}
-
-		public Long getCommunityNum() {
-			return communityNum;
-		}
-
-		public void setCommunityNum(Long communityNum) {
-			this.communityNum = communityNum;
-		}
-
-		public Long getUserNum() {
-			return userNum;
-		}
-
-		public void setUserNum(Long userNum) {
-			this.userNum = userNum;
-		}
+	    
 	
 }

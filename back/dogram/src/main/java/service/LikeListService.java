@@ -28,14 +28,26 @@ public class LikeListService implements LikeListServiceI{
     	return dao.checkCookie(cookie);
     }
 
-	
-    public int create(LikeListDto dto,Long num) throws SQLException, ClassNotFoundException {
+    public Long checkLike(LikeListDto dto) throws SQLException {
     	
-        dto.setUserNum(num);
+    	return dao.delCheck(dto);
+    	
+    }
+	
+    public int create(LikeListDto dto) throws SQLException, ClassNotFoundException {
+    	
             dao.create(dto);
-            
-            System.out.println("create Community Success");
+            System.out.println("create like Success");
 			return 1;
+    }
+    
+    public int delete(LikeListDto dto) throws SQLException, ClassNotFoundException {
+    	
+		dao.delet(dto);
+		System.out.println("delete like Success");
+		return 1;
+		
+    	
     }
 
 }

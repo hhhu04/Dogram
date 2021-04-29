@@ -1,5 +1,6 @@
 package com.dogram.start;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -90,7 +92,7 @@ public class HomeController {
 	
 	@PostMapping("/login")
 	@ResponseBody
-	public int login(@RequestBody UserDto dto, HttpServletResponse response, HttpServletRequest request) {
+	public String login(@RequestBody UserDto dto, HttpServletResponse response, HttpServletRequest request) {
 		
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
@@ -100,7 +102,7 @@ public class HomeController {
 		try {
 			
 			check = user.login(dto, response, request);
-			return check;
+			return Integer.toString(check);
 		
 		}catch (Exception e) {
             e.printStackTrace();
@@ -108,66 +110,100 @@ public class HomeController {
 		
 	
 		
-		return check;
+		return Integer.toString(check);
 	}
 	
 	
 	@PostMapping("/join")
 	@ResponseBody
-	public UserDto join(@RequestBody UserDto dto) {
+	public String join(@RequestBody UserDto dto) {
 		
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
 		
-		int check = 0;
+		int check = -1;
 		try {
 			
 			check = user.read(dto);
 			
 			if(check == 1) {
 				user.create(dto);
-				return dto;
+				return Integer.toString(check);
 			}
 			
 		}catch (Exception e) {
             e.printStackTrace();
         }
 		
-		return dto;
+		return Integer.toString(check);
 	}
 
 	
-//	@GetMapping("/findid")
-//	public String findId() {
-//		return "findid";
-//	}
-//	
-//
-//	
-//	@PostMapping("/findid")
-//	@ResponseBody
-//	public int findId(@RequestBody MailDto dto) {
-//		
-////		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
-////		MailService mail = ctx.getBean("mail",MailService.class);
-//		MailService mail= new MailService();
-//		
-//		int num = 0;
-//		 try {
-//			 System.out.println(dto.toString());
-//			 System.out.println();
-//			 String email = dto.getEmail();
-//			 
-//			num  = mail.mailSend(email);
-//			return num;
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return 0;
-//		}
-//		
-//		
-//	}
+
+	@PostMapping("/update")
+	@ResponseBody
+	public String update(@CookieValue(value="id", required=false) Cookie cookie, @RequestBody UserDto dto) {
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		UserService user = ctx.getBean("user",UserService.class);
+		int num = -1;
+		
+		if(cookie.getName() != null) {
+			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
+			
+			try {
+				num = user.update(dto,cookie.getValue());
+				return Integer.toString(num);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return Integer.toString(num);
+	}
+	
+	
+	@PostMapping("/delete")
+	@ResponseBody
+	public String delete(@CookieValue(value="id", required=false) Cookie cookie, @RequestBody UserDto dto,HttpServletResponse response, HttpServletRequest request) {
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		UserService user = ctx.getBean("user",UserService.class);
+		int num = -1;
+		
+		if(cookie.getName() != null) {
+			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
+			
+			try {
+				num = user.delete(dto,cookie.getValue());
+				Cookie[] cookies = request.getCookies();
+				for(Cookie cookiee : cookies)
+				{
+					if(cookiee.getName().equals("id")) {
+						cookiee.setMaxAge(0);
+						response.addCookie(cookiee);
+					}
+				}
+				return Integer.toString(num);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return Integer.toString(num);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

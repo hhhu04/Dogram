@@ -45,7 +45,7 @@ public class UserService {
     
     public int read(UserDto dto) throws SQLException, ClassNotFoundException{
     	
-    	int num = dao.checkUser(dto);
+    	int num = dao.checkUser2(dto);
     	System.out.println("Check User Success");
     	return num;
     }
@@ -56,13 +56,47 @@ public class UserService {
     	
     	
     	if(num == 0) {
+    		if(dto.getId().equals("탈퇴한 회원입니다.")) return -1;
+    		else {
 			Cookie cookie = new Cookie("id",dto.getId());
 			response.addCookie(cookie);
 			return num;
+    		}
 		}
     	
     	System.out.println("Check User Success");
     	return num;
+    }
+    
+    public int update(UserDto dto,String cookie) throws ClassNotFoundException, SQLException {
+    	Long useerNum =  dao.checkCookie(cookie);
+    	dto.setNum(useerNum);
+    	int num = dao.checkUser(dto);
+    	if(num == -1) {
+    		num = dao.update(dto);
+    		System.out.println("update User Success");
+        	return num;
+    	}
+    	
+    	
+    	return -1;
+    }
+    
+    public int delete(UserDto dto,String cookie) throws ClassNotFoundException, SQLException {
+    	Long useerNum =  dao.checkCookie(cookie);
+    	System.out.println(useerNum);
+    	dto.setNum(useerNum);
+    	int num = dao.checkUser(dto);
+    	System.out.println("1");
+    	if(num == -1) {
+    		num = dao.delete(dto);
+    		System.out.println("2");
+    		System.out.println("delete User Success");
+        	return num;
+    	}
+    	
+    	
+    	return -1;
     }
 
     
