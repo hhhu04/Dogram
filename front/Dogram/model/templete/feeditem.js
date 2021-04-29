@@ -3,11 +3,12 @@ const feedItem = () => {
     <div class="feed_header">
         <div class="user_area">
             <img src="/img/main-logo.png" alt="" style="width: 50px">
-            <span class="name">Bomi</span>
+            <span class="name">${userName}</span>
         </div>
     </div>
     <div class="main_photo">
         <img src="/img/mindog.jpg" alt="">
+        <img src="${photo}" alt="">
     </div>
     <div class="desc_area">
         <div class="btn_area">
@@ -17,13 +18,13 @@ const feedItem = () => {
             <a href="#" class="message_btn"><i class="far fa-envelope"></i></a>
         </div>
         <div class="like">
-          <span>좋아요</span> <span>150</span>개
+          <span>좋아요</span> <span>${likeCount}</span>개
         </div>
         <div class="desc_title">
-          <span class="name">bomi</span> <span class="title">나의 귀여운 셀카에요!</span>
+          <span class="name">${userName}</span> <span class="title">${feedTitle}</span>
         </div>
         <div class="comment_area">
-          <span class="name">cutyyy</span> <span class="">와우 정말 귀여워요!</span>
+          <span class="name">${commentName}</span> <span class="">${commentText}</span>
           <div><button>댓글 더보기...</button></div>
         </div>
     </div>

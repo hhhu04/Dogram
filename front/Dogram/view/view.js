@@ -31,6 +31,8 @@ class View {
     this.storeBtn = document.getElementById("js_store");
     this.loginBtn = document.getElementById("js_login");
     this.joinBtn = document.getElementById("js_join");
+
+    this.postJoinBtn = document.getElementById("js_joinBtn");
   }
 
   addComponent(component) {
@@ -75,6 +77,9 @@ class View {
   }
   bindLinkJoin(linkJoin) {
     this.joinBtn.addEventListener("click", linkJoin);
+  }
+  bindPostJoin(postJoin) {
+    this.postJoinBtn.addEventListener("click", postJoin);
   }
 }
 export default View;
