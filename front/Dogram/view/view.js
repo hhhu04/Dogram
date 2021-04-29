@@ -5,6 +5,8 @@ class View {
     this.appTitle = document.getElementById("app_title");
     this.gnbBtn = "";
     this.sideNav = "";
+    this.homeBtn = "";
+    this.feedBtn = "";
     this.componentsByName = {};
   }
 
@@ -24,8 +26,11 @@ class View {
     this.gnbBtn = document.querySelector(".gnb_btn");
     this.sideNav = document.querySelector(".sidenav");
 
-    this.homeBtn = document.querySelector("#js_home");
-    this.feedBtn = document.querySelector("#js_feed");
+    this.homeBtn = document.getElementById("js_home");
+    this.feedBtn = document.getElementById("js_feed");
+    this.storeBtn = document.getElementById("js_store");
+    this.loginBtn = document.getElementById("js_login");
+    this.joinBtn = document.getElementById("js_join");
   }
 
   addComponent(component) {
@@ -51,16 +56,25 @@ class View {
     // }
   }
   bindShowNav(navFunc) {
-    navFunc();
+    this.gnbBtn.addEventListener("click", navFunc);
   }
   bindCloseNav(navFunc) {
-    navFunc();
+    this.closeBtn.addEventListener("click", navFunc);
   }
   bindLinkHome(linkHome) {
-    linkHome();
+    this.homeBtn.addEventListener("click", linkHome);
   }
   bindLinkFeed(linkFeed) {
-    linkFeed();
+    this.feedBtn.addEventListener("click", linkFeed);
+  }
+  bindLinkStore(linkStore) {
+    this.storeBtn.addEventListener("click", linkStore);
+  }
+  bindLinkLogin(linkLogin) {
+    this.loginBtn.addEventListener("click", linkLogin);
+  }
+  bindLinkJoin(linkJoin) {
+    this.joinBtn.addEventListener("click", linkJoin);
   }
 }
 export default View;

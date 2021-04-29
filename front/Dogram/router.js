@@ -19,7 +19,7 @@ class Router {
     console.log(this.routes);
   };
   hashChange = () => {
-    console.log("aaa");
+    console.log("hash change!");
     console.log(this.routes);
     const hash = window.location.hash;
     console.log(this);
@@ -29,7 +29,7 @@ class Router {
     console.log(route);
     if (route) {
       this.params = new RegExp(route.url).exec(hash);
-      console.log(this.params);
+      // console.log(this.params);
       this.view.setCssUrl(`css/${route.name}.css`);
 
       this.view.viewConstructor(route.model);
