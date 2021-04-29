@@ -34,6 +34,9 @@
     </bean>
     
     	
+    	<bean id="comment" class="service.CommentService">
+        <constructor-arg ref="commentDao" ></constructor-arg>
+    </bean>
     	
     	
     

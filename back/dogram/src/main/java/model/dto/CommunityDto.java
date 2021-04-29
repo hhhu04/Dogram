@@ -1,6 +1,7 @@
 package model.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,5 +37,7 @@ public class CommunityDto {
 
     private String address;
 
-	
+
+    
+    
 }
