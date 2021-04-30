@@ -15,10 +15,10 @@ const loginTemp = (navBarTemp) => {
             <div id="formContent">
                 <h1 class="login_title">Welcome!!</h1>
                 <!-- Login Form -->
-                <form action="#" method="post">
+                <form action="#" method="post" name="loginForm">
                     <input type="text" id="login" class="fadeIn second" name="login" placeholder="id">
-                    <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
-                    <input type="button" class="fadeIn fourth login_btn" value="로그인"><a class="underlineHover regist_btn" href="register.html">회원가입</a>
+                    <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
+                    <input type="button" class="fadeIn fourth login_btn" id="login_btn" value="로그인"><a class="underlineHover regist_btn" href="register.html" id="js_join">회원가입</a>
                     <div><a class="underlineHover find_btn" href="#">아이디 / 비밀번호 찾기</a></div>
                 </form>
             </div>
