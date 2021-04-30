@@ -17,6 +17,8 @@ class Controller {
     console.log(this.router);
     console.log(this.router.view);
     // this.service.API.getUserimg();
+    window.addEventListener("hashchange", this.didRenderMount);
+    window.addEventListener("hashchange", this.ohterRenderMount);
 
     this.router.addRoute("intro", "#/", introTemp(navBarTemp("asd", "done")));
     this.router.addRoute("feed", "#/feed", feedTemp(navBarTemp()));
@@ -25,16 +27,13 @@ class Controller {
     this.router.addRoute("store", "#/store", storeTemp(navBarTemp()));
     this.router.hashChange();
     this.didRenderMount();
-    // this.router.view.setCssUrl("css/intro.css");
+    this.ohterRenderMount();
     this.router.view.setTitle("Dogram");
-    window.addEventListener("hashchange", this.didRenderMount);
-    // this.bindMount();
-    // this.router.view.bindShowNav(this.showNav);
     console.log("done!");
     console.log("bind on!");
     console.log(this);
   }
-  // hash가 feed일경우 서비스와의 이벤트바인딩
+  // 공통 이벤트 바인딩
   didRenderMount = () => {
     console.log("didrendermount");
     this.router.view.bindShowNav(this.showNav);
@@ -44,9 +43,24 @@ class Controller {
     this.router.view.bindLinkStore(this.linkStore);
     this.router.view.bindLinkLogin(this.linkLogin);
     this.router.view.bindLinkJoin(this.linkJoin);
-    this.router.view.bindPostJoin(this.postJoin);
   };
-  // 데이터를 받고
+
+  // 해쉬 별 이벤트 바인딩
+  ohterRenderMount = () => {
+    console.log("did other rendermount");
+
+    const hash = window.location.hash;
+    switch (hash) {
+      case "#/auth/join":
+        this.router.view.bindPostJoin(this.postJoin);
+        break;
+      case "#/auth/login":
+        this.router.view.bindPostLogin(this.postLogin);
+        this.router.view.bindLinkJoin(this.linkJoin);
+
+        break;
+    }
+  };
   showNav = () => {
     console.log("after bind");
     if (this.router.view.mySidenav.style.width == "250px") {
@@ -57,6 +71,7 @@ class Controller {
       this.router.view.sideNav.classList.add("on");
     }
   };
+
   closeNav = (e) => {
     e.preventDefault();
     console.log(e);
@@ -94,6 +109,15 @@ class Controller {
   postJoin = (e) => {
     e.preventDefault();
     this.service.API.postJoin();
+  };
+  postLogin = (e) => {
+    e.preventDefault();
+    this.service.API.postLogin(
+      this.router.view.loginVal.value,
+      this.router.view.passwordVal.value
+    );
+    console.log(this.router.view.loginVal.value);
+    console.log(this.router.view.passwordVal.value);
   };
 }
 export default Controller;

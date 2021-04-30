@@ -28,6 +28,18 @@ class API {
     console.log(data);
     return data;
   }
+  async postLogin(userId, userPassword) {
+    // let url =
+    //   "http://api.openweathermap.org/data/2.5/weather?q=seoul&appid=a73a95d23aafd36d49c370750d7a2781";
+    let url = "http://192.168.1.71:8070/user/login";
+    let data = {
+      id: userId,
+      password: userPassword,
+    };
+    let response = await sendRequest("POST", url, data);
+    console.log(response);
+    return response;
+  }
 }
 
 export default API;

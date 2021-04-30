@@ -7,13 +7,17 @@ var sendRequest = (method, url, data = null) => {
     ajax.setRequestHeader("Access-Control-Allow-Origin", "*");
 
     // POST
-    if (!data) {
-      await ajax.send(data);
+    if (data) {
+      await ajax.send(JSON.stringify(data));
+      // await console.log(ajax.getAllResponseHeaders());
     } // 실행하고 res을 받는거를 기다림
 
     // res를 받고나서 실행, 이벤트는 달고 res를 받을때 load가 됨
     ajax.addEventListener("load", (err, result) => {
       console.log(ajax.response);
+      console.log(ajax);
+      console.log(ajax.getAllResponseHeaders());
+
       // console.log(err.currentTarget.response);
       return res(ajax.response);
     });

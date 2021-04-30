@@ -21,10 +21,11 @@ class Router {
     // const route = this.routes.filter((route) =>
     //   hash.match(new RegExp(route["url"]))
     // )[0];
-    console.log(this.routes);
-    console.log(hash);
+    // console.log(this.routes);
+    // console.log(hash);
     // const route = hash.match(new RegExp(this.routes[`^${hash}$`].name));
     const route = this.routes[hash];
+    console.log(route);
     if (route) {
       this.view.setCssUrl(`css/${route["name"]}.css`);
       this.view.viewConstructor(route["model"]);
