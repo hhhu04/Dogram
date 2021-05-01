@@ -3,7 +3,9 @@ import FeedService from "/service/feed.service.js";
 
 class Service {
   constructor() {
-    console.log(FeedService.a);
+    this.API = new API();
+    this.model = [];
+    this.model.push(this.API.getUserimg());
   }
 }
 

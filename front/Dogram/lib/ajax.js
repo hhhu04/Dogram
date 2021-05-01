@@ -1,16 +1,27 @@
 var sendRequest = (method, url, data = null) => {
-  return new Promise((res) => {
+  return new Promise(async (res) => {
     const ajax = new XMLHttpRequest();
 
     ajax.open(method, url);
     ajax.setRequestHeader("Content-type", "application/json");
+    ajax.setRequestHeader("Access-Control-Allow-Origin", "*");
 
-    if (!data) {
-      ajax.send(data);
-    }
+    // POST
+    if (data) {
+      await ajax.send(JSON.stringify(data));
+      // await console.log(ajax.getAllResponseHeaders());
+    } // 실행하고 res을 받는거를 기다림
+
+    // res를 받고나서 실행, 이벤트는 달고 res를 받을때 load가 됨
     ajax.addEventListener("load", (err, result) => {
-      return err ? res(err) : res(result);
+      console.log(ajax.response);
+      console.log(ajax);
+      console.log(ajax.getAllResponseHeaders());
+
+      // console.log(err.currentTarget.response);
+      return res(ajax.response);
     });
+    // return res(ajax.response);
   });
 };
 

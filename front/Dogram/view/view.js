@@ -27,10 +27,18 @@ class View {
     this.sideNav = document.querySelector(".sidenav");
 
     this.homeBtn = document.getElementById("js_home");
+    this.mainBtn = document.querySelector(".main-title");
     this.feedBtn = document.getElementById("js_feed");
     this.storeBtn = document.getElementById("js_store");
     this.loginBtn = document.getElementById("js_login");
     this.joinBtn = document.getElementById("js_join");
+
+    this.postJoinBtn = document.getElementById("js_joinBtn");
+    this.postLoginBtn = document.getElementById("login_btn");
+
+    this.loginVal = document.loginForm.login;
+    this.passwordVal = document.loginForm.password;
+    console.log(this.loginVal);
   }
 
   addComponent(component) {
@@ -63,6 +71,7 @@ class View {
   }
   bindLinkHome(linkHome) {
     this.homeBtn.addEventListener("click", linkHome);
+    this.mainBtn.addEventListener("click", linkHome);
   }
   bindLinkFeed(linkFeed) {
     this.feedBtn.addEventListener("click", linkFeed);
@@ -75,6 +84,12 @@ class View {
   }
   bindLinkJoin(linkJoin) {
     this.joinBtn.addEventListener("click", linkJoin);
+  }
+  bindPostJoin(postJoin) {
+    this.postJoinBtn.addEventListener("click", postJoin);
+  }
+  bindPostLogin(postLogin) {
+    this.postLoginBtn.addEventListener("click", postLogin);
   }
 }
 export default View;
