@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <import resource="classpath:dao-context.xml"/>
+
+    <bean id="user" class="service.UserService">
+        <constructor-arg ref="userDao" ></constructor-arg>
+    </bean>
+  
+   <bean id="mail" class="service.MailService">
+        <constructor-arg ref="mailDao" ></constructor-arg>
+    </bean>
+    
+      <bean id="community" class="service.CommunityService">
+        <constructor-arg ref="communityDao" ></constructor-arg>
+    </bean>
+    
+     <bean id="store" class="service.StoreService">
+        <constructor-arg ref="storeDao" ></constructor-arg>
+    </bean>
+    
+    <bean id="manager" class="service.ManagerService">
+        <constructor-arg ref="managerDao" ></constructor-arg>
+    </bean>
+    
+     <bean id="likeList" class="service.LikeListService">
+        <constructor-arg ref="likeListDao" ></constructor-arg>
+    </bean>
+    
+    	
+    	<bean id="comment" class="service.CommentService">
+        <constructor-arg ref="commentDao" ></constructor-arg>
+    </bean>
+    	
+    	
+    
+    
+    
+    
+    <bean id="datenow" class="configuration.DateNow"></bean>
+    
+    <bean id="mail2" class="configuration.MailConfig"></bean>
+  
+  <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+     <property name="host" value="smtp.gmail.com" />
+     <property name="port" value="587" />
+ <property name="username" value="ShinTest94@gmail.com"/> <!-- 자신의 이메일 아이디 -->
+ <property name="password" value="q1w2e3r4!1234"/> <!-- 자신의 비밀번호 -->
+ <!-- 보안연결 TLS과 관련된 설정 -->
+     <property name="javaMailProperties">
+    <props>
+       <prop key="mail.smtp.auth">true</prop>
+       <prop key="mail.smtp.starttls.enable">true</prop>
+    </props>
+     </property>
+</bean>
+
+
+
+</beans>
