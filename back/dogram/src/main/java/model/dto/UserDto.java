@@ -28,7 +28,7 @@ public class UserDto {
 	
 	private String phoneNumber;
 
-	private String petName;
+	private String name;
 	
     private String img;
 

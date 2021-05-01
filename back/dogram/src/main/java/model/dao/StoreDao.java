@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -13,6 +17,7 @@ import configuration.DateNow;
 import model.DBHandler;
 import model.DataBase;
 import model.dao.daol.StroeDaoI;
+import model.dto.CommunityDto;
 import model.dto.StoreDto;
 import model.dto.UserDto;
 
@@ -96,6 +101,52 @@ public class StoreDao implements StroeDaoI{
 	        db.disconnect();
 	        return 0;
 	    }
+
+	public List<StoreDto> read(StoreDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<StoreDto> list = new ArrayList<StoreDto>();
+		 Connection c = db.connect();
+			Statement stat = c.createStatement();
+			
+			PreparedStatement preparedStatement = 
+					c.prepareStatement("select * from store");
+			
+			
+			 ResultSet rs = preparedStatement.executeQuery();
+			
+		        while(rs.next()) {
+		
+		        	StoreDto dto2 = new StoreDto();
+		        	
+		        	Long num = rs.getLong("num");
+		        	Long userNum = rs.getLong("user_num");
+		        	String product = rs.getString("product");
+		        	String price = rs.getString("price");
+		        	String createdAt = rs.getString("created_at");
+		        	String updatedAt = rs.getString("updated_at");
+		        	String category = rs.getString("category");
+		        	int wantCount = rs.getInt("want_count");
+		        	String buyer = rs.getString("buyer");
+		        	
+		        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+		        	
+		        	dto2.setNum(num);
+		        	dto2.setUserNum(userNum);
+		        	dto2.setProduct(product);
+		        	dto2.setPrice(price);
+		        	dto2.setCreatedAt(dateTime);
+		        	dto2.setUpdatedAt(dateTime);
+		        	dto2.setCategory(category);
+		        	dto2.setWantCount(wantCount);
+		        	dto2.setBuyer(userNum);
+		        	
+		        	list.add(dto2);
+		        	
+		        }
+		
+		return list;
+	}
 	
 
 }

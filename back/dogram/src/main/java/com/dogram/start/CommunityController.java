@@ -1,6 +1,8 @@
 package com.dogram.start;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -22,9 +24,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import model.dao.CommunityDao;
+import model.dto.CommentDto;
 import model.dto.CommunityDto;
 import model.dto.LikeListDto;
 import model.dto.UserDto;
+import service.CommentService;
 import service.CommunityService;
 import service.LikeListService;
 import service.UserService;
@@ -38,7 +42,6 @@ public class CommunityController {
 		return "newfeed";
 	}
 	
-
 	
 	@PostMapping("/newfeed")
 	@ResponseBody
@@ -65,64 +68,126 @@ public class CommunityController {
 	
 	@PostMapping("/")
 	@ResponseBody
-	public String read(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody UserDto userDto) {
+	public List<CommunityDto> read(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody UserDto userDto,CommunityDto dto) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 		
 		if(cookie.getName() != null) {
-			if(cookie.getName().equals("id")){
 				try {
 					Long userNum = comm.ckeckCookie(cookie.getValue());
 					userDto.setNum(userNum);
-					int num = comm.read(userDto);
+					dto.setUserNum(userNum);
+					List<CommunityDto> list = comm.read(userDto,dto);
 					
-					
-					///주소 설정
-					
-					
-					
-					ObjectMapper mapper = new ObjectMapper();
-
-					String json = mapper.writeValueAsString(CommunityDao.map);
-					json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(CommunityDao.map); 
-
-					return json;
+					return list;
 					
 				} catch (ClassNotFoundException | SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
 				}
-			}
-			}
+			
+		}
+		return null;
 		
-		return "";
 	}
-	
 	
 	
 	@PostMapping("/addlike")
 	@ResponseBody
-	public int like(@RequestBody LikeListDto dto, HttpServletResponse response, HttpServletRequest request) {
-//		
+	public int addlike(@RequestBody LikeListDto dto,@CookieValue(value="id", required=false) Cookie cookie) {
+		
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
-		LikeListService like = ctx.getBean("mlikeList",LikeListService.class);
+		LikeListService like = ctx.getBean("likeList",LikeListService.class);
+		int num = -1;
+		if(cookie.getName() != null) {
+			try {
+				Long uNum = like.ckeckCookie(cookie.getValue());
+				dto.setUserNum(uNum);
+				Long c = like.checkLike(dto);
+					if(c == 0L) num = like.create(dto);
+					else num = like.delete(dto);
+					
+				return num;
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -2;
+			}
+		}
 		
-		int check = -1;
-		
-		try {
-			
-//			check = like.create(dto);
-			return check;
-		
-		}catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-		return 0;
+		return -3;
 	}
+	
+	
+	@PostMapping("/update")
+	@ResponseBody
+	public int update(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie) {
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		CommunityService comm = ctx.getBean("community",CommunityService.class);
+		if(cookie.getName() != null) {
+		if(cookie.getName().equals("id")){
+			try {
+				Long userNum = comm.ckeckCookie(cookie.getValue());
+				dto.setUserNum(userNum);
+				int num = comm.update(dto);
+				return num;
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -2;
+			}
+		}
+		}
+		return -1;
+	}
+	
+	
+	@PostMapping("/delete")
+	@ResponseBody
+	public int delete(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie) {
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		CommunityService comm = ctx.getBean("community",CommunityService.class);
+		if(cookie.getName() != null) {
+			try {
+				Long userNum = comm.ckeckCookie(cookie.getValue());
+				dto.setUserNum(userNum);
+				int num = comm.delete(dto);
+				return num;
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -2;
+			}
+		}
+		
+		return -1;
+	}
+	
+	
+	@PostMapping("/addcomment")
+	@ResponseBody
+	public int addComment(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody CommentDto dto) {
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		CommentService comme = ctx.getBean("comment",CommentService.class);
+		int num = -1;
+		if(cookie.getName() != null) {
+			try {
+				comme.ckeckCookie(cookie.getValue(),dto);
+				num = comme.create(dto);
+					
+				return num;
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return -2;
+			}
+	
+		
+		}
+		return -1;
+	}
+	
 	
 	
 }
