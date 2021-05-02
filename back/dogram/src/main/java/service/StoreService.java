@@ -47,7 +47,7 @@ public class StoreService implements StoreI{
 	public List<StoreDto> read(UserDto userDto, StoreDto dto) throws SQLException {
 		// TODO Auto-generated method stub
 		List<StoreDto> list = dao.read(dto);
-		
+		System.out.println("store list success");
 		
 		return list;
 	}

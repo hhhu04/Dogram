@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,16 +51,25 @@ public class UserService {
     	return num;
     }
     
+    
+    
     public int login(UserDto dto,HttpServletResponse response, HttpServletRequest request) throws SQLException, ClassNotFoundException{
     	
     	int num = dao.loginUser(dto);
     	
     	
     	if(num == 0) {
-    		if(dto.getId().equals("탈퇴한 회원입니다.")) return -1;
+    		if(dto.getPassword().equals("탈퇴한 회원입니다.")) return -1;
     		else {
 			Cookie cookie = new Cookie("id",dto.getId());
 			response.addCookie(cookie);
+			
+			 HttpSession session = request.getSession();
+			 session.setAttribute("id", dto.getId());
+			 String id = (String) session.getAttribute("id");
+
+			
+			num = 1;
 			return num;
     		}
 		}
@@ -98,6 +108,16 @@ public class UserService {
     	
     	return -1;
     }
+
+
+	public int myPage(UserDto dto, String cookie) throws SQLException, ClassNotFoundException {
+		Long useerNum =  dao.checkCookie(cookie);
+    	System.out.println(useerNum);
+    	dto.setNum(useerNum);
+		dao.myPage(dto);
+		// TODO Auto-generated method stub
+		return 1;
+	}
 
     
 	

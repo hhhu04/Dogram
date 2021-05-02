@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,8 @@ public class LikeListService implements LikeListServiceI{
     public LikeListService(LikeListDao communityDao) {
         this.dao = communityDao;
     }
+    
+    
     
     public Long ckeckCookie(String cookie) throws ClassNotFoundException, SQLException {
     	
@@ -47,7 +50,17 @@ public class LikeListService implements LikeListServiceI{
 		System.out.println("delete like Success");
 		return 1;
 		
-    	
     }
+    
+    
+    public List<LikeListDto> read(LikeListDto dto) throws SQLException {
+    	List<LikeListDto> list = dao.read(dto);
+    	
+    	return list;
+    }
+    
+    
+    
+    
 
 }

@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -12,6 +16,7 @@ import model.DBHandler;
 import model.DataBase;
 import model.dao.daol.LikeListDaoI;
 import model.dto.LikeListDto;
+import model.dto.StoreDto;
 import model.dto.UserDto;
 
 @Component
@@ -105,6 +110,42 @@ public class LikeListDao implements LikeListDaoI{
 
 	        db.disconnect();
 		return rs;
+	}
+
+	public List<LikeListDto> read(LikeListDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<LikeListDto> list = new ArrayList<LikeListDto>();
+		
+		Connection c = db.connect();
+		Statement stat = c.createStatement();
+		
+		PreparedStatement preparedStatement = 
+				c.prepareStatement("select * from like_list where user_num=?");
+		
+		preparedStatement.setLong(1, dto.getUserNum());
+		
+		 ResultSet rs = preparedStatement.executeQuery();
+		
+	        while(rs.next()) {
+	
+	        	LikeListDto dto2 = new LikeListDto();
+	        	
+	        	Long num = rs.getLong("num");
+	        	Long userNum = rs.getLong("user_num");
+	        	Long communityNum = rs.getLong("community_num");
+	        	
+	        	dto2.setNum(num);
+	        	dto2.setUserNum(userNum);
+	        	dto2.setCommunityNum(communityNum);
+	        	
+	        	list.add(dto2);
+	        
+	        }
+		
+	        stat.close();
+		
+		
+		return list;
 	}
 
 }

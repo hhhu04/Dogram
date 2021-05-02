@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -200,7 +201,7 @@ public int checkUser2(UserDto dto) throws ClassNotFoundException, SQLException {
 					c.prepareStatement("update user set id=?,password=?,name=?,email=?,img=?,phone_number=?,updated_at=? where user.num = ?");
 				
 				
-				preparedStatement.setString(1, "탈퇴한 회원입니다.");
+				preparedStatement.setLong(1, dto.getNum());
 				preparedStatement.setString(2, "탈퇴한 회원입니다.");
 				preparedStatement.setString(3, "탈퇴한 회원입니다.");
 				preparedStatement.setString(4, "탈퇴한 회원입니다.");
@@ -219,6 +220,54 @@ public int checkUser2(UserDto dto) throws ClassNotFoundException, SQLException {
 			 
 			 return rs;
 		 }
+
+		public int myPage(UserDto dto) throws SQLException {
+			// TODO Auto-generated method stub
+			Connection c = db.connect();
+			Statement stat = c.createStatement();
+			
+			PreparedStatement preparedStatement = 
+					c.prepareStatement("select * from user where user.num = ?");
+			
+			preparedStatement.setLong(1, dto.getNum());
+			
+			 ResultSet rs = preparedStatement.executeQuery();
+		        if(rs.next()) {
+		        	
+		        	String id = rs.getString("id");
+		        	String password = rs.getString("password");
+		        	String email = rs.getString("email");
+		        	String address = rs.getString("address");
+		        	String phone = rs.getString("name");
+		        	String img = rs.getString("img");
+		        	String grade = rs.getString("credit_grade");
+		        	int rating = rs.getInt("credit_rating");
+		        	String createdAt = rs.getString("created_at");
+		        	String updatedAt = rs.getString("updated_at");
+		        	
+		        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+		        	LocalDateTime dateTime2 = LocalDateTime.parse(updatedAt, formatter);
+		        	
+		        	dto.setId(id);
+		        	dto.setPassword(password);
+		        	dto.setAddress(address);
+		        	dto.setEmail(email);
+		        	dto.setPhoneNumber(phone);
+		        	dto.setImg(img);
+		        	dto.setCreditGrade(grade);
+		        	dto.setCreditRating(rating);
+		        	dto.setCreatedAt(dateTime);
+		        	dto.setUpdatedAt(dateTime2);
+		        	
+		            return 1;
+		        }
+		        stat.close();
+
+		        db.disconnect();
+			
+			return 1;
+		}
 		 
 	 
 	 
