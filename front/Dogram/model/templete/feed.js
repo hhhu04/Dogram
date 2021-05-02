@@ -4,7 +4,7 @@ const feedTemp = (navBarTemp, feedItem = "") => {
     <div class="inner">
       <h3 class="masthead-brand">
         <a href="#/" class="main-title">DOGRAM</a>
-        <button type="button" class="search_btn"><i class="fas fa-search"></i></button>
+        <button type="button" class="search_btn feed_searchBtn"><i class="fas fa-search"></i></button>
       </h3>
       
       <span class="gnb_btn"><i class="fas fa-bars"></i></span>

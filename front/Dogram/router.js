@@ -1,9 +1,7 @@
 class Router {
   constructor(view) {
     this.view = view;
-    // this.routes = [];
     this.routes = {};
-    // this.hashChange = this.hashChange.bind(this);
     console.log(this);
 
     window.addEventListener("hashchange", this.hashChange);
@@ -26,9 +24,19 @@ class Router {
     // const route = hash.match(new RegExp(this.routes[`^${hash}$`].name));
     const route = this.routes[hash];
     console.log(route);
+
+    // 페이지(해쉬)별 css, tempelete, view render
     if (route) {
       this.view.setCssUrl(`css/${route["name"]}.css`);
       this.view.viewConstructor(route["model"]);
+      switch (route.name) {
+        case "login":
+          this.view.loginConstructor();
+          break;
+        case "feed":
+          this.view.feedConstructor();
+          break;
+      }
       console.log("model load!");
     } else {
       this.view.viewConstructor();

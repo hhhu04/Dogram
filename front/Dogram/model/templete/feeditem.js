@@ -1,4 +1,11 @@
-const feedItem = () => {
+const feedItem = (
+  userName = "",
+  photo = "",
+  likeCount = "",
+  feedTitle = "",
+  commentName = "",
+  commentText = ""
+) => {
   return `<div class="feed_item">
     <div class="feed_header">
         <div class="user_area">

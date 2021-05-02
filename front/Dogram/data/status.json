@@ -1,3 +1,14 @@
-{
-    "status": "success"
-}
+[
+    {
+        "userName": "kim",
+        "photo": "img/minidog.jpg",
+        "likeCount": "200",
+        "commentName": "goodBoy"
+    },
+    {
+        "userName": "park",
+        "photo": "img/minidog.jpg",
+        "likeCount": "100",
+        "commentName": "Hemi"
+    }
+]

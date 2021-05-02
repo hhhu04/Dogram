@@ -6,7 +6,12 @@ class Service {
     this.API = new API();
     this.model = [];
     this.model.push(this.API.getUserimg());
+    this.feedModel = this.API.getFirstFeedLoad();
   }
+  getFirstFeed = () => {
+    console.log("get call");
+    console.log(this.feedModel);
+  };
 }
 
 export default Service;

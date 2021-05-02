@@ -8,7 +8,7 @@ import feedItem from "/model/templete/feeditem.js";
 
 // import View from "/view/view.js";
 // import route from "/model/route.model.js";
-
+// feedItem()
 class Controller {
   constructor(service, router) {
     this.service = service;
@@ -21,7 +21,7 @@ class Controller {
     window.addEventListener("hashchange", this.ohterRenderMount);
 
     this.router.addRoute("intro", "#/", introTemp(navBarTemp("asd", "done")));
-    this.router.addRoute("feed", "#/feed", feedTemp(navBarTemp()));
+    this.router.addRoute("feed", "#/feed", feedTemp(navBarTemp(), feedItem()));
     this.router.addRoute("login", "#/auth/login", loginTemp(navBarTemp()));
     this.router.addRoute("join", "#/auth/join", joinTemp(navBarTemp()));
     this.router.addRoute("store", "#/store", storeTemp(navBarTemp()));
@@ -29,9 +29,9 @@ class Controller {
     this.didRenderMount();
     this.ohterRenderMount();
     this.router.view.setTitle("Dogram");
-    console.log("done!");
+
     console.log("bind on!");
-    console.log(this);
+    // console.log(this);
   }
   // 공통 이벤트 바인딩
   didRenderMount = () => {
@@ -57,7 +57,11 @@ class Controller {
       case "#/auth/login":
         this.router.view.bindPostLogin(this.postLogin);
         this.router.view.bindLinkJoin(this.linkJoin);
-
+        break;
+      case "#/feed":
+        // this.router.view.bindContainerLoad(this.containerLoad);
+        console.log("feed load");
+        this.service.getFirstFeed();
         break;
     }
   };
@@ -119,5 +123,9 @@ class Controller {
     console.log(this.router.view.loginVal.value);
     console.log(this.router.view.passwordVal.value);
   };
+  // containerLoad = () => {
+  //   this.service.API.getFirstFeedLoad();
+  //   console.log("feed load");
+  // };
 }
 export default Controller;
