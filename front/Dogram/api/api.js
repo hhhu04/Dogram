@@ -44,8 +44,12 @@ class API {
   async getFirstFeedLoad() {
     let url = "http://127.0.0.1:5501/data/status.json";
     let response = await sendRequest("GET", url);
-
-    // console.log(response);
+    console.log(response);
+    // console.log(
+    //   response.then((data) => {
+    //     return data;
+    //   })
+    // );
     console.log("api call");
     return response;
   }

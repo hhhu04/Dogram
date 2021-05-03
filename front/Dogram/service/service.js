@@ -5,12 +5,19 @@ class Service {
   constructor() {
     this.API = new API();
     this.model = [];
-    this.model.push(this.API.getUserimg());
-    this.feedModel = this.API.getFirstFeedLoad();
+    // this.model.push(this.API.getUserimg());
+    // this.feedModel = this.getFirstFeed();
+    // console.log(this.feedModel);
+    // console.log(this.getFirstFeed());
   }
-  getFirstFeed = () => {
+  //
+  getFirstFeed = async () => {
     console.log("get call");
-    console.log(this.feedModel);
+    const getLoadFeed = await this.API.getFirstFeedLoad();
+    // console.log(JSON.stringify(JSON.parse(getLoadFeed.response)));
+    console.log(typeof JSON.stringify(JSON.parse(getLoadFeed.response)));
+    console.log(typeof JSON.parse(getLoadFeed.response));
+    return JSON.parse(getLoadFeed.response);
   };
 }
 
