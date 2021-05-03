@@ -1,6 +1,7 @@
 package service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,10 @@ public class CommentService implements CommentServiceI{
     	return dao.checkCookie(cookie,dto);
     }
 
+    public Long ckeckself(String cookie,CommentDto dto) throws ClassNotFoundException, SQLException {
+    	
+    	return dao.checkself(cookie,dto);
+    }
 
 
 	public int create(CommentDto dto) throws ClassNotFoundException, SQLException {
@@ -39,9 +44,34 @@ public class CommentService implements CommentServiceI{
 	}
 
 
-	public int delete(CommentDto dto) {
+	public int delete(CommentDto dto) throws SQLException {
 		// TODO Auto-generated method stub
-		return 0;
+		dao.delete(dto);
+		System.out.println("comment delete success");
+		return 1;
+	}
+
+
+	public void cdelete(CommentDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		dao.delete(dto);
+	}
+
+
+	public List<CommentDto> read(CommentDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		List<CommentDto> list = dao.read(dto);
+		
+		return list;
+	}
+
+
+	public int upComment(CommentDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		dao.update(dto);
+		System.out.println("comment update success");
+		return 1;
 	}
 
 

@@ -83,6 +83,13 @@ public class CommunityService  implements CommunityServiceI{
 		
 		return -1;
 	}
+
+	public List<CommunityDto> read(CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<CommunityDto> list = dao.read2(dto);
+		
+		return list;
+	}
     
     
     

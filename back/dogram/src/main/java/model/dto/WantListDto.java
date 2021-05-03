@@ -3,14 +3,20 @@ package model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dto {
+@ToString
+public class WantListDto {
 
-	private String id;
+	private Long num;
 	
-	private String img;
+	private Long userNum;
+	
+	private Long storeNum;
+	
+	private String title;
 	
 }

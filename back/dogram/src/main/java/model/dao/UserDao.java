@@ -102,7 +102,7 @@ public int loginUser(UserDto dto) throws ClassNotFoundException, SQLException {
 	}
 	
 public int checkUser2(UserDto dto) throws ClassNotFoundException, SQLException {
-		
+	System.out.println(dto.getId());
 		Connection c = db.connect();
 		Statement stat = c.createStatement();
 		

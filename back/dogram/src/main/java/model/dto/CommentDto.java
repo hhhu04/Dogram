@@ -1,5 +1,9 @@
 package model.dto;
 
+import java.time.LocalDateTime;
+
+import org.springframework.scheduling.quartz.LocalDataSourceJobStore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +20,9 @@ public class CommentDto {
 
     private String comment;
 
-    private String createdAt;
+    private LocalDateTime createdAt;
 
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     private Long communityNum;
 

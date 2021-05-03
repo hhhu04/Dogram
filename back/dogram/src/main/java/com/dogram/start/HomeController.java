@@ -1,7 +1,12 @@
 package com.dogram.start;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +20,6 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,18 +29,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
-
-import model.dto.Dto;
+import model.dto.CommunityDto;
 import model.dto.LikeListDto;
 import model.dto.MailDto;
+import model.dto.StoreDto;
 import model.dto.UserDto;
+import model.dto.WantListDto;
 import model.dao.UserDao;
+import service.CommunityService;
 import service.LikeListService;
 import service.MailService;
+import service.StoreService;
 import service.UserService;
 
 /**
@@ -53,6 +61,30 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
+	
+	@GetMapping("/upload")
+	public String upload() {
+		return "file";
+	}
+	
+	private static final String FILE_SERVER_PATH = "/home/cat/img";
+	private static String img = null;
+	
+	@RequestMapping("/upload")
+	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
+		if(!file.getOriginalFilename().isEmpty()) {
+			file.transferTo(new File("/home/cat/img", file.getOriginalFilename()));
+			model.addAttribute("msg", "File uploaded successfully.");
+			img = FILE_SERVER_PATH+"/"+file.getOriginalFilename();
+		}else {
+			model.addAttribute("msg", "Please select a valid mediaFile..");
+		}
+		
+		return "join";
+	}
+	
+	
+	
 	
 	
 	@GetMapping("/message")
@@ -119,13 +151,22 @@ public class HomeController {
 		return Integer.toString(check);
 	}
 	
+	@GetMapping("/join")
+	public String join() {
+		return "join";
+	}
 	
 	@PostMapping("/join")
 	@ResponseBody
-	public String join(@RequestBody UserDto dto) {
-		
+	public int join(@RequestBody UserDto dto) {
+		System.out.println("123");
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
+		
+		if(img != null) {
+			dto.setImg(img);
+			img = null;
+		}
 		
 		int check = -1;
 		try {
@@ -133,15 +174,14 @@ public class HomeController {
 			check = user.read(dto);
 			
 			if(check == 1) {
-				user.create(dto);
-				return Integer.toString(check);
+				return user.create(dto);
 			}
 			
 		}catch (Exception e) {
             e.printStackTrace();
         }
 		
-		return Integer.toString(check);
+		return check;
 	}
 
 	
@@ -152,6 +192,11 @@ public class HomeController {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
 		int num = -1;
+		
+		if(img != null) {
+			dto.setImg(img);
+			img = null;
+		}
 		
 		 HttpSession session = request.getSession();
 		 session.setAttribute("id", dto.getId());
@@ -277,6 +322,103 @@ public class HomeController {
 		
 		return list;
 	}
+	
+	@PostMapping("/wantList")
+	@ResponseBody
+	public List<WantListDto> wantList(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody WantListDto dto,HttpServletResponse response, HttpServletRequest request){
+		
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		StoreService want = ctx.getBean("store",StoreService.class);
+		
+		UserDto userDto=new UserDto();
+		 HttpSession session = request.getSession();
+		 session.setAttribute("id", userDto.getId());
+//		 String id = (String) session.getAttribute("id");
+		 String id = cookie.getValue();
+		
+		List<WantListDto> list = null;
+		Long uNum;
+		try {
+//			uNum = like.ckeckCookie(cookie.getValue());
+			uNum = want.ckeckCookie(id);
+			dto.setUserNum(uNum);
+			list = want.read(dto);
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return list;
+	}
+	
+	
+	@PostMapping("/feedList")
+	@ResponseBody
+	public List<CommunityDto> feedList(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody CommunityDto dto,HttpServletResponse response, HttpServletRequest request){
+		
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		CommunityService commu = ctx.getBean("community",CommunityService.class);
+		
+		UserDto userDto=new UserDto();
+		 HttpSession session = request.getSession();
+		 session.setAttribute("id", userDto.getId());
+//		 String id = (String) session.getAttribute("id");
+		 String id = cookie.getValue();
+		
+		List<CommunityDto> list = null;
+		Long uNum;
+		try {
+//			uNum = like.ckeckCookie(cookie.getValue());
+			uNum = commu.ckeckCookie(id);
+			dto.setUserNum(uNum);
+			list = commu.read(dto);
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	
+	@PostMapping("/storeList")
+	@ResponseBody
+	public List<StoreDto> storeList(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody StoreDto dto,HttpServletResponse response, HttpServletRequest request){
+		
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		StoreService commu = ctx.getBean("store",StoreService.class);
+		
+		UserDto userDto=new UserDto();
+		 HttpSession session = request.getSession();
+		 session.setAttribute("id", userDto.getId());
+//		 String id = (String) session.getAttribute("id");
+		 String id = cookie.getValue();
+		
+		List<StoreDto> list = null;
+		Long uNum;
+		try {
+//			uNum = like.ckeckCookie(cookie.getValue());
+			uNum = commu.ckeckCookie(id);
+			dto.setUserNum(uNum);
+			list = commu.read(dto);
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

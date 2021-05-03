@@ -41,10 +41,10 @@
         <constructor-arg ref="commentDao" ></constructor-arg>
     </bean>
     	
-    	
- 
-  
-    
+   
+   <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
+   
+
     
     <bean id="datenow" class="configuration.DateNow"></bean>
     

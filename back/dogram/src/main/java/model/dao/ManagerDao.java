@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -75,6 +79,64 @@ public int loginManager(ManagerDto dto) throws ClassNotFoundException, SQLExcept
 	public Long checkCookie(String cookie) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<UserDto> readUser(UserDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<UserDto> list = new ArrayList<UserDto>();
+		Connection c = db.connect();
+		Statement stat = c.createStatement();
+		
+		PreparedStatement preparedStatement = 
+				c.prepareStatement("select * from user");
+		
+		
+		 ResultSet rs = preparedStatement.executeQuery();
+	        while(rs.next()) {
+	        UserDto dto2 = new UserDto();
+	        	
+	        Long num = rs.getLong("num");
+	        String id = rs.getString("id");
+	        String password = rs.getString("password");
+	        String email = rs.getString("email");
+	        String address = rs.getString("address");
+	        String phoneNumber = rs.getString("phone_number");
+	        String name = rs.getString("name");
+	        String img = rs.getString("img");
+	        String createdAt = rs.getString("created_at");
+	        String updatedAt = rs.getString("updated_at");
+	        int creditRating = rs.getInt("credit_ration");
+	        String creditGrade = rs.getString("credit_grade");
+	        
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+        	if(updatedAt != null) {
+        	LocalDateTime dateTime2 = LocalDateTime.parse(createdAt, formatter);
+        	dto2.setUpdatedAt(dateTime2);
+        	}else dto2.setUpdatedAt(null);
+	    	
+	    	dto2.setNum(num);
+	    	dto2.setId(id);
+	    	dto2.setPassword(password);
+	    	dto2.setEmail(email);
+	    	dto2.setAddress(address);
+	    	dto2.setPhoneNumber(phoneNumber);
+	    	dto2.setName(name);
+	    	dto2.setImg(img);
+	    	dto2.setCreatedAt(dateTime);
+	        dto2.setCreditRating(creditRating);
+	        dto2.setCreditGrade(creditGrade);
+	        
+	        list.add(dto2);
+	        }
+	        stat.close();
+	        
+	        db.disconnect();
+		
+		
+		
+		
+		return list;
 	}
 	
 
