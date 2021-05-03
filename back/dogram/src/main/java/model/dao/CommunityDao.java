@@ -168,6 +168,57 @@ public class CommunityDao implements CommunityDaoI{
 		 return list;
 	 }
 	 
+	 public List<CommunityDto> read2(CommunityDto cdto) throws SQLException {
+		 List<CommunityDto> list = new ArrayList<CommunityDto>();
+		 System.out.println(list);
+		 Connection c = db.connect();
+			Statement stat = c.createStatement();
+			
+			PreparedStatement preparedStatement = 
+					c.prepareStatement("select * from community where user_num=?");
+			
+			preparedStatement.setLong(1, cdto.getUserNum());
+			
+			 ResultSet rs = preparedStatement.executeQuery();
+			
+		        while(rs.next()) {
+		        	CommunityDto dto = new CommunityDto();
+		        	Long num = rs.getLong("num");
+		        	String img = rs.getString("img");
+		        	String title = rs.getString("title");
+		        	String body = rs.getString("body");
+		        	int commentCount = rs.getInt("comment_count");
+		        	int likeCount = rs.getInt("like_count");
+		        	String tag = rs.getString("tag");
+		        	String createdAt = rs.getString("created_at");
+		        	String updatedAt = rs.getString("updated_at");
+		        	String address = rs.getString("address");
+		        	Long userNum = rs.getLong("user_num");
+		        	
+		        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+		        	System.out.println(title);
+		        	dto.setNum(num);
+		        	dto.setImg(img);
+		        	dto.setTitle(title);
+		        	dto.setBody(body);
+		        	dto.setCommentCount(commentCount);
+		        	dto.setLikeCount(likeCount);
+		        	dto.setTag(tag);
+		        	dto.setCreatedAt(dateTime);
+		        	dto.setAddress(address);
+		        	dto.setUserNum(userNum);
+		        	dto.setUpdatedAt(dateTime);
+		        	System.out.println(dto);
+		        	list.add(dto);
+		        	
+		        	System.out.println(list);
+		        }
+		        stat.close();
+		        db.disconnect();
+		 return list;
+	 }
+	 
 	 
  public int checkUser(CommunityDto dto) throws SQLException {
 		 

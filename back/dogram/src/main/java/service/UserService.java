@@ -33,7 +33,7 @@ public class UserService {
     }
 
 
-    public void create(UserDto dto) throws SQLException, ClassNotFoundException {
+    public int create(UserDto dto) throws SQLException, ClassNotFoundException {
 
         dto.setCreatedAt(LocalDateTime.now());
         dto.setCreditRating(0);
@@ -41,7 +41,7 @@ public class UserService {
 
             dao.create(dto);
                 System.out.println("create User Success");
-            
+            return 1;
     }
     
     public int read(UserDto dto) throws SQLException, ClassNotFoundException{
