@@ -46,7 +46,8 @@ class View {
   feedConstructor() {
     this.feedSearchBtn = document.querySelector(".feed_searchBtn");
     this.container = document.querySelector(".content");
-    this.container;
+    this.feedItem = document.querySelector(".feed_item");
+    console.log(this.container);
   }
   addComponent(component) {
     this.componentsByName[component.name] = component;
@@ -98,8 +99,8 @@ class View {
   bindPostLogin(postLogin) {
     this.postLoginBtn.addEventListener("click", postLogin);
   }
-  // bindContainerLoad(containerLoad) {
-  //   window.addEventListener("load", containerLoad);
-  // }
+  bindAddFeed(containerLoad) {
+    window.addEventListener("scroll", containerLoad, { passive: true });
+  }
 }
 export default View;

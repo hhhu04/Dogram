@@ -14,7 +14,7 @@ const feedItem = (
         </div>
     </div>
     <div class="main_photo">
-        <img src="/img/mindog.jpg" alt="">
+        <!-- <img src="/img/mindog.jpg" alt=""> -->
         <img src="${photo}" alt="">
     </div>
     <div class="desc_area">
