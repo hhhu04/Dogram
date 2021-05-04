@@ -20,13 +20,14 @@
 		</form>
 		
 
-<form id="joinform" name="joinform" method="POST">
+<form id="joinform" name="joinform" method="POST" enctype="multipart/form-data">
 <input type="text" id="id" name="id" placeholder="id"><br>
 <input type="text" id="password" name="password" placeholder="password"><br>
 <input type="text" id="email" name="email" placeholder="email"><br>
 <input type="text" id="address" name="address" placeholder="address"><br>
 <input type="text" id="phoneNumber" name="phoneNumber" placeholder="phone"><br>
 <input type="text" id="name" name="name" placeholder="pet"><br>
+<input type="file" id="upload" name="upload" placeholder="pet"><br>
 <input type="button" id="add" value="버튼">
 </form>
 
@@ -49,7 +50,8 @@ $(function(){
 	        	type:'POST',
 	        	data : JSON.stringify(login),
 	        	dataType : 'json',
-	        	contentType : "application/json; charset=utf-8",
+	        	processData: false,
+	        	contentType : false,
 	        	success : function(data){
 	        			console.log(data);
 	                    document.cookie = "id="+id;

@@ -1,8 +1,12 @@
 package service;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +15,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import model.dao.UserDao;
 import model.dto.UserDto;
@@ -24,7 +32,9 @@ public class UserService {
     static ParkingDAO dao = new DaoFactory().parkingDAO();
     static ParkingDTO dto = new ParkingDTO();
     */
-
+	
+	
+	
 	@Autowired
     UserDao dao;
 
@@ -119,6 +129,23 @@ public class UserService {
 		return 1;
 	}
 
+	
+	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
+		String img;
+		
+		if(!file.getOriginalFilename().isEmpty()) {
+			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", file.getOriginalFilename()));
+			model.addAttribute("msg", "File uploaded successfully.");
+			img = "resources/img/"+file.getOriginalFilename();
+			System.out.println("99");
+		}else {
+			model.addAttribute("msg", "Please select a valid mediaFile..");
+			img = "-1";
+		}
+		
+		
+		return img;
+	}
     
 	
 }

@@ -17,7 +17,9 @@ import configuration.DateNow;
 import model.DBHandler;
 import model.DataBase;
 import model.dao.daol.ManagerDaoI;
+import model.dto.CommunityDto;
 import model.dto.ManagerDto;
+import model.dto.StoreDto;
 import model.dto.UserDto;
 
 @Component
@@ -76,10 +78,7 @@ public int loginManager(ManagerDto dto) throws ClassNotFoundException, SQLExcept
 	        return 0;
 	    }
 
-	public Long checkCookie(String cookie) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	public List<UserDto> readUser(UserDto dto) throws SQLException {
 		// TODO Auto-generated method stub
@@ -105,7 +104,7 @@ public int loginManager(ManagerDto dto) throws ClassNotFoundException, SQLExcept
 	        String img = rs.getString("img");
 	        String createdAt = rs.getString("created_at");
 	        String updatedAt = rs.getString("updated_at");
-	        int creditRating = rs.getInt("credit_ration");
+	        int creditRating = rs.getInt("credit_rating");
 	        String creditGrade = rs.getString("credit_grade");
 	        
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -127,16 +126,78 @@ public int loginManager(ManagerDto dto) throws ClassNotFoundException, SQLExcept
 	        dto2.setCreditRating(creditRating);
 	        dto2.setCreditGrade(creditGrade);
 	        
-	        list.add(dto2);
+	        if(!password.equals("탈퇴한 회원입니다.")) list.add(dto2);
 	        }
 	        stat.close();
 	        
 	        db.disconnect();
 		
+		return list;
+	}
+
+	public Long checkCookie(String cookie) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<CommunityDto> readFeed(CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		List<CommunityDto> list = new ArrayList<CommunityDto>();
+		Connection c = db.connect();
+		Statement stat = c.createStatement();
+		
+		PreparedStatement preparedStatement = 
+				c.prepareStatement("select * from community");
 		
 		
+		 ResultSet rs = preparedStatement.executeQuery();
+	        while(rs.next()) {
+	        CommunityDto dto2 = new CommunityDto();
+		
+	        Long num = rs.getLong("num");
+	        String img = rs.getString("img");
+	        String title = rs.getString("title");
+	        String body = rs.getString("body");
+	        int commentCount = rs.getInt("comment_count");
+	        int likeCount = rs.getInt("like_count");
+	        String tag = rs.getString("tag");
+	        Long userNum = rs.getLong("user_num");
+	        String address = rs.getString("address");
+	        String createdAt = rs.getString("created_at");
+	        String updatedAt = rs.getString("updated_at");
+	        
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+        	if(updatedAt != null) {
+        	LocalDateTime dateTime2 = LocalDateTime.parse(createdAt, formatter);
+        	dto2.setUpdatedAt(dateTime2);
+        	}else dto2.setUpdatedAt(null);
+	        
+	        dto2.setNum(userNum);
+        	dto2.setImg(img);
+        	dto2.setTitle(title);
+        	dto2.setBody(body);
+        	dto2.setCommentCount(commentCount);
+        	dto2.setLikeCount(likeCount);
+        	dto2.getTag();
+        	dto2.setUserNum(userNum);
+        	dto2.setAddress(address);
+        	dto2.setCreatedAt(dateTime);
+        	
+        	list.add(dto2);
+	        
+	        }
+	        stat.close();
+	        
+	        db.disconnect();
 		
 		return list;
+	}
+
+	public List<StoreDto> readStore(StoreDto dto) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

@@ -75,9 +75,19 @@ public class ManagerService implements ManagerI{
 	}
 
 
-	public List<CommunityDto> readFeed(CommunityDto dto) {
+	public List<CommunityDto> readFeed(CommunityDto dto) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		List<CommunityDto> list = dao.readFeed(dto);
+		
+		return list;
+	}
+
+
+	public List<StoreDto> readStore(StoreDto dto) {
+		// TODO Auto-generated method stub
+		List<StoreDto> list = dao.readStore(dto);
+		
+		return list;
 	}
 	 
 

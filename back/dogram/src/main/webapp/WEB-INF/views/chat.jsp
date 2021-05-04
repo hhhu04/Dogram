@@ -10,6 +10,7 @@
     <div>
         <input type="text" id="sender" value="${sessionScope.member.m_id }" style="display: none;">
         <input type="text" id="messageinput">
+        <html lang="en" xmlns:th="http://www.thymeleaf.org">
     </div>
     <div>
         <button type="button" onclick="openSocket();">Open</button>

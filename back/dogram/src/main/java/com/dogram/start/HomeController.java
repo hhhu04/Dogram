@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,6 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.Multipart;
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +26,9 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -32,8 +40,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import lombok.Getter;
 import model.dto.CommunityDto;
 import model.dto.LikeListDto;
 import model.dto.MailDto;
@@ -62,28 +72,59 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	
-	@GetMapping("/upload")
-	public String upload() {
+	
+	
+	@GetMapping("/file")
+	public String file() {
 		return "file";
 	}
 	
-	private static final String FILE_SERVER_PATH = "/home/cat/img";
-	private static String img = null;
 	
-	@RequestMapping("/upload")
-	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
-		if(!file.getOriginalFilename().isEmpty()) {
-			file.transferTo(new File("/home/cat/img", file.getOriginalFilename()));
-			model.addAttribute("msg", "File uploaded successfully.");
-			img = FILE_SERVER_PATH+"/"+file.getOriginalFilename();
-		}else {
-			model.addAttribute("msg", "Please select a valid mediaFile..");
+	
+	
+	@RequestMapping("/join2")
+	@ResponseBody
+	public int join2(@RequestParam("file") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv) {
+		System.out.println("123");
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		UserService user = ctx.getBean("user",UserService.class);
+		UserDto dto = new UserDto();
+		
+		dto.setId(file.getParameter("id"));
+		dto.setPassword(file.getParameter("password"));
+		dto.setEmail(file.getParameter("email"));
+		dto.setName(file.getParameter("name"));
+		dto.setAddress(file.getParameter("address"));
+		dto.setPhoneNumber(file.getParameter("phoneNumber"));
+		
+		int check = -1;
+		
+		try {
+			dto.setImg(user.upload(img, mv,model));
+			check = user.read(dto);
+			if(check == 1) {
+				return user.create(dto);
+			}
+			
+		} catch (IllegalStateException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		return "join";
+		System.out.println(file.getParameter("id"));
+		System.out.println(file.getParameter("password"));
+		
+		
+
+		
+		return check;
 	}
-	
-	
 	
 	
 	
@@ -156,69 +197,107 @@ public class HomeController {
 		return "join";
 	}
 	
-	@PostMapping("/join")
-	@ResponseBody
-	public int join(@RequestBody UserDto dto) {
-		System.out.println("123");
-		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
-		UserService user = ctx.getBean("user",UserService.class);
-		
-		if(img != null) {
-			dto.setImg(img);
-			img = null;
-		}
-		
-		int check = -1;
-		try {
-			
-			check = user.read(dto);
-			
-			if(check == 1) {
-				return user.create(dto);
-			}
-			
-		}catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-		return check;
-	}
+//	@PostMapping("/join")
+//	@ResponseBody
+//	public int join(@RequestBody UserDto dto) {
+//		System.out.println("123");
+//		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+//		UserService user = ctx.getBean("user",UserService.class);
+//		
+//	
+//		int check = -1;
+//		try {
+//			
+//			check = user.read(dto);
+//			
+//			if(check == 1) {
+//				return user.create(dto);
+//			}
+//			
+//		}catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//		
+//		return check;
+//	}
 
 	
 
-	@PostMapping("/update")
+	@RequestMapping("/update")
 	@ResponseBody
-	public String update(@CookieValue(value="id", required=false) Cookie cookie, @RequestBody UserDto dto,HttpServletResponse response, HttpServletRequest request) {
+	public int update(@CookieValue(value="id", required=false) Cookie cookie,HttpServletResponse response, 
+			HttpServletRequest request,@RequestParam("file") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
 		int num = -1;
 		
-		if(img != null) {
-			dto.setImg(img);
-			img = null;
-		}
+		UserDto dto = new UserDto();
 		
 		 HttpSession session = request.getSession();
 		 session.setAttribute("id", dto.getId());
 		 String id = (String) session.getAttribute("id");
-		
-		
 //		if(cookie.getName() != null) {
 //			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
-			
 			try {
-//				num = user.update(dto,cookie.getValue());
+				
+				dto.setId(file.getParameter("id"));
+				dto.setPassword(file.getParameter("password"));
+				dto.setEmail(file.getParameter("email"));
+				dto.setName(file.getParameter("name"));
+				dto.setAddress(file.getParameter("address"));
+				dto.setPhoneNumber(file.getParameter("phoneNumber"));
+				dto.setImg(user.upload(img, mv,model));
+				
 				num = user.update(dto,id);
-				return Integer.toString(num);
+				return num;
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//		}
+			//		}
+			catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 		
-		return Integer.toString(num);
+		return num;
 	}
+	
+//	@PostMapping("/update")
+//	@ResponseBody
+//	public String update(@CookieValue(value="id", required=false) Cookie cookie, @RequestBody UserDto dto,HttpServletResponse response, HttpServletRequest request) {
+//		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+//		UserService user = ctx.getBean("user",UserService.class);
+//		int num = -1;
+//		
+//
+//		
+//		 HttpSession session = request.getSession();
+//		 session.setAttribute("id", dto.getId());
+//		 String id = (String) session.getAttribute("id");
+//		
+//		
+////		if(cookie.getName() != null) {
+////			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
+//			
+//			try {
+////				num = user.update(dto,cookie.getValue());
+//				num = user.update(dto,id);
+//				return Integer.toString(num);
+//			} catch (ClassNotFoundException | SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+////		}
+//		
+//		
+//		return Integer.toString(num);
+//	}
+	
 	
 	
 	@PostMapping("/delete")
@@ -275,11 +354,10 @@ public class HomeController {
 		 session.setAttribute("id", dto.getId());
 		 String id = (String) session.getAttribute("id");
 		
-		
 		if(cookie.getName() != null) {
 			try {
-//				user.myPage(dto,cookie.getValue());
-				user.myPage(dto,id);
+				user.myPage(dto,cookie.getValue());
+//				user.myPage(dto,id);
 				return dto;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

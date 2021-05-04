@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="description" content="">
+	<link href="${pageContext.request.contextPath}/style.css" rel="stylesheet">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>파일 다운로드</title>
   </head>
@@ -10,22 +10,19 @@
   	<div class="content">
 		<br/><br/>
 		<h3>파일 업로드</h3>
-		<form action="/user/upload" method="post" enctype="multipart/form-data">
-		  <table>
-		    <tr>
-		      <td>Select File</td>
-		      <td><input type="file" name="uploadFile" /></td>
-		      <td>
-		        <button type="submit">Upload</button>
-		      </td>
-		    </tr>
-		  </table>
-		</form>
+<form action="/user/join2" method="post" enctype="multipart/form-data">
+<input type="text" id="id" name="id" placeholder="id"><br>
+<input type="text" id="password" name="password" placeholder="password"><br>
+<input type="text" id="email" name="email" placeholder="email"><br>
+<input type="text" id="address" name="address" placeholder="address"><br>
+<input type="text" id="phoneNumber" name="phoneNumber" placeholder="phone"><br>
+<input type="text" id="name" name="name" placeholder="pet"><br>
+<input type="file" name="file" />
+<button type="submit">Upload</button>
+</form>
+
 		
-		
-		<form>
-		<input type="text" value="$name">
-		</form>
+
 	</div>
   </body>
 </html>

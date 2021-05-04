@@ -28,7 +28,7 @@
                 return;
             }
             //웹소켓 객체 만드는 코드
-            ws=new WebSocket("ws://192.168.0.6:8070/echo.do");
+            ws=new WebSocket("ws://192.168.1.71:8070/echo.do");
             
             ws.onopen=function(event){
                 if(event.data===undefined) return;
