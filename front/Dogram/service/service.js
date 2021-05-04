@@ -11,6 +11,10 @@ class Service {
     // console.log(this.getFirstFeed());
   }
   //
+  postJoin = async (data) => {
+    const joinResult = await this.API.postJoin(data);
+    return JSON.parse(joinResult.response);
+  };
   getFirstFeed = async () => {
     console.log("get call");
     const getLoadFeed = await this.API.getFirstFeedLoad();

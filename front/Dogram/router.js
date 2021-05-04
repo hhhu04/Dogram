@@ -2,6 +2,7 @@ class Router {
   constructor(view) {
     this.view = view;
     this.routes = {};
+    // this.FeedController = new FeedController();
     console.log(this);
 
     window.addEventListener("hashchange", this.hashChange);
@@ -33,8 +34,12 @@ class Router {
         case "login":
           this.view.loginConstructor();
           break;
+        case "join":
+          this.view.joinConstructor();
+
+          break;
         case "feed":
-          this.view.feedConstructor();
+          this.view.FeedView.feedConstructor();
           break;
       }
       console.log("model load!");
