@@ -1,4 +1,4 @@
-import { sendRequest } from "/lib/ajax.js";
+import { sendRequest, sendRequestFormData } from "/lib/ajax.js";
 
 class API {
   getTodoList() {
@@ -15,11 +15,11 @@ class API {
 
     return response;
   }
-  async postJoin() {
+  async postJoin(formData) {
     // let url =
     //   "http://api.openweathermap.org/data/2.5/weather?q=seoul&appid=a73a95d23aafd36d49c370750d7a2781";
-    let url = "/user/join";
-    let response = await sendRequest("POST", url);
+    let url = "http://192.168.1.71:8070/user/join2";
+    let response = await sendRequestFormData("POST", url, formData);
 
     return response;
   }

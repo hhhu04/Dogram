@@ -14,6 +14,7 @@ class Controller {
     this.service = service;
     // this.view = view;
     this.router = router;
+    // this.FeedController = new FeedController(service, router);
     // console.log(this.router);
     // console.log(this.router.view);
     // this.service.API.getUserimg();
@@ -52,37 +53,39 @@ class Controller {
 
     const hash = window.location.hash;
     switch (hash) {
+      case "#/":
+        this.didRenderMount();
+        break;
       case "#/auth/join":
         this.router.view.bindPostJoin(this.postJoin);
+        // this.didRenderMount();
         break;
       case "#/auth/login":
         this.router.view.bindPostLogin(this.postLogin);
         this.router.view.bindLinkJoin(this.linkJoin);
+        // this.didRenderMount();
         break;
       case "#/feed":
-        this.router.view.bindAddFeed(this.containerLoad);
-        // this.router.hashChange();
-        // this.didRenderMount();
-        // const getFeedData = await this.service.getFirstFeed();
-        // let feedItemShow = getFeedData.map((item, idx) => {
-        //   console.log(item);
-        //   if (idx <= 5) {
-        //     return feedItem(
-        //       item.userName,
-        //       item.photo,
-        //       item.likeCount,
-        //       item.commentName
-        //     );
-        //   }
-        // });
-        // console.log(feedItemShow);
-        // this.router.addRoute(
-        //   "feed",
-        //   "#/feed",
-        //   feedTemp(navBarTemp(), feedItemShow.join(" "))
-          // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
-        // );
-        // addroute(data를 템플릿에 넣는다)
+        const getFeedData = await this.service.getFirstFeed();
+        let feedItemShow = getFeedData.map((item, idx) => {
+          // console.log(item);
+          if (idx < 5) {
+            return feedItem(
+              item.userName,
+              item.photo,
+              item.likeCount,
+              item.commentName
+            );
+          }
+        });
+        console.log(feedItemShow);
+        this.router.addRoute(
+          "feed",
+          "#/feed",
+          feedTemp(navBarTemp(), feedItemShow.join(" "))
+        );
+        this.router.hashChange();
+        this.didRenderMount();
         break;
     }
   };
@@ -131,10 +134,10 @@ class Controller {
     window.location.hash = "#/auth/join";
     // this.didRenderMount();
   };
-  postJoin = (e) => {
-    e.preventDefault();
-    this.service.API.postJoin();
-  };
+  // postJoin = (e) => {
+  //   e.preventDefault();
+  //   this.service.API.postJoin();
+  // };
   postLogin = (e) => {
     e.preventDefault();
     this.service.API.postLogin(
@@ -144,57 +147,60 @@ class Controller {
     console.log(this.router.view.loginVal.value);
     console.log(this.router.view.passwordVal.value);
   };
-  containerLoad = () => {
-    const screenHeight = screen.height;
-    const fullHeight = this.router.view.container.clientHeight;
-    const scrollPosition = pageYOffset; // 스크롤위치
-    let oneTime = false;
-    // let feedItemShow = getFeedData.map((item, idx) => {
-    //   console.log(idx);
-    //   if (idx <= 9) {
-    //     return feedItem(
-    //       item.userName,
-    //       item.photo,
-    //       item.likeCount,
-    //       item.commentName
-    //     );
-    //   }
-    // });
-    const madeBox = () => {
-      oneTime = false;
-      // const getFeedData = await this.service.getFirstFeed();
-      // console.log(getFeedData);
-      const getFeedData = await this.service.getFirstFeed();
-      console.log(getFeedData)
-      console.log("feed load");
-      // console.log(typeof getFeedData);
-      // console.log(getFeedData[0].userName);
-      // console.log("feed!!!");
-      // let feedItemShow = getFeedData.map((item, idx) => {
-      //   console.log(idx);
-      //   if (idx <= 5) {
-      //     return feedItem(
-      //       item.userName,
-      //       item.photo,
-      //       item.likeCount,
-      //       item.commentName
-      //     );
-      //   }
-      // });
-      // // console.log(feedItemShow);
-      // // console.log(this.containerLoad());
-      // this.router.addRoute(
-      //   "feed",
-      //   "#/feed",
-      //   feedTemp(navBarTemp(), feedItemShow.join(" "))
-      //   // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
-      // );
-    };
-    if (fullHeight - screenHeight / 1 <= scrollPosition && !oneTime) {
-      oneTime = true;
-      console.log("next");
-      madeBox();
-    }
-  };
+  // containerLoad = () => {
+  //   const screenHeight = screen.height;
+  //   const fullHeight = this.router.view.FeedView.container.clientHeight;
+  //   const scrollPosition = pageYOffset; // 스크롤위치
+  //   let oneTime = false;
+  //   // let feedItemShow = getFeedData.map((item, idx) => {
+  //   //   console.log(idx);
+  //   //   if (idx <= 9) {
+  //   //     return feedItem(
+  //   //       item.userName,
+  //   //       item.photo,
+  //   //       item.likeCount,
+  //   //       item.commentName
+  //   //     );
+  //   //   }
+  //   // });
+  //   const madeBox = async () => {
+  //     oneTime = false;
+  //     // const getFeedData = await this.service.getFirstFeed();
+  //     // console.log(getFeedData);
+  //     const getFeedData = await this.service.getFirstFeed();
+  //     console.log(getFeedData);
+  //     console.log("feed load");
+  //     // console.log(typeof getFeedData);
+  //     // console.log(getFeedData[0].userName);
+  //     // console.log("feed!!!");
+  //     this.feedState++;
+  //     let feedItemShow = getFeedData.map((item, idx) => {
+  //       console.log(idx);
+  //       if (this.feedState * 5 <= idx < this.feedState * 5 + 5) {
+  //         return feedItem(
+  //           item.userName,
+  //           item.photo,
+  //           item.likeCount,
+  //           item.commentName
+  //         );
+  //       }
+  //     });
+  //     // // console.log(feedItemShow);
+  //     // // console.log(this.containerLoad());
+  //     this.router.addRoute(
+  //       "feed",
+  //       "#/feed",
+  //       feedTemp(navBarTemp(), feedItemShow.join(" "))
+  //       // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
+  //     );
+  //     this.router.hashChange();
+  //     this.didRenderMount();
+  //   };
+  //   if (fullHeight - screenHeight / 1 <= scrollPosition && !oneTime) {
+  //     oneTime = true;
+  //     console.log("next");
+  //     madeBox();
+  //   }
+  // };
 }
 export default Controller;
