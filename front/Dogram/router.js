@@ -1,38 +1,42 @@
 class Router {
   constructor(view) {
     this.view = view;
-    this.routes = [];
-    // this.hashChange = this.hashChange.bind(this);
+    this.routes = {};
     console.log(this);
 
     window.addEventListener("hashchange", this.hashChange);
     // window.addEventListener("DOMContentLoaded", this.hashChange);
   }
   addRoute = (name, url, model) => {
-    this.routes.push({
-      name,
-      url,
-      model,
-    });
-    console.log(this);
-
-    console.log(this.routes);
+    this.routes[url] = { name, model };
   };
+
   hashChange = () => {
     console.log("hash change!");
-    console.log(this.routes);
-    const hash = window.location.hash;
-    console.log(this);
-    const route = this.routes.filter((route) =>
-      hash.match(new RegExp(route.url))
-    )[0];
-    console.log(route);
-    if (route) {
-      this.params = new RegExp(route.url).exec(hash);
-      // console.log(this.params);
-      this.view.setCssUrl(`css/${route.name}.css`);
 
-      this.view.viewConstructor(route.model);
+    const hash = window.location.hash;
+
+    // const route = this.routes.filter((route) =>
+    //   hash.match(new RegExp(route["url"]))
+    // )[0];
+    // console.log(this.routes);
+    // console.log(hash);
+    // const route = hash.match(new RegExp(this.routes[`^${hash}$`].name));
+    const route = this.routes[hash];
+    console.log(route);
+
+    // 페이지(해쉬)별 css, tempelete, view render
+    if (route) {
+      this.view.setCssUrl(`css/${route["name"]}.css`);
+      this.view.viewConstructor(route["model"]);
+      switch (route.name) {
+        case "login":
+          this.view.loginConstructor();
+          break;
+        case "feed":
+          this.view.feedConstructor();
+          break;
+      }
       console.log("model load!");
     } else {
       this.view.viewConstructor();

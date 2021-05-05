@@ -8,34 +8,33 @@ import feedItem from "/model/templete/feeditem.js";
 
 // import View from "/view/view.js";
 // import route from "/model/route.model.js";
-
+// feedItem()
 class Controller {
   constructor(service, router) {
     this.service = service;
     // this.view = view;
     this.router = router;
-    console.log(this.router);
-    console.log(this.router.view);
+    // console.log(this.router);
+    // console.log(this.router.view);
+    // this.service.API.getUserimg();
+    window.addEventListener("hashchange", this.didRenderMount);
+    window.addEventListener("hashchange", this.ohterRenderMount);
 
-    // intro HTML렌더링 + 요소업데이트
-    console.log(navBarTemp());
-    this.router.addRoute("intro", "^#/$", introTemp(navBarTemp("asd", "done")));
-    this.router.addRoute("feed", "^#/feed$", feedTemp(navBarTemp()));
-    this.router.addRoute("login", "^#/auth/login$", loginTemp(navBarTemp()));
-    this.router.addRoute("join", "^#/auth/join$", joinTemp(navBarTemp()));
-    this.router.addRoute("store", "^#/store$", storeTemp(navBarTemp()));
+    this.router.addRoute("intro", "#/", introTemp(navBarTemp("asd", "done")));
+    this.router.addRoute("feed", "#/feed", feedTemp(navBarTemp()));
+    // data api를 받아서 templete에 넣고 반복문돌려서 생성한다
+    this.router.addRoute("login", "#/auth/login", loginTemp(navBarTemp()));
+    this.router.addRoute("join", "#/auth/join", joinTemp(navBarTemp()));
+    this.router.addRoute("store", "#/store", storeTemp(navBarTemp()));
     this.router.hashChange();
     this.didRenderMount();
-    // this.router.view.setCssUrl("css/intro.css");
+    this.ohterRenderMount();
     this.router.view.setTitle("Dogram");
-    window.addEventListener("hashchange", this.didRenderMount);
-    // this.bindMount();
-    // this.router.view.bindShowNav(this.showNav);
-    console.log("done!");
+
     console.log("bind on!");
-    console.log(this);
+    // console.log(this);
   }
-  // hash가 feed일경우 서비스와의 이벤트바인딩
+  // 공통 이벤트 바인딩
   didRenderMount = () => {
     console.log("didrendermount");
     this.router.view.bindShowNav(this.showNav);
@@ -46,7 +45,47 @@ class Controller {
     this.router.view.bindLinkLogin(this.linkLogin);
     this.router.view.bindLinkJoin(this.linkJoin);
   };
-  // 데이터를 받고
+
+  // 해쉬 별 이벤트 바인딩
+  ohterRenderMount = async () => {
+    console.log("did other rendermount");
+
+    const hash = window.location.hash;
+    switch (hash) {
+      case "#/auth/join":
+        this.router.view.bindPostJoin(this.postJoin);
+        break;
+      case "#/auth/login":
+        this.router.view.bindPostLogin(this.postLogin);
+        this.router.view.bindLinkJoin(this.linkJoin);
+        break;
+      case "#/feed":
+        this.router.view.bindAddFeed(this.containerLoad);
+        // this.router.hashChange();
+        // this.didRenderMount();
+        // const getFeedData = await this.service.getFirstFeed();
+        // let feedItemShow = getFeedData.map((item, idx) => {
+        //   console.log(item);
+        //   if (idx <= 5) {
+        //     return feedItem(
+        //       item.userName,
+        //       item.photo,
+        //       item.likeCount,
+        //       item.commentName
+        //     );
+        //   }
+        // });
+        // console.log(feedItemShow);
+        // this.router.addRoute(
+        //   "feed",
+        //   "#/feed",
+        //   feedTemp(navBarTemp(), feedItemShow.join(" "))
+          // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
+        // );
+        // addroute(data를 템플릿에 넣는다)
+        break;
+    }
+  };
   showNav = () => {
     console.log("after bind");
     if (this.router.view.mySidenav.style.width == "250px") {
@@ -57,6 +96,7 @@ class Controller {
       this.router.view.sideNav.classList.add("on");
     }
   };
+
   closeNav = (e) => {
     e.preventDefault();
     console.log(e);
@@ -74,6 +114,7 @@ class Controller {
     e.preventDefault();
     window.location.hash = "#/feed";
     // this.didRenderMount();
+    // addrouter
   };
   linkStore = (e) => {
     e.preventDefault();
@@ -89,6 +130,71 @@ class Controller {
     e.preventDefault();
     window.location.hash = "#/auth/join";
     // this.didRenderMount();
+  };
+  postJoin = (e) => {
+    e.preventDefault();
+    this.service.API.postJoin();
+  };
+  postLogin = (e) => {
+    e.preventDefault();
+    this.service.API.postLogin(
+      this.router.view.loginVal.value,
+      this.router.view.passwordVal.value
+    );
+    console.log(this.router.view.loginVal.value);
+    console.log(this.router.view.passwordVal.value);
+  };
+  containerLoad = () => {
+    const screenHeight = screen.height;
+    const fullHeight = this.router.view.container.clientHeight;
+    const scrollPosition = pageYOffset; // 스크롤위치
+    let oneTime = false;
+    // let feedItemShow = getFeedData.map((item, idx) => {
+    //   console.log(idx);
+    //   if (idx <= 9) {
+    //     return feedItem(
+    //       item.userName,
+    //       item.photo,
+    //       item.likeCount,
+    //       item.commentName
+    //     );
+    //   }
+    // });
+    const madeBox = () => {
+      oneTime = false;
+      // const getFeedData = await this.service.getFirstFeed();
+      // console.log(getFeedData);
+      const getFeedData = await this.service.getFirstFeed();
+      console.log(getFeedData)
+      console.log("feed load");
+      // console.log(typeof getFeedData);
+      // console.log(getFeedData[0].userName);
+      // console.log("feed!!!");
+      // let feedItemShow = getFeedData.map((item, idx) => {
+      //   console.log(idx);
+      //   if (idx <= 5) {
+      //     return feedItem(
+      //       item.userName,
+      //       item.photo,
+      //       item.likeCount,
+      //       item.commentName
+      //     );
+      //   }
+      // });
+      // // console.log(feedItemShow);
+      // // console.log(this.containerLoad());
+      // this.router.addRoute(
+      //   "feed",
+      //   "#/feed",
+      //   feedTemp(navBarTemp(), feedItemShow.join(" "))
+      //   // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
+      // );
+    };
+    if (fullHeight - screenHeight / 1 <= scrollPosition && !oneTime) {
+      oneTime = true;
+      console.log("next");
+      madeBox();
+    }
   };
 }
 export default Controller;

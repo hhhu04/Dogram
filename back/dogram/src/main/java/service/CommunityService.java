@@ -2,6 +2,8 @@ package service;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +39,7 @@ public class CommunityService  implements CommunityServiceI{
     public int create(CommunityDto dto,Long num) throws SQLException, ClassNotFoundException {
     	
         dto.setUserNum(num);
-       String add = dao.checkAddress(dto.getUserNum());
-       if(add != null) dao.create(dto, add);
-       else dao.create(dto);
+       dao.create(dto);
             
             System.out.println("create Community Success");
 			return 1;
@@ -48,17 +48,48 @@ public class CommunityService  implements CommunityServiceI{
     
     
 
-	public int read(UserDto userDto) throws SQLException {
+	public List<CommunityDto> read(UserDto userDto,CommunityDto dto) throws SQLException {
 		// TODO Auto-generated method stub
 		
 		dao.checkAddress(userDto);
-		CommunityDto dto = new CommunityDto();
-		dao.read(dto);
+		List<CommunityDto> list = dao.read(dto);
 		
 		
-		return 0;
+		return list;
+	}
+
+	public int update(CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		int num = dao.checkUser(dto);
+		if(num == 1) {
+			dao.update(dto);
+			 System.out.println("update Community Success");
+				return 1;
+		}
+		
+		return -1;
 	}
 	
+	public int delete(CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		int num = dao.checkUser(dto);
+		if(num == 1) {
+			dao.delete(dto);
+			 System.out.println("delete Community Success");
+				return 1;
+		}
+		
+		return -1;
+	}
+
+	public List<CommunityDto> read(CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<CommunityDto> list = dao.read2(dto);
+		
+		return list;
+	}
     
     
     

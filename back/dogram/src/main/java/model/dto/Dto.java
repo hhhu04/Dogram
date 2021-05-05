@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Dto {
 
 	private String id;
-	private String pw;
-
+	
+	private String img;
 	
 }

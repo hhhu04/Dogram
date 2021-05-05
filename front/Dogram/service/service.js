@@ -3,8 +3,22 @@ import FeedService from "/service/feed.service.js";
 
 class Service {
   constructor() {
-    console.log(FeedService.a);
+    this.API = new API();
+    this.model = [];
+    // this.model.push(this.API.getUserimg());
+    // this.feedModel = this.getFirstFeed();
+    // console.log(this.feedModel);
+    // console.log(this.getFirstFeed());
   }
+  //
+  getFirstFeed = async () => {
+    console.log("get call");
+    const getLoadFeed = await this.API.getFirstFeedLoad();
+    // console.log(JSON.stringify(JSON.parse(getLoadFeed.response)));
+    console.log(typeof JSON.stringify(JSON.parse(getLoadFeed.response)));
+    console.log(typeof JSON.parse(getLoadFeed.response));
+    return JSON.parse(getLoadFeed.response);
+  };
 }
 
 export default Service;

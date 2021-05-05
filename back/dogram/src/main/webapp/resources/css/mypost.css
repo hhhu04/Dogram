@@ -1,0 +1,52 @@
+/* STRUCTURE */
+body {
+  background-color: var(--bs-light);
+  background-color: rgb(216, 193, 173);
+}
+.innner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 170px;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+}
+.login_title {
+  text-align: left;
+  color: #6661d5;
+}
+.main_logo {
+  display: block;
+  width: 50px;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+.inner {
+  padding: 30px;
+}
+/* .inner.content {
+  margin-top: 100px;
+} */
+
+/* my post 본문 */
+.post_box .title {
+  text-align: left;
+}
+.post_area {
+  display: flex;
+}
+.content {
+  background-color: #fff;
+}
+button[type="button"] {
+  border: 1px solid #aaa;
+  background-color: #fff;
+  border-radius: 5px;
+}

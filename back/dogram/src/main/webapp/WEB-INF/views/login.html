@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+
+<div class = "box1">
+<h3>로그인 페이지</h3>
+<form id="logForm" method="GET">
+<input type="email" id="id" name ="id" placeholder="이메일">
+<input type="password" id="password" name="password" placeholder="비밀번호">
+<input type="button" id="add" name="add" value="로그인">
+</form>
+<br>
+</div>
+
+ 
+
+<script>
+$(function(){
+	
+ $('#add').on('click', function(e) {
+ 	var str = $("#logForm").serializeArray();
+ 	var em = document.getElementById('id').value;
+ 	var em2 = document.getElementById('password').value;
+ 	var login = {"id":em,"password":em2};
+ 	$.ajax({
+        	url:'./login',
+        	type:'POST',
+        	data : JSON.stringify(login),
+        	dataType : 'json',
+        	contentType : "application/json; charset=utf-8",
+        	success : function(data){
+        			console.log(data);
+        			if($.trim(data) == em)$(location).attr('123');
+        			else alert("입력 값 확인");	
+        	},
+        		error:function(data){
+        			console.log(data);
+        	}
+        	
+        });
+ 	});
+}); 
+
+</script>
+
+
+
+</body>
+</html>
