@@ -11,6 +11,17 @@ class Service {
     // console.log(this.getFirstFeed());
   }
   //
+  postLogin = async (userId, userPassword) => {
+    let data = {
+      id: userId,
+      password: userPassword,
+    };
+    document.cookie = `user=${data.id}`;
+
+    const loginResult = await this.API.postLogin(data);
+
+    return JSON.parse(loginResult.response);
+  };
   postJoin = async (data) => {
     const joinResult = await this.API.postJoin(data);
     return JSON.parse(joinResult.response);

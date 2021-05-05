@@ -16,8 +16,6 @@ class API {
     return response;
   }
   async postJoin(formData) {
-    // let url =
-    //   "http://api.openweathermap.org/data/2.5/weather?q=seoul&appid=a73a95d23aafd36d49c370750d7a2781";
     let url = "http://192.168.1.71:8070/user/join2";
     let response = await sendRequestFormData("POST", url, formData);
 
@@ -28,14 +26,9 @@ class API {
     console.log(data);
     return data;
   }
-  async postLogin(userId, userPassword) {
-    // let url =
-    //   "http://api.openweathermap.org/data/2.5/weather?q=seoul&appid=a73a95d23aafd36d49c370750d7a2781";
+  async postLogin(data) {
     let url = "http://192.168.1.71:8070/user/login";
-    let data = {
-      id: userId,
-      password: userPassword,
-    };
+
     let response = await sendRequest("POST", url, data);
     console.log(response);
     return response;
