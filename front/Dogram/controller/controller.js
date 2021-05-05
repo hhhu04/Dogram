@@ -54,6 +54,7 @@ class Controller {
     const hash = window.location.hash;
     switch (hash) {
       case "#/":
+        console.log("main hash!!");
         this.didRenderMount();
         break;
       case "#/auth/join":
@@ -61,8 +62,8 @@ class Controller {
         // this.didRenderMount();
         break;
       case "#/auth/login":
-        this.router.view.bindPostLogin(this.postLogin);
-        this.router.view.bindLinkJoin(this.linkJoin);
+        this.router.view.LoginView.bindPostLogin(this.postLogin);
+        this.router.view.LoginView.bindLinkJoin(this.linkJoin);
         // this.didRenderMount();
         break;
       case "#/feed":
@@ -138,15 +139,15 @@ class Controller {
   //   e.preventDefault();
   //   this.service.API.postJoin();
   // };
-  postLogin = (e) => {
-    e.preventDefault();
-    this.service.API.postLogin(
-      this.router.view.loginVal.value,
-      this.router.view.passwordVal.value
-    );
-    console.log(this.router.view.loginVal.value);
-    console.log(this.router.view.passwordVal.value);
-  };
+  // postLogin = (e) => {
+  //   e.preventDefault();
+  //   this.service.API.postLogin(
+  //     this.router.view.loginVal.value,
+  //     this.router.view.passwordVal.value
+  //   );
+  //   console.log(this.router.view.loginVal.value);
+  //   console.log(this.router.view.passwordVal.value);
+  // };
   // containerLoad = () => {
   //   const screenHeight = screen.height;
   //   const fullHeight = this.router.view.FeedView.container.clientHeight;

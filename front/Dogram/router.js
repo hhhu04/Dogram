@@ -32,7 +32,7 @@ class Router {
       this.view.viewConstructor(route["model"]);
       switch (route.name) {
         case "login":
-          this.view.loginConstructor();
+          this.view.LoginView.loginConstructor();
           break;
         case "join":
           this.view.joinConstructor();
