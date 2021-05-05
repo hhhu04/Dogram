@@ -1,17 +1,4 @@
 const feedTemp = (navBarTemp, feedItem = "") => {
-  // console.log(data["[[PromiseResult]]"]);
-  // console.log(data);
-  // console.log(typeof data);
-  // console.log(feedItem);
-  // let feedItemShow = data.map((item) => {
-  //   return feedItem(
-  //     item.userName,
-  //     item.photo,
-  //     item.likeCount,
-  //     item.commentName
-  //   );
-  // });
-  console.log(feedItem);
   return `<div class='cover-container'>
   <div class="masthead clearfix">
     <div class="inner">
