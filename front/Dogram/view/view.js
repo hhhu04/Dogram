@@ -10,6 +10,7 @@ class View {
     this.sideNav = "";
     this.homeBtn = "";
     this.feedBtn = "";
+    this.logoutbtn = "";
     this.componentsByName = {};
     this.FeedView = new FeedView();
     this.LoginView = new LoginView();
@@ -39,6 +40,8 @@ class View {
     this.joinBtn = document.getElementById("js_join");
 
     this.postJoinBtn = document.getElementById("js_joinBtn");
+
+    this.logoutbtn = document.querySelector(".logoutbtn");
   }
 
   // loginConstructor() {
@@ -67,6 +70,7 @@ class View {
   // updateView() {
   // }
   bindShowNav(navFunc) {
+    console.log("=========here============");
     this.gnbBtn.addEventListener("click", navFunc);
   }
   bindCloseNav(navFunc) {
@@ -83,6 +87,7 @@ class View {
     this.storeBtn.addEventListener("click", linkStore);
   }
   bindLinkLogin(linkLogin) {
+    if (!this.loginBtn) return;
     this.loginBtn.addEventListener("click", linkLogin);
   }
   bindLinkJoin(linkJoin) {
@@ -98,6 +103,12 @@ class View {
   bindAddFeed(containerLoad) {
     window.addEventListener("scroll", containerLoad, { passive: true });
     console.log("scroll down!");
+  }
+
+  bindLogout(logoutFunc) {
+    if (!this.logoutbtn) return;
+    this.logoutbtn.addEventListener("click", logoutFunc);
+    console.log(this.logoutbtn);
   }
 }
 export default View;

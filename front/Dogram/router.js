@@ -5,7 +5,7 @@ class Router {
     // this.FeedController = new FeedController();
     console.log(this);
 
-    window.addEventListener("hashchange", this.hashChange);
+    // window.addEventListener("hashchange", this.hashChange);
     // window.addEventListener("DOMContentLoaded", this.hashChange);
   }
   addRoute = (name, url, model) => {
@@ -31,9 +31,6 @@ class Router {
       this.view.setCssUrl(`css/${route["name"]}.css`);
       this.view.viewConstructor(route["model"]);
       switch (route.name) {
-        case "login":
-          this.view.LoginView.loginConstructor();
-          break;
         case "join":
           this.view.joinConstructor();
 
