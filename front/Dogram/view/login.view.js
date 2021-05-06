@@ -9,6 +9,10 @@ class LoginView {
   }
   bindPostLogin(postLogin) {
     this.postLoginBtn.addEventListener("click", postLogin);
+    // window.addEventListener(
+    //   "beforeunload",
+    //   this.postLoginBtn.removeEventListener("click", postLogin)
+    // );
   }
   bindLinkJoin(linkJoin) {
     this.joinBtn.addEventListener("click", linkJoin);

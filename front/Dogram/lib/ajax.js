@@ -10,6 +10,7 @@ var sendRequest = (method, url, data = null) => {
     if (data) {
       console.log(data);
       await ajax.send(JSON.stringify(data));
+      res(ajax);
       // await console.log(ajax.getAllResponseHeaders());
     } // 실행하고 res을 받는거를 기다림
     else {
