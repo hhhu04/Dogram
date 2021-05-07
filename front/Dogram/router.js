@@ -33,7 +33,6 @@ class Router {
       switch (route.name) {
         case "login":
           this.view.LoginView.loginConstructor();
-
           break;
         case "join":
           this.view.joinConstructor();
@@ -41,6 +40,9 @@ class Router {
           break;
         case "feed":
           this.view.FeedView.feedConstructor();
+          break;
+        case "feedUpload":
+          this.view.FeedUploadView.feedUploadConstructor();
           break;
       }
       console.log("model load!");
