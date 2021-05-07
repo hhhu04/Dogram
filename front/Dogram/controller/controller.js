@@ -165,7 +165,10 @@ class Controller {
     console.log("logout");
 
     document.cookie = "";
+    // 브라우저 셋쿠키
     this.setCookie("user", "hhh", -1);
+    // 내가 저장한것 지우기
+    this.service.userinfo = "";
 
     this.router.addRoute("intro", "#/", introTemp(navBarTemp("", "")));
     window.location.hash = "#/";

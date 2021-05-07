@@ -1,4 +1,5 @@
 import FeedView from "/view/feed.view.js";
+import FeedUploadView from "/view/feed.write.view.js";
 import LoginView from "/view/login.view.js";
 
 class View {
@@ -13,6 +14,7 @@ class View {
     this.logoutbtn = "";
     this.componentsByName = {};
     this.FeedView = new FeedView();
+    this.FeedUploadView = new FeedUploadView();
     this.LoginView = new LoginView();
   }
 

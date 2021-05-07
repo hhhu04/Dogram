@@ -29,6 +29,7 @@ class JoinController extends Controller {
       console.log(value);
     }
     this.service.postJoin(new FormData(form));
+    window.location.hash = "#/auth/login";
   };
 }
 

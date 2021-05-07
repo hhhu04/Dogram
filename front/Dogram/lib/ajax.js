@@ -15,7 +15,7 @@ var sendRequest = (method, url, data = null) => {
     } // 실행하고 res을 받는거를 기다림
     else {
       // await console.log(res());
-      await ajax.send(JSON.stringify(data));
+      await ajax.send(JSON.stringify({}));
       res(ajax);
     }
 
@@ -39,12 +39,15 @@ var sendRequestFormData = (method, url, data = null) => {
     const ajax = new XMLHttpRequest();
 
     ajax.open(method, url, false);
+    // ajax.setRequestHeader("Content-type", "application/json");
+
     ajax.setRequestHeader("Access-Control-Allow-Origin", "*");
 
     // POST
     if (data) {
       console.log(data);
       await ajax.send(data);
+      res(ajax);
       // await console.log(ajax.getAllResponseHeaders());
     } // 실행하고 res을 받는거를 기다림
     else {
