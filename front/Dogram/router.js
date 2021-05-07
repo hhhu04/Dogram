@@ -31,6 +31,10 @@ class Router {
       this.view.setCssUrl(`css/${route["name"]}.css`);
       this.view.viewConstructor(route["model"]);
       switch (route.name) {
+        case "login":
+          this.view.LoginView.loginConstructor();
+
+          break;
         case "join":
           this.view.joinConstructor();
 

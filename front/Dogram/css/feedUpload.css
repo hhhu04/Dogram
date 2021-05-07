@@ -172,6 +172,18 @@ textarea#desc {
   padding: 10px 20px;
   font-weight: bold;
 }
+.filebox {
+  position: relative;
+  width: 100%;
+}
+#imagePreview {
+  min-width: 50%;
+  min-width: 165px;
+  position: absolute;
+  left: 40%;
+  top: 10%;
+  transform: translateX(-40%);
+}
 
 /*
          * Footer

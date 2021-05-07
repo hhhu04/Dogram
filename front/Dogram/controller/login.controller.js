@@ -1,6 +1,7 @@
 import Controller from "/controller/controller.js";
 import navBarTemp from "/model/templete/navbar.js";
 import loginTemp from "/model/templete/login.js";
+import introTemp from "/model/templete/intro.js";
 
 class LoginController extends Controller {
   constructor(service, router) {
@@ -13,9 +14,11 @@ class LoginController extends Controller {
     this.router.hashChange();
     this.didRenderMount();
     this.router.view.LoginView.bindPostLogin(this.postLogin);
+    console.log("바인딩됨");
   }
   postLogin = async (e) => {
     e.preventDefault();
+    console.log("로그인ㄱㄱ");
     await this.service.postLogin(
       this.router.view.LoginView.loginVal.value,
       this.router.view.LoginView.passwordVal.value
