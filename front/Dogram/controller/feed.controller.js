@@ -12,23 +12,34 @@ class FeedController extends Controller {
       "#/feed",
       feedTemp(navBarTemp("logoutbtn", this.service.userinfo))
     );
+
     this.router.hashChange();
     this.didRenderMount();
-    this.getFeedData();
-    this.fistContainerLoad(this.getFeedData());
+    this.fistContainerLoad();
 
     this.feedState = 1;
     this.likeState = 0;
     // this.userinfo = this.getCookie("user");
     this.router.view.bindAddFeed(this.containerLoad);
+    this.router.view.FeedView.bindLinkUpload(this.linkUpload);
 
     console.log("feedController");
   }
+
+  feedRenderMount = () => {
+    this.router.view.FeedView.bindAddLike(this.addLike);
+    this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+  };
   getFeedData = async () => {
     this.feedData = await this.service.getFirstFeed();
+    console.log(1);
+    // return this.feedData;
   };
-  fistContainerLoad = (data) => {
-    let feedItemShow = data.map((item, idx) => {
+  fistContainerLoad = async () => {
+    console.log(2);
+    // const data = this.getFeedData();
+    this.feedData = await this.service.getFirstFeed();
+    let feedItemShow = this.feedData.map((item, idx) => {
       // console.log(item);
       if (idx < 5) {
         return feedItem(
@@ -51,6 +62,9 @@ class FeedController extends Controller {
         feedItemShow.join(" ")
       )
     );
+    this.router.hashChange();
+    this.didRenderMount();
+    this.feedRenderMount();
   };
   containerLoad = () => {
     const screenHeight = screen.height;
@@ -92,8 +106,8 @@ class FeedController extends Controller {
           // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
         );
         this.router.hashChange();
-        this.router.view.FeedView.bindAddLike(this.addLike);
         this.didRenderMount();
+        this.feedRenderMount();
       }
     };
     // console.log(fullHeight - screenHeight / 1.5);
@@ -118,6 +132,10 @@ class FeedController extends Controller {
   fillLike = () => {
     if (this.userinfo) {
     }
+  };
+  linkUpload = (e) => {
+    e.preventDefault();
+    window.location.hash = "#/feed/upload";
   };
 }
 export default FeedController;

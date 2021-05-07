@@ -6,6 +6,7 @@ import IntroController from "/controller/intro.controller.js";
 import FeedController from "/controller/feed.controller.js";
 import JoinController from "/controller/join.controller.js";
 import LoginController from "/controller/login.controller.js";
+import FeedUploadController from "/controller/feed.upload.ctr.js";
 
 // import API from "/api/api.js";
 
@@ -26,6 +27,9 @@ const windowHashChange = () => {
     case "#/feed":
       new FeedController(app.service, app.router);
       console.log("FeedController");
+      break;
+    case "#/feed/upload":
+      new FeedUploadController(app.service, app.router);
       break;
     case "#/auth/join":
       new JoinController(app.service, app.router);

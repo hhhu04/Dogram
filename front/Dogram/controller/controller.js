@@ -163,12 +163,25 @@ class Controller {
   logoutFunc = (e) => {
     e.preventDefault();
     console.log("logout");
-    // this.service.setCookie("user", "", "-1");
+
     document.cookie = "";
+    this.setCookie("user", "hhh", -1);
 
     this.router.addRoute("intro", "#/", introTemp(navBarTemp("", "")));
     window.location.hash = "#/";
+    this.router.hashChange();
     this.didRenderMount();
+  };
+
+  setCookie = (strName, strValue, iSecond) => {
+    var strCookie = strName + "=" + encodeURIComponent(strValue);
+    if (typeof iSecond === "number") {
+      strCookie += "; max-age=" + iSecond;
+    }
+
+    // QQQ: path, domain 유효범위를 설정하고 싶으면 여기서 strCookie 변수에 추가해 주어야 한다.
+
+    document.cookie = strCookie;
   };
 }
 export default Controller;

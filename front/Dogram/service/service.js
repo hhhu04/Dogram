@@ -25,6 +25,10 @@ class Service {
     this.userinfo = this.getCookie("user");
     return JSON.parse(loginResult.response);
   };
+  postUpload = async () => {
+    const uploadResult = await this.API.postUpload(data);
+    return JSON.parse(uploadResult.response);
+  };
   postJoin = async (data) => {
     const joinResult = await this.API.postJoin(data);
     return JSON.parse(joinResult.response);

@@ -16,9 +16,9 @@ const navBarTemp = (userStatus = "", userText = "") => {
   <a href="" id='js_home'>홈</a>
   <a href="#" id='js_feed'>피드게시판</a>
   <a href="#" id='js_store'>뼈다귀장터</a>
-  <a href="#" id='${
-    userText ? "" : "js_login"
-  }' class='${userStatus}'>${logText}</a>
+  <a href="#" id='${userText ? "" : "js_login"}' class='${
+    userText ? userStatus : ""
+  }'>${logText}</a>
   <a href="#" id='js_join' class="${userText ? "dnone" : ""}">회원가입</a>
   <a href="#" class="user_status" class='${
     userText ? "" : "dnone"

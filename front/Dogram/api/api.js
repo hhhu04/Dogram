@@ -15,6 +15,12 @@ class API {
 
     return response;
   }
+  async postUpload(formData) {
+    let url = "http://192.168.1.71:8070/feed/newfeed/";
+    let response = await sendRequestFormData("POST", url, formData);
+
+    return response;
+  }
   async postJoin(formData) {
     let url = "http://192.168.1.71:8070/user/join2";
     let response = await sendRequestFormData("POST", url, formData);

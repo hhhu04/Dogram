@@ -8,6 +8,8 @@ class LoginView {
     console.log(this.loginVal);
   }
   bindPostLogin(postLogin) {
+    console.log(this.postLoginBtn);
+    if (!this.postLoginBtn) return;
     this.postLoginBtn.addEventListener("click", postLogin);
     // window.addEventListener(
     //   "beforeunload",
