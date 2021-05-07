@@ -1,4 +1,5 @@
 import FeedView from "/view/feed.view.js";
+import LoginView from "/view/login.view.js";
 
 class View {
   constructor() {
@@ -9,8 +10,10 @@ class View {
     this.sideNav = "";
     this.homeBtn = "";
     this.feedBtn = "";
+    this.logoutbtn = "";
     this.componentsByName = {};
     this.FeedView = new FeedView();
+    this.LoginView = new LoginView();
   }
 
   setCssUrl(url) {
@@ -37,14 +40,17 @@ class View {
     this.joinBtn = document.getElementById("js_join");
 
     this.postJoinBtn = document.getElementById("js_joinBtn");
-    this.postLoginBtn = document.getElementById("login_btn");
+
+    this.logoutbtn = document.querySelector(".logoutbtn");
   }
 
-  loginConstructor() {
-    this.loginVal = document.loginForm.login;
-    this.passwordVal = document.loginForm.password;
-    console.log(this.loginVal);
-  }
+  // loginConstructor() {
+  //   this.loginVal = document.loginForm.login;
+  //   this.passwordVal = document.loginForm.password;
+  //   this.postLoginBtn = document.getElementById("login_btn");
+  //   this.joinBtn = document.querySelector(".regist_btn");
+  //   console.log(this.loginVal);
+  // }
   joinConstructor() {
     this.postJoinBtn = document.getElementById("js_joinBtn");
     this.idVal = document.joinForm.id;
@@ -53,35 +59,18 @@ class View {
     this.emailVal = document.joinForm.email;
     this.fileVal = document.joinForm.file;
   }
-  // feedConstructor() {
-  //   this.feedSearchBtn = document.querySelector(".feed_searchBtn");
-  //   this.container = document.querySelector(".content");
-  //   this.feedItem = document.querySelector(".feed_item");
-  //   console.log(this.container);
+  // addComponent(component) {
+  //   this.componentsByName[component.name] = component;
   // }
-  addComponent(component) {
-    this.componentsByName[component.name] = component;
-    // component.model = this.proxify(component.model);
-  }
 
-  showComponent(name) {
-    this.currentComponent = this.componentsByName[name];
-
-    // if (this.currentComponent) {
-    //   this.currentComponent.controller(this.currentComponent.model);
-    // }
-    this.updateView();
-  }
-  updateView() {
-    // if (!this.currentComponent) {
-    //   this.app.innerHTML = this.currentComponent.view(
-    //     this.currentComponent.model
-    //   );
-    // } else {
-    //   this.app.innerHTML = "<h3>Not Found</h3>";
-    // }
-  }
+  // showComponent(name) {
+  //   this.currentComponent = this.componentsByName[name];
+  //   this.updateView();
+  // }
+  // updateView() {
+  // }
   bindShowNav(navFunc) {
+    console.log("=========here============");
     this.gnbBtn.addEventListener("click", navFunc);
   }
   bindCloseNav(navFunc) {
@@ -98,20 +87,28 @@ class View {
     this.storeBtn.addEventListener("click", linkStore);
   }
   bindLinkLogin(linkLogin) {
+    if (!this.loginBtn) return;
     this.loginBtn.addEventListener("click", linkLogin);
   }
   bindLinkJoin(linkJoin) {
     this.joinBtn.addEventListener("click", linkJoin);
+    // this.registBtn.addEventListener("click", linkJoin);
   }
   bindPostJoin(postJoin) {
     this.postJoinBtn.addEventListener("click", postJoin);
   }
-  bindPostLogin(postLogin) {
-    this.postLoginBtn.addEventListener("click", postLogin);
-  }
+  // bindPostLogin(postLogin) {
+  //   this.postLoginBtn.addEventListener("click", postLogin);
+  // }
   bindAddFeed(containerLoad) {
     window.addEventListener("scroll", containerLoad, { passive: true });
     console.log("scroll down!");
+  }
+
+  bindLogout(logoutFunc) {
+    if (!this.logoutbtn) return;
+    this.logoutbtn.addEventListener("click", logoutFunc);
+    console.log(this.logoutbtn);
   }
 }
 export default View;

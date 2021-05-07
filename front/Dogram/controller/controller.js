@@ -14,25 +14,45 @@ class Controller {
     this.service = service;
     // this.view = view;
     this.router = router;
-    // this.FeedController = new FeedController(service, router);
-    // console.log(this.router);
-    // console.log(this.router.view);
-    // this.service.API.getUserimg();
-    window.addEventListener("hashchange", this.didRenderMount);
-    window.addEventListener("hashchange", this.ohterRenderMount);
+    // window.addEventListener("hashchange", this.didRenderMount);
+    // window.addEventListener("hashchange", this.ohterRenderMount);
 
-    this.router.addRoute("intro", "#/", introTemp(navBarTemp("asd", "done")));
-    this.router.addRoute("feed", "#/feed", feedTemp(navBarTemp()));
-    // data api를 받아서 templete에 넣고 반복문돌려서 생성한다
-    this.router.addRoute("login", "#/auth/login", loginTemp(navBarTemp()));
-    this.router.addRoute("join", "#/auth/join", joinTemp(navBarTemp()));
-    this.router.addRoute("store", "#/store", storeTemp(navBarTemp()));
-    this.router.hashChange();
-    this.didRenderMount();
-    this.ohterRenderMount();
-    this.router.view.setTitle("Dogram");
+    // this.router.addRoute(
+    //   "intro",
+    //   "#/",
+    //   introTemp(navBarTemp("logoutbtn", this.service.userinfo))
+    // );
+    // this.router.addRoute(
+    //   "feed",
+    //   "#/feed",
+    //   feedTemp(navBarTemp("logoutbtn", this.service.userinfo))
+    // );
+    // // data api를 받아서 templete에 넣고 반복문돌려서 생성한다
+    // this.router.addRoute(
+    //   "login",
+    //   "#/auth/login",
+    //   loginTemp(navBarTemp("logoutbtn", this.service.userinfo))
+    // );
+    // this.router.addRoute(
+    //   "join",
+    //   "#/auth/join",
+    //   joinTemp(navBarTemp("logoutbtn", this.service.userinfo))
+    // );
+    // this.router.addRoute(
+    //   "store",
+    //   "#/store",
+    //   storeTemp(navBarTemp("logoutbtn", this.service.userinfo))
+    // );
+    // this.router.hashChange();
+    // console.log(this.router.view.gnbBtn);
+    // if (this.router.view.gnbBtn) {
+    //   this.didRenderMount();
+    // }
 
-    console.log("bind on!");
+    // this.ohterRenderMount();
+    // this.router.view.setTitle("Dogram");
+
+    // console.log("bind on!");
     // console.log(this);
   }
   // 공통 이벤트 바인딩
@@ -45,25 +65,26 @@ class Controller {
     this.router.view.bindLinkStore(this.linkStore);
     this.router.view.bindLinkLogin(this.linkLogin);
     this.router.view.bindLinkJoin(this.linkJoin);
+    this.router.view.bindLogout(this.logoutFunc);
   };
 
   // 해쉬 별 이벤트 바인딩
   ohterRenderMount = async () => {
     console.log("did other rendermount");
-
     const hash = window.location.hash;
     switch (hash) {
       case "#/":
+        this.router.hashChange();
+        console.log("main hash!!");
         this.didRenderMount();
         break;
       case "#/auth/join":
+        this.router.hashChange();
         this.router.view.bindPostJoin(this.postJoin);
-        // this.didRenderMount();
+        this.didRenderMount();
         break;
       case "#/auth/login":
-        this.router.view.bindPostLogin(this.postLogin);
-        this.router.view.bindLinkJoin(this.linkJoin);
-        // this.didRenderMount();
+        // this.router.view.LoginView.bindPostLogin(this.postLogin);
         break;
       case "#/feed":
         const getFeedData = await this.service.getFirstFeed();
@@ -74,7 +95,10 @@ class Controller {
               item.userName,
               item.photo,
               item.likeCount,
-              item.commentName
+              "",
+              "",
+              "",
+              item.no
             );
           }
         });
@@ -82,13 +106,19 @@ class Controller {
         this.router.addRoute(
           "feed",
           "#/feed",
-          feedTemp(navBarTemp(), feedItemShow.join(" "))
+          feedTemp(
+            navBarTemp("logoutbtn", this.service.userinfo),
+            feedItemShow.join(" ")
+          )
         );
         this.router.hashChange();
+        this.router.view.FeedView.bindAddLike(this.addLike);
         this.didRenderMount();
         break;
     }
   };
+
+  // 공통 이벤트 메서드
   showNav = () => {
     console.log("after bind");
     if (this.router.view.mySidenav.style.width == "250px") {
@@ -111,96 +141,34 @@ class Controller {
     console.log(e);
     e.preventDefault();
     window.location.hash = "#/";
-    // this.didRenderMount();
   };
   linkFeed = (e) => {
     e.preventDefault();
     window.location.hash = "#/feed";
-    // this.didRenderMount();
-    // addrouter
   };
   linkStore = (e) => {
     e.preventDefault();
     window.location.hash = "#/store";
-    // this.didRenderMount();
   };
   linkLogin = (e) => {
     e.preventDefault();
     window.location.hash = "#/auth/login";
-    // this.didRenderMount();
   };
   linkJoin = (e) => {
     e.preventDefault();
     window.location.hash = "#/auth/join";
-    // this.didRenderMount();
   };
-  // postJoin = (e) => {
-  //   e.preventDefault();
-  //   this.service.API.postJoin();
-  // };
-  postLogin = (e) => {
+
+  // 해쉬별 메서드
+  logoutFunc = (e) => {
     e.preventDefault();
-    this.service.API.postLogin(
-      this.router.view.loginVal.value,
-      this.router.view.passwordVal.value
-    );
-    console.log(this.router.view.loginVal.value);
-    console.log(this.router.view.passwordVal.value);
+    console.log("logout");
+    // this.service.setCookie("user", "", "-1");
+    document.cookie = "";
+
+    this.router.addRoute("intro", "#/", introTemp(navBarTemp("", "")));
+    window.location.hash = "#/";
+    this.didRenderMount();
   };
-  // containerLoad = () => {
-  //   const screenHeight = screen.height;
-  //   const fullHeight = this.router.view.FeedView.container.clientHeight;
-  //   const scrollPosition = pageYOffset; // 스크롤위치
-  //   let oneTime = false;
-  //   // let feedItemShow = getFeedData.map((item, idx) => {
-  //   //   console.log(idx);
-  //   //   if (idx <= 9) {
-  //   //     return feedItem(
-  //   //       item.userName,
-  //   //       item.photo,
-  //   //       item.likeCount,
-  //   //       item.commentName
-  //   //     );
-  //   //   }
-  //   // });
-  //   const madeBox = async () => {
-  //     oneTime = false;
-  //     // const getFeedData = await this.service.getFirstFeed();
-  //     // console.log(getFeedData);
-  //     const getFeedData = await this.service.getFirstFeed();
-  //     console.log(getFeedData);
-  //     console.log("feed load");
-  //     // console.log(typeof getFeedData);
-  //     // console.log(getFeedData[0].userName);
-  //     // console.log("feed!!!");
-  //     this.feedState++;
-  //     let feedItemShow = getFeedData.map((item, idx) => {
-  //       console.log(idx);
-  //       if (this.feedState * 5 <= idx < this.feedState * 5 + 5) {
-  //         return feedItem(
-  //           item.userName,
-  //           item.photo,
-  //           item.likeCount,
-  //           item.commentName
-  //         );
-  //       }
-  //     });
-  //     // // console.log(feedItemShow);
-  //     // // console.log(this.containerLoad());
-  //     this.router.addRoute(
-  //       "feed",
-  //       "#/feed",
-  //       feedTemp(navBarTemp(), feedItemShow.join(" "))
-  //       // 리턴을 data가 있는 feedItem this.containerLoad.join(" ")
-  //     );
-  //     this.router.hashChange();
-  //     this.didRenderMount();
-  //   };
-  //   if (fullHeight - screenHeight / 1 <= scrollPosition && !oneTime) {
-  //     oneTime = true;
-  //     console.log("next");
-  //     madeBox();
-  //   }
-  // };
 }
 export default Controller;

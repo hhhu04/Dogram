@@ -12,6 +12,9 @@
   padding-top: 60px;
   transition: 0.5s;
 }
+.dnone {
+  display: none !important;
+}
 /* The navigation menu links */
 .sidenav a {
   padding: 8px 8px 8px 32px;
