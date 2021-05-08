@@ -44,6 +44,15 @@ class Router {
         case "feedUpload":
           this.view.FeedUploadView.feedUploadConstructor();
           break;
+        case "mypage":
+          console.log(route.name);
+          this.view.MypageView.mypageConstructor();
+          break;
+
+        case "modify":
+          console.log(route.name);
+          this.view.ModifyView.modifyConstructor();
+          break;
       }
       console.log("model load!");
     } else {

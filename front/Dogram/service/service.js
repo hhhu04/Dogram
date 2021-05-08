@@ -7,6 +7,7 @@ class Service {
     this.model = [];
     this.userinfo = this.getCookie("user");
     console.log(this.userinfo);
+
     // this.model.push(this.API.getUserimg());
     // this.feedModel = this.getFirstFeed();
     // console.log(this.feedModel);
@@ -33,6 +34,10 @@ class Service {
     const joinResult = await this.API.postJoin(data);
     return JSON.parse(joinResult.response);
   };
+  updateUser = async () => {
+    const updateResult = await this.API.postUpload(data);
+    return JSON.parse(uploadResult.response);
+  };
   getFirstFeed = async () => {
     console.log("get call");
     const getLoadFeed = await this.API.getFirstFeedLoad();
@@ -42,6 +47,11 @@ class Service {
     return JSON.parse(getLoadFeed.response);
   };
 
+  deleteUser = async () => {
+    const deleteResult = await this.APT.deleteUser();
+    return JSON.parse(deleteResult.response);
+    await console.log("delete!!");
+  };
   getCookie = (cName) => {
     cName = cName + "=";
     var cookieData = document.cookie;
@@ -58,15 +68,10 @@ class Service {
 
   setCookie = (name, value, expires, path, domain, secure) => {
     var time = new Date();
-
     expires = expires ? time.setDate(time.getDate() + expires) : "";
-
     path = path ? "; path=" + path : "";
-
     domain = domain ? "; domain=" + domain : "";
-
     secure = secure ? "; secure" : "";
-
     document.cookie =
       name +
       "=" +
