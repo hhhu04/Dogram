@@ -20,9 +20,7 @@ const navBarTemp = (userStatus = "", userText = "") => {
     userText ? userStatus : ""
   }'>${logText}</a>
   <a href="#" id='js_join' class="${userText ? "dnone" : ""}">회원가입</a>
-  <a href="#" class="user_status" class='${
-    userText ? "" : "dnone"
-  }'>${mypage}</a>  
+  <a href="#" class="user_status ${userText ? "" : "dnone"}">${mypage}</a>  
   </div>
   `;
 };

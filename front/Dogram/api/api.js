@@ -54,6 +54,13 @@ class API {
     console.log("api call");
     return response;
   }
+
+  async deleteUser() {
+    let url = "http://127.0.0.1:5501/data/status.json";
+    let response = await sendRequest("POST", url);
+    console.log("api call");
+    return response;
+  }
 }
 
 export default API;
