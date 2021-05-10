@@ -5,7 +5,11 @@ const feedItem = (
   feedTitle = "",
   commentName = "",
   commentText = "",
-  contentNum = ""
+  contentNum = "",
+
+  // likeState = "",
+  heart = "far",
+  numberCheck = ""
 ) => {
   return `<div class="feed_item">
     <div class="feed_header">
@@ -16,11 +20,11 @@ const feedItem = (
     </div>
     <div class="main_photo">
         <!-- <img src="/img/mindog.jpg" alt=""> -->
-        <img src="${photo}" alt="">
+        <img src="http://192.168.1.71:8070/${photo}" alt="">
     </div>
     <div class="desc_area">
         <div class="btn_area">
-            <button type="button" style="width: 15px;padding: 0;" class="likebtn" id="${contentNum}"><i class="far fa-heart"></i></button>
+            <button type="button" style="width: 15px;padding: 0;" class="likebtn" id="${contentNum}"><i class="${heart} fa-heart" id="${contentNum}"></i></button>
             <button type="button"><i class="far fa-paper-plane"></i></button>
             <button type="button"><i class="far fa-comment-alt"></i></button>
             <a href="#" class="message_btn"><i class="far fa-envelope"></i></a>

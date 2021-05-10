@@ -15,7 +15,7 @@ const joinTemp = (navBarTemp) => {
             <div id="formContent">
                 <h1 class="login_title">회원가입</h1>
                 <!-- Login Form -->
-                <form class="form-horizontal" id="joinForm" onsubmit="(e) => {e.preventDefault()}" method="post" action="#" name="joinForm" enctype="multipart/form-data">
+                <form class="form-horizontal" accept-charset="UTF-8" id="joinForm" onsubmit="(e) => {e.preventDefault()}" method="post" action="#" name="joinForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="id" class="cols-sm-2 control-label">아이디</label>
                         <div class="cols-sm-10">
