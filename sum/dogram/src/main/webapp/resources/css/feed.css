@@ -230,7 +230,31 @@ html {
 .desc_title {
   margin-bottom: 10px;
 }
-
+.comment_area {
+  margin-bottom: 20px;
+}
+.commentForm {
+  position: relative;
+}
+.commentInput {
+  width: 100%;
+  line-height: 20px;
+  min-height: 50px;
+  border: 1px solid #aaa;
+  border-left: none;
+  border-right: none;
+  resize: none;
+  text-indent: 8px;
+  overflow: hidden;
+  background-color: transparent;
+  padding-top: 20px;
+}
+.commentBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 /*
        * Footer
        */
