@@ -35,6 +35,12 @@ const feedItem = (
           <span class="name">${commentName}</span> <span class="">${commentText}</span>
           <div><button>댓글 더보기...</button></div>
         </div>
+        <div>
+        <form method="POST" name="commentForm" class="commentForm">
+          <textarea class="commentInput" autofocus="true"  placeholder="댓글 달기" autocomplete="off" autocorrect="off"></textarea>
+          <button type="submit" disabled class="commentBtn">게시</button>
+        </form>
+        </div>
     </div>
     </div>`;
 };

@@ -7,6 +7,8 @@ import FeedController from "/controller/feed.controller.js";
 import JoinController from "/controller/join.controller.js";
 import LoginController from "/controller/login.controller.js";
 import FeedUploadController from "/controller/feed.upload.ctr.js";
+import ModifyController from "/controller/modify.controller.js";
+import MypageController from "/controller/mypage.controller.js";
 
 // import API from "/api/api.js";
 
@@ -38,6 +40,12 @@ const windowHashChange = () => {
     case "#/auth/login":
       new LoginController(app.service, app.router);
       console.log("login done");
+      break;
+    case "#/mypage":
+      new MypageController(app.service, app.router);
+      break;
+    case "#/mypage/modify":
+      new ModifyController(app.service, app.router);
       break;
   }
 };

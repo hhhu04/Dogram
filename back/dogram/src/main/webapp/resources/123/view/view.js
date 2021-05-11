@@ -1,5 +1,8 @@
 import FeedView from "/view/feed.view.js";
+import FeedUploadView from "/view/feed.write.view.js";
 import LoginView from "/view/login.view.js";
+import ModifyView from "/view/modify.view.js";
+import MypageView from "/view/mypage.view.js";
 
 class View {
   constructor() {
@@ -13,7 +16,10 @@ class View {
     this.logoutbtn = "";
     this.componentsByName = {};
     this.FeedView = new FeedView();
+    this.FeedUploadView = new FeedUploadView();
     this.LoginView = new LoginView();
+    this.ModifyView = new ModifyView();
+    this.MypageView = new MypageView();
   }
 
   setCssUrl(url) {
@@ -42,6 +48,7 @@ class View {
     this.postJoinBtn = document.getElementById("js_joinBtn");
 
     this.logoutbtn = document.querySelector(".logoutbtn");
+    this.mypageBtn = document.querySelector(".user_status");
   }
 
   // loginConstructor() {
@@ -92,6 +99,11 @@ class View {
   }
   bindLinkJoin(linkJoin) {
     this.joinBtn.addEventListener("click", linkJoin);
+    // this.registBtn.addEventListener("click", linkJoin);
+  }
+
+  bindLinkMypage(linkMypage) {
+    this.mypageBtn.addEventListener("click", linkMypage);
     // this.registBtn.addEventListener("click", linkJoin);
   }
   bindPostJoin(postJoin) {

@@ -2,6 +2,7 @@ package com.dogram.start;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.http.HttpRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class CommunityController {
 	@PostMapping("/newfeed")
 	@ResponseBody
 	public int newfeed(@CookieValue(value="id", required=false) Cookie cookie,
-			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv) {
+			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv, HttpServletResponse response) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 		
@@ -83,10 +84,30 @@ public class CommunityController {
 		
 		CommunityDto cdto = new CommunityDto();
 		
-		cdto.setTitle(file.getParameter("title"));
-		cdto.setContent(file.getParameter("content"));
-		cdto.setCategory(file.getParameter("category"));
-		cdto.setAddress(file.getParameter("address"));
+		try {
+			System.out.println("실행확인");
+			
+			file.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
+			String title = file.getParameter("title");
+			String content = file.getParameter("content");
+			String category = file.getParameter("category");
+			String address = file.getParameter("address");
+			
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			content = new String(content.getBytes("8859_1"),"utf-8");
+			category = new String(category.getBytes("8859_1"),"utf-8");
+
+			System.out.println(title);
+			cdto.setTitle(title);
+			cdto.setContent(content);
+			cdto.setCategory(category);
+			cdto.setAddress(address);
+			
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		System.out.println("1");
 		
@@ -192,26 +213,47 @@ public class CommunityController {
 	
 	@PostMapping("/update")
 	@ResponseBody
-	public int update(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie,HttpServletRequest request) {
+	public int update(@CookieValue(value="id", required=false) Cookie cookie,
+			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv, HttpServletResponse response) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
-		
-		if(img != null) {
-			dto.setImg(img);
-			img = null;
+		CommunityDto cdto = new CommunityDto();
+		try {
+			System.out.println("실행확인");
+			
+			file.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
+			String title = file.getParameter("title");
+			String content = file.getParameter("content");
+			String category = file.getParameter("category");
+			String address = file.getParameter("address");
+			
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			content = new String(content.getBytes("8859_1"),"utf-8");
+			category = new String(category.getBytes("8859_1"),"utf-8");
+
+			System.out.println(title);
+			cdto.setTitle(title);
+			cdto.setContent(content);
+			cdto.setCategory(category);
+			cdto.setAddress(address);
+			
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+		String id=cookie.getValue();
 //		if(cookie.getName() != null) {
 //		if(cookie.getName().equals("id")){
 			try {
 //				Long userNum = comm.ckeckCookie(cookie.getValue());
 				Long userNum = comm.ckeckCookie(id);
-				dto.setUserNum(userNum);
-				int num = comm.update(dto);
+				cdto.setUserNum(userNum);
+				cdto.setImg(comm.upload(img, mv,model));
+				int num = comm.update(cdto);
 				return num;
-			} catch (ClassNotFoundException | SQLException e) {
+			} catch (ClassNotFoundException | SQLException | IllegalStateException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return -2;

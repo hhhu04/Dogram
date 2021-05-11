@@ -24,6 +24,11 @@ const mypostlistTemp = () => {
             <button type="button">삭제</button>
         </div>
     </div>
-</div>`;
+</div>
+<div id="testBody"></div>
+<div class="pagination-wrapper clearfix">
+    <div class="pagination" id="pages"></div>
+</div>
+`;
 };
 export default mypostlistTemp;

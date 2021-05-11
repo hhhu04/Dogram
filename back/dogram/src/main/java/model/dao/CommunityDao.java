@@ -66,16 +66,42 @@ public class CommunityDao implements CommunityDaoI{
 		return -1L;
 		
 	}
+		
+public String img(Long cookie) throws ClassNotFoundException, SQLException {
+			
+			Connection c = db.connect();
+			Statement stat = c.createStatement();
+			
+			PreparedStatement preparedStatement = 
+					c.prepareStatement("select img from user where user.num = ?");
+			
+			preparedStatement.setLong(1, cookie);
+			
+			 ResultSet rs = preparedStatement.executeQuery();
+		        if(rs.next()) {
+		        	return rs.getString("img");
+		        }
+		        stat.close();
+
+		        db.disconnect();
+			
+			return "-1";
+		}
+		
+		
 	
 	 public int create(CommunityDto dto) throws ClassNotFoundException, SQLException{
 		
+		 String userImg = img(dto.getUserNum());
+		 	System.out.println(userImg+"1223123");
+		 
 		 	GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 	    	DateNow date = ctx.getBean("datenow",DateNow.class);
 		 
 	        Connection c = db.connect();
 
 	        PreparedStatement preparedStatement = c.prepareStatement(
-	                "insert into community (img,title,content,comment_count,like_count,category,user_num,created_at) value(?,?,?,?,?,?,?,?)");
+	                "insert into community (title,img,content,comment_count,like_count,category,user_num,created_at,user_img) value(?,?,?,?,?,?,?,?,?)");
 
 	        preparedStatement.setString(1, dto.getTitle());
 	        preparedStatement.setString(2, dto.getImg());
@@ -85,6 +111,7 @@ public class CommunityDao implements CommunityDaoI{
 	        preparedStatement.setString(6, dto.getCategory());
 	        preparedStatement.setLong(7, dto.getUserNum());
 	        preparedStatement.setString(8, date.date());
+	        preparedStatement.setString(9, userImg);
 	        preparedStatement.executeUpdate();
 	        preparedStatement.close();
 
@@ -218,6 +245,7 @@ public class CommunityDao implements CommunityDaoI{
 		        	String updatedAt = rs.getString("updated_at");
 		        	String address = rs.getString("address");
 		        	Long userNum = rs.getLong("user_num");
+		        	String userImg = rs.getString("user_img");
 		        	
 		        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
@@ -232,6 +260,7 @@ public class CommunityDao implements CommunityDaoI{
 		        	dto.setAddress(address);
 		        	dto.setUserNum(userNum);
 		        	dto.setUpdatedAt(dateTime);
+		        	dto.setUserImg(userImg);
 		        	
 		        	
 		        	list2 = like.readAll(dto2,num);

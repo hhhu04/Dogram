@@ -13,7 +13,7 @@ const feedWriteTemp = (navBarTemp, feedItem = "") => {
                   <div class="content">
                     <h1>새 게시물</h1>
                     <div class="header_section">
-                      <form class="form-horizontal" name="uploadForm" method="post" action="#" accept="img/*" enctype="multipart/form-data">
+                      <form class="form-horizontal" accept-charset="UTF-8" name="uploadForm" method="post" action="#" accept="img/*" enctype="multipart/form-data">
                         <div class="left_side">
                             <div class="form-group">
                                 

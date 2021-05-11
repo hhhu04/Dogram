@@ -40,8 +40,7 @@ class API {
 
     return response;
   }
-//집 192.168.1.71
-//학원 192.168.1.71
+
   async getFirstFeedLoad() {
     // let url = "http://192.168.1.71:8070/feed/";
     let url = "http://192.168.1.71:8070/data/status.json";
