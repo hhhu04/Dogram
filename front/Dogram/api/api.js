@@ -27,11 +27,14 @@ class API {
 
     return response;
   }
-  // getData() {
-  //   let data = "../data.weather.json";
-  //   console.log(data);
-  //   return data;
-  // }
+  async postComment(formData) {
+    let url = "http://192.168.1.71:8070/feed/commentadd";
+
+    let response = await sendRequest("POST", url, formData);
+    console.log(response);
+
+    return response;
+  }
   async postLogin(data) {
     let url = "http://192.168.1.71:8070/user/login";
 
@@ -59,6 +62,15 @@ class API {
   async deleteUser() {
     let url = "http://127.0.0.1:5501/data/status.json";
     let response = await sendRequest("POST", url);
+    console.log("api call");
+    return response;
+  }
+
+  async addLike(data) {
+    // let url = "http://101.101.211.145:8080/feed/addlike";
+    let url = "http://192.168.1.71:8070/feed/addlike";
+
+    let response = await sendRequest("POST", url, data);
     console.log("api call");
     return response;
   }

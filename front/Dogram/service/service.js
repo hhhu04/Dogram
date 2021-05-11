@@ -5,7 +5,7 @@ class Service {
   constructor() {
     this.API = new API();
     this.model = [];
-    this.userinfo = this.getCookie("user");
+    this.userinfo = this.getCookie("id");
     console.log(this.userinfo);
 
     // this.model.push(this.API.getUserimg());
@@ -23,12 +23,16 @@ class Service {
     const loginResult = await this.API.postLogin(data);
 
     document.cookie = `user=${data.id}`;
-    this.userinfo = this.getCookie("user");
+    this.userinfo = this.getCookie("id");
     return JSON.parse(loginResult.response);
   };
   postUpload = async (data) => {
     const uploadResult = await this.API.postUpload(data);
     return JSON.parse(uploadResult.response);
+  };
+  postComment = async (data) => {
+    const commentResult = await this.API.postComment(data);
+    return JSON.parse(commentResult.response);
   };
   postJoin = async (data) => {
     const joinResult = await this.API.postJoin(data);
@@ -48,9 +52,16 @@ class Service {
   };
 
   deleteUser = async () => {
-    const deleteResult = await this.APT.deleteUser();
+    const deleteResult = await this.API.deleteUser();
     return JSON.parse(deleteResult.response);
     await console.log("delete!!");
+  };
+
+  addAndDeleteLike = async (data) => {
+    const datas = JSON.stringify({ communityNum: data.toString() });
+    const addlikeResult = await this.API.addLike(JSON.parse(datas));
+    console.log(addlikeResult.response);
+    return JSON.parse(addlikeResult.response);
   };
   getCookie = (cName) => {
     cName = cName + "=";
