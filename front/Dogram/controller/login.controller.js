@@ -14,6 +14,8 @@ class LoginController extends Controller {
     this.router.hashChange();
     this.didRenderMount();
     this.router.view.LoginView.bindPostLogin(this.postLogin);
+    this.router.view.LoginView.bindLinkJoin(this.linkJoin);
+
     console.log("바인딩됨");
   }
   postLogin = async (e) => {
@@ -38,6 +40,11 @@ class LoginController extends Controller {
     //   this.router.view.LoginView.loginVal.value,
     //   this.router.view.LoginView.passwordVal.value
     // );
+  };
+  linkJoin = (e) => {
+    e.preventDefault();
+    console.log("aaa");
+    window.location.hash = "#/auth/join";
   };
 }
 
