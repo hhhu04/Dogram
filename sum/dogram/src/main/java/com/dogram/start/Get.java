@@ -3,16 +3,19 @@ package com.dogram.start;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class Get {
 
 	
-	@GetMapping("/tes")
-	public String tes() {
-		return "img";
-	}
+	@RequestMapping(value="/chat")
+    public ModelAndView getChatViewPage(ModelAndView mav) {
+        mav.setViewName("chat");
+        return mav;
+    }
 	
+
 	
 	
 	@GetMapping("/")

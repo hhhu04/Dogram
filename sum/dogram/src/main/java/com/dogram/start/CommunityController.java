@@ -2,6 +2,7 @@ package com.dogram.start;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.http.HttpRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,9 +22,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +38,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import model.dao.CommunityDao;
 import model.dto.CommentDto;
 import model.dto.CommunityDto;
-import model.dto.FeedDto;
 import model.dto.LikeListDto;
 import model.dto.UserDto;
 import service.CommentService;
@@ -54,8 +56,6 @@ public class CommunityController {
 //	}
 	
 	
-	private static final String FILE_SERVER_PATH = "/home/cat/img";
-	private static String img = null;
 	
 //	@RequestMapping("/upload")
 //	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
@@ -74,7 +74,7 @@ public class CommunityController {
 	@PostMapping("/newfeed")
 	@ResponseBody
 	public int newfeed(@CookieValue(value="id", required=false) Cookie cookie,
-			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv) {
+			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv, HttpServletResponse response) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 		
@@ -83,10 +83,30 @@ public class CommunityController {
 		
 		CommunityDto cdto = new CommunityDto();
 		
-		cdto.setTitle(file.getParameter("title"));
-		cdto.setContent(file.getParameter("content"));
-		cdto.setCategory(file.getParameter("category"));
-		cdto.setAddress(file.getParameter("address"));
+		try {
+			System.out.println("실행확인");
+			
+			file.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
+			String title = file.getParameter("title");
+			String content = file.getParameter("content");
+			String category = file.getParameter("category");
+			String address = file.getParameter("address");
+			
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			content = new String(content.getBytes("8859_1"),"utf-8");
+			category = new String(category.getBytes("8859_1"),"utf-8");
+
+			System.out.println(title);
+			cdto.setTitle(title);
+			cdto.setContent(content);
+			cdto.setCategory(category);
+			cdto.setAddress(address);
+			
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		System.out.println("1");
 		
@@ -95,9 +115,9 @@ public class CommunityController {
 			try {
 				System.out.println("2");
 								
-//				Long userNum = comm.ckeckCookie(cookie.getValue());
+				Long userNum = comm.ckeckCookie(cookie.getValue());
 //				Long userNum = comm.ckeckCookie(id);
-				Long userNum = comm.ckeckCookie("hhh");
+//				Long userNum = comm.ckeckCookie("hhh");
 				cdto.setImg(comm.upload(img, mv,model));
 				int num = comm.create(cdto, userNum);
 				return num;
@@ -128,14 +148,15 @@ public class CommunityController {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 		
-//		HttpSession session = request.getSession();
-//		String id = (String) session.getAttribute("id");
 		
 //		if(cookie.getName() != null) {
 				try {
 //					Long userNum = comm.ckeckCookie(cookie.getValue());
-					String id = "hhh";
+//					String id = "hhh";
+					String  id = cookie.getValue();
+					System.out.println(id+"------------------");
 					Long userNum = comm.ckeckCookie(id);
+					System.out.println(userNum);
 					userDto.setNum(userNum);
 					dto.setUserNum(userNum);
 					List<CommunityDto> list = comm.read(userDto,dto);
@@ -153,6 +174,48 @@ public class CommunityController {
 		
 	}
 	
+	@PostMapping(value = "/{num}")	
+	@ResponseBody
+	public CommunityDto te(@PathVariable("num") int num) {
+		CommunityDto dto = new CommunityDto();
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		CommunityService comm = ctx.getBean("community",CommunityService.class);
+		try {
+			comm.readOne(dto, num);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	return dto;
+}
+	
+	
+//	@GetMapping("/")
+//	@ResponseBody
+//	public CommunityDto readOne() {
+//		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+//		CommunityService comm = ctx.getBean("community",CommunityService.class);
+//		
+//		
+////		if(cookie.getName() != null) {
+//				try {
+////					Long userNum = comm.ckeckCookie(cookie.getValue());
+//					String id = "hhh";
+//					
+//					return list;
+//					
+//				} catch (ClassNotFoundException | SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				
+//				}
+//			
+////		}
+//		return null;
+//		
+//	}
+	
 
 	
 	
@@ -165,10 +228,11 @@ public class CommunityController {
 		
 //		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
-		String id = "hhh";
+//		String id = "dogram";
+		String id = cookie.getValue();
 		
 		int num = -1;
-		if(cookie.getName() != null) {
+//		if(cookie.getName() != null) {
 			try {
 //				Long uNum = like.ckeckCookie(cookie.getValue());
 				Long uNum = like.ckeckCookie(id);
@@ -184,34 +248,55 @@ public class CommunityController {
 				e.printStackTrace();
 				return -1;
 			}
-		}
+//		}
 //		
-		return -2;
+//		return -2;
 	}
 	
 	
 	@PostMapping("/update")
 	@ResponseBody
-	public int update(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie,HttpServletRequest request) {
+	public int update(@CookieValue(value="id", required=false) Cookie cookie,
+			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv, HttpServletResponse response) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
-		
-		if(img != null) {
-			dto.setImg(img);
-			img = null;
+		CommunityDto cdto = new CommunityDto();
+		try {
+			System.out.println("실행확인");
+			
+			file.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
+			String title = file.getParameter("title");
+			String content = file.getParameter("content");
+			String category = file.getParameter("category");
+			String address = file.getParameter("address");
+			
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			content = new String(content.getBytes("8859_1"),"utf-8");
+			category = new String(category.getBytes("8859_1"),"utf-8");
+
+			System.out.println(title);
+			cdto.setTitle(title);
+			cdto.setContent(content);
+			cdto.setCategory(category);
+			cdto.setAddress(address);
+			
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+		String id=cookie.getValue();
 //		if(cookie.getName() != null) {
 //		if(cookie.getName().equals("id")){
 			try {
 //				Long userNum = comm.ckeckCookie(cookie.getValue());
 				Long userNum = comm.ckeckCookie(id);
-				dto.setUserNum(userNum);
-				int num = comm.update(dto);
+				cdto.setUserNum(userNum);
+				cdto.setImg(comm.upload(img, mv,model));
+				int num = comm.update(cdto);
 				return num;
-			} catch (ClassNotFoundException | SQLException e) {
+			} catch (ClassNotFoundException | SQLException | IllegalStateException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return -2;
@@ -227,8 +312,9 @@ public class CommunityController {
 	public int delete(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie,HttpServletRequest request) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+//		HttpSession session = request.getSession();
+//		String id = (String) session.getAttribute("id");
+		String id = cookie.getValue();
 		
 //		if(cookie.getName() != null) {
 			try {
@@ -259,7 +345,7 @@ public class CommunityController {
 //		if(cookie.getName() != null) {
 			try {
 				comme.ckeckCookie(cookie.getValue(),dto);
-				comme.ckeckCookie(id,dto);
+//				comme.ckeckCookie(id,dto);
 				num = comme.create(dto);
 					
 				return num;
@@ -282,11 +368,11 @@ public class CommunityController {
 		List<CommentDto> list = null;
 		
 		int num = -1;
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+//		HttpSession session = request.getSession();
+//		String id = (String) session.getAttribute("id");
 //		if(cookie.getName() != null) {
 			try {
-//				comme.ckeckCookie(cookie.getValue(),dto);
+				comme.ckeckCookie(cookie.getValue(),dto);
 //				comme.ckeckCookie(id,dto);
 				list = comme.read(dto);
 				return list;
@@ -294,9 +380,12 @@ public class CommunityController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return list;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 	
-		
+		return list;
 	}
 	
 	
@@ -308,7 +397,7 @@ public class CommunityController {
 		CommentService comme = ctx.getBean("comment",CommentService.class);
 		int num = -1;
 		
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
 		String id = cookie.getValue();
 		System.out.println(id);
@@ -341,7 +430,7 @@ public class CommunityController {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommentService comme = ctx.getBean("comment",CommentService.class);
 		
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
 		String id = cookie.getValue();
 		

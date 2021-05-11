@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<textarea rows="5" cols="30" id="msgArea">
+</textarea>
+<br>메시지 : <input type="text" id="chatMsg">
+<br>상대 : <input type="text" id="targetUser">
+<br>
+<input type="button" value="전송" id="btnSend">
+
+<script type="text/javascript">
+var ws;
+var userid = '${param.id}';
+function connet(){
+	ws = new WebSocket('ws://localhost:8070/')
+}
+
+</script>
+
+
+</body>
+</html>

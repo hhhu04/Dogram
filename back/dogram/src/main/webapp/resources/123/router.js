@@ -5,8 +5,8 @@ class Router {
     // this.FeedController = new FeedController();
     console.log(this);
 
-     window.addEventListener("hashchange", this.hashChange);
-    window.addEventListener("DOMContentLoaded", this.hashChange);
+    // window.addEventListener("hashchange", this.hashChange);
+    // window.addEventListener("DOMContentLoaded", this.hashChange);
   }
   addRoute = (name, url, model) => {
     this.routes[url] = { name, model };
@@ -33,7 +33,6 @@ class Router {
       switch (route.name) {
         case "login":
           this.view.LoginView.loginConstructor();
-
           break;
         case "join":
           this.view.joinConstructor();
@@ -41,6 +40,18 @@ class Router {
           break;
         case "feed":
           this.view.FeedView.feedConstructor();
+          break;
+        case "feedUpload":
+          this.view.FeedUploadView.feedUploadConstructor();
+          break;
+        case "mypage":
+          console.log(route.name);
+          this.view.MypageView.mypageConstructor();
+          break;
+
+        case "modify":
+          console.log(route.name);
+          this.view.ModifyView.modifyConstructor();
           break;
       }
       console.log("model load!");

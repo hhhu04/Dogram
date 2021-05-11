@@ -14,11 +14,10 @@ class FeedUploadController extends Controller {
 
     this.router.hashChange();
     this.didRenderMount();
-    this.imagePreview = document.querySelector("#imagePreview");
-    this.realInput = document.querySelector("#file");
-    this.realInput.addEventListener("change", this.readInputFile);
-    // this.router.hashChange();
-    this.router.view.bindAddFeed(this.containerLoad);
+
+    this.router.view.FeedUploadView.bindChangeImg(this.readInputFile);
+    this.router.view.FeedUploadView.bindPostUpload(this.postUpload);
+    this.imagePreview = this.router.view.FeedUploadView.imagePreview;
   }
   readInputFile = (e) => {
     console.log(e);
@@ -26,21 +25,15 @@ class FeedUploadController extends Controller {
     const selFiles = [];
     let files = e.target.files;
     let fileArr = Array.prototype.slice.call(files);
-    let index = 0;
+    console.log(files);
     fileArr.forEach((f) => {
       if (files.length < 11) {
-        // if (selFiles.length === 0) {
-        //   selFiles.push(f);
-        // } else {
-        //   selFiles.pop();
-        //   selFiles.push(f);
-        // }
         selFiles.push(f);
 
         console.log(selFiles);
         console.log(selFiles[0].name);
         var reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = (e) => {
           // console.log(e.target.result);
           var node = document.createElement("div");
           // var textnode = document.createTextNode(
@@ -52,11 +45,13 @@ class FeedUploadController extends Controller {
 
           console.log(node);
           // var html = `<a id=img_id_${index}><img src=${e.target.result} data-file=${f.name} /></a>`;
-          this.imagePreview = document.querySelector("#imagePreview");
+          // this.imagePreview = document.querySelector("#imagePreview");
 
-          console.log(this.imagePreview);
+          // console.log(this.imagePreview.children);
+          if (this.imagePreview.children.length) {
+            this.imagePreview.removeChild(this.imagePreview.children[0]);
+          }
           this.imagePreview.appendChild(node);
-          index++;
         };
 
         reader.readAsDataURL(f);

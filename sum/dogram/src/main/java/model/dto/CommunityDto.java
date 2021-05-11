@@ -42,5 +42,7 @@ public class CommunityDto {
     
     private List<CommentDto> clist;
     
+    private String userImg;
+    
     
 }

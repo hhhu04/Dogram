@@ -3,6 +3,8 @@ package com.dogram.start;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -14,6 +16,7 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,11 +32,12 @@ public class WebSocketChat  {
 	    }
 	    @RequestMapping(value="/chat.do")
 	    public ModelAndView getChatViewPage(ModelAndView mav) {
-	        mav.setViewName("chat");
+	        mav.setViewName("chat3");
 	        return mav;
 	    }
 	    @OnOpen
 	    public void onOpen(Session session) {
+//	        logger.info("Open session id:"+session.getId());
 	        logger.info("Open session id:"+session.getId());
 	        try {
 	            final Basic basic=session.getBasicRemote();

@@ -16,7 +16,7 @@ class API {
     return response;
   }
   async postUpload(formData) {
-    let url = "http://192.168.1.71:8070/feed/newfeed/";
+    let url = "http://192.168.1.71:8070/feed/newfeed";
     let response = await sendRequestFormData("POST", url, formData);
 
     return response;
@@ -40,8 +40,10 @@ class API {
 
     return response;
   }
-
+//집 192.168.1.71
+//학원 192.168.1.71
   async getFirstFeedLoad() {
+    // let url = "http://192.168.1.71:8070/feed/";
     let url = "http://192.168.1.71:8070/data/status.json";
     let response = await sendRequest("GET", url);
     console.log(response);
@@ -50,6 +52,13 @@ class API {
     //     return data;
     //   })
     // );
+    console.log("api call");
+    return response;
+  }
+
+  async deleteUser() {
+    let url = "http://192.168.1.71:8070/data/status.json";
+    let response = await sendRequest("POST", url);
     console.log("api call");
     return response;
   }

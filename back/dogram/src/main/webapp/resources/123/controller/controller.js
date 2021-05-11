@@ -66,57 +66,58 @@ class Controller {
     this.router.view.bindLinkLogin(this.linkLogin);
     this.router.view.bindLinkJoin(this.linkJoin);
     this.router.view.bindLogout(this.logoutFunc);
+    this.router.view.bindLinkMypage(this.linkMypage);
   };
 
   // 해쉬 별 이벤트 바인딩
-  ohterRenderMount = async () => {
-    console.log("did other rendermount");
-    const hash = window.location.hash;
-    switch (hash) {
-      case "#/":
-        this.router.hashChange();
-        console.log("main hash!!");
-        this.didRenderMount();
-        break;
-      case "#/auth/join":
-        this.router.hashChange();
-        this.router.view.bindPostJoin(this.postJoin);
-        this.didRenderMount();
-        break;
-      case "#/auth/login":
-        // this.router.view.LoginView.bindPostLogin(this.postLogin);
-        break;
-      case "#/feed":
-        const getFeedData = await this.service.getFirstFeed();
-        let feedItemShow = getFeedData.map((item, idx) => {
-          // console.log(item);
-          if (idx < 5) {
-            return feedItem(
-              item.userName,
-              item.photo,
-              item.likeCount,
-              "",
-              "",
-              "",
-              item.no
-            );
-          }
-        });
-        console.log(feedItemShow);
-        this.router.addRoute(
-          "feed",
-          "#/feed",
-          feedTemp(
-            navBarTemp("logoutbtn", this.service.userinfo),
-            feedItemShow.join(" ")
-          )
-        );
-        this.router.hashChange();
-        this.router.view.FeedView.bindAddLike(this.addLike);
-        this.didRenderMount();
-        break;
-    }
-  };
+  // ohterRenderMount = async () => {
+  //   console.log("did other rendermount");
+  //   const hash = window.location.hash;
+  //   switch (hash) {
+  //     case "#/":
+  //       this.router.hashChange();
+  //       console.log("main hash!!");
+  //       this.didRenderMount();
+  //       break;
+  //     case "#/auth/join":
+  //       this.router.hashChange();
+  //       this.router.view.bindPostJoin(this.postJoin);
+  //       this.didRenderMount();
+  //       break;
+  //     case "#/auth/login":
+  //       // this.router.view.LoginView.bindPostLogin(this.postLogin);
+  //       break;
+  //     case "#/feed":
+  //       const getFeedData = await this.service.getFirstFeed();
+  //       let feedItemShow = getFeedData.map((item, idx) => {
+  //         // console.log(item);
+  //         if (idx < 5) {
+  //           return feedItem(
+  //             item.userName,
+  //             item.photo,
+  //             item.likeCount,
+  //             "",
+  //             "",
+  //             "",
+  //             item.no
+  //           );
+  //         }
+  //       });
+  //       console.log(feedItemShow);
+  //       this.router.addRoute(
+  //         "feed",
+  //         "#/feed",
+  //         feedTemp(
+  //           navBarTemp("logoutbtn", this.service.userinfo),
+  //           feedItemShow.join(" ")
+  //         )
+  //       );
+  //       this.router.hashChange();
+  //       this.router.view.FeedView.bindAddLike(this.addLike);
+  //       this.didRenderMount();
+  //       break;
+  //   }
+  // };
 
   // 공통 이벤트 메서드
   showNav = () => {
@@ -158,6 +159,10 @@ class Controller {
     e.preventDefault();
     window.location.hash = "#/auth/join";
   };
+  linkMypage = (e) => {
+    e.preventDefault();
+    window.location.hash = "#/mypage";
+  };
 
   // 해쉬별 메서드
   logoutFunc = (e) => {
@@ -165,7 +170,10 @@ class Controller {
     console.log("logout");
 
     document.cookie = "";
+    // 브라우저 셋쿠키
     this.setCookie("user", "hhh", -1);
+    // 내가 저장한것 지우기
+    this.service.userinfo = "";
 
     this.router.addRoute("intro", "#/", introTemp(navBarTemp("", "")));
     window.location.hash = "#/";

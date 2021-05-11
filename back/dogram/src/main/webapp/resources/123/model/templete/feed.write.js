@@ -4,7 +4,7 @@ const feedWriteTemp = (navBarTemp, feedItem = "") => {
               <div class="inner">
                 <h3 class="masthead-brand"><a href="../intro.html" class="main-title">DOGRAM</a></h3>
 
-                <span onclick="openNav()" class="gnb_btn"><i class="fas fa-bars"></i></span>
+                <span class="gnb_btn"><i class="fas fa-bars"></i></span>
               </div>
             </div>
             ${navBarTemp}
@@ -21,7 +21,7 @@ const feedWriteTemp = (navBarTemp, feedItem = "") => {
                                     <div class="input-group filebox">
                                         <!-- <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span> -->
                                         <label for="file" class="cols-sm-2 control-label file_btn"><i class="fas fa-plus"></i></label>
-                                        <input type="file" name="file" id="file" accept="image/*">
+                                        <input type="file" name="img" id="file" accept="image/*">
 
                                         <div id="imagePreview">
                                             미리보기
@@ -58,12 +58,12 @@ const feedWriteTemp = (navBarTemp, feedItem = "") => {
                                 <label for="desc" class="cols-sm-2 control-label">내용</label>
                                 <div class="cols-sm-10">
                                     <div class="input-group">
-                                        <textarea name="desc" id="desc" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
+                                        <textarea name="content" id="desc" cols="30" rows="10" placeholder="내용을 입력하세요"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group upload_btn">
-                                <button type="submit" class="btn btn-primary btn-lg btn-block login-button">등록하기</button>
+                                <button type="submit" onclick="(e) => {e.preventDefault()}" id="uploadBtn" class="btn btn-primary btn-lg btn-block login-button">등록하기</button>
                             </div>
                         </div>
                     </form>

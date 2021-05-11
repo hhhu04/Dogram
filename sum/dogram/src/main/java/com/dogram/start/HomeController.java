@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -90,12 +91,27 @@ public class HomeController {
 		UserService user = ctx.getBean("user",UserService.class);
 		UserDto dto = new UserDto();
 		
-		dto.setId(file.getParameter("id"));
-		dto.setPassword(file.getParameter("password"));
-		dto.setEmail(file.getParameter("email"));
-		dto.setName(file.getParameter("name"));
-		dto.setAddress(file.getParameter("address"));
-		dto.setPhoneNumber(file.getParameter("phoneNumber"));
+		String id = file.getParameter("id");
+		String password = file.getParameter("password");
+		String email = file.getParameter("email");
+		String name = file.getParameter("name");
+		String phoneNumber = file.getParameter("phoneNumber");
+		
+		try {
+			id = new String(id.getBytes("8859_1"),"utf-8");
+			password = new String(password.getBytes("8859_1"),"utf-8");
+			email = new String(email.getBytes("8859_1"),"utf-8");
+			name = new String(name.getBytes("8859_1"),"utf-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		dto.setId(id);
+		dto.setPassword(password);
+		dto.setEmail(email);
+		dto.setName(name);
+		dto.setPhoneNumber(phoneNumber);
 		
 		int check = -1;
 		
@@ -136,23 +152,15 @@ public class HomeController {
 	
 	
 	@GetMapping("/logout")
-	public int logout(HttpServletResponse response, HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-//		int num =0;
-//		for(Cookie cookie : cookies)
-//		{
-//			if(cookie.getName().equals("id")) {
-//				cookie.setMaxAge(0);
-//				response.addCookie(cookie);
-//				num--;
-//			}
-//		}	
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
-		session.invalidate();
+	public String logout(HttpServletResponse response, HttpServletRequest request) {
 		
-		System.out.println("logout");
-		return 1;
+		Cookie cookie = new Cookie("id", null);
+		cookie.setMaxAge(0);
+		response.addCookie(cookie);
+		
+		
+		return "redirect:../#/";
+		
 //		if(num < 0) return 1;
 //		else return -1;
 	}
@@ -240,7 +248,8 @@ public class HomeController {
 //		if(cookie.getName() != null) {
 //			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
 			try {
-				String id = "hhh";
+//				String id = "hhh";
+				String id = cookie.getValue();
 				dto.setId(file.getParameter("id"));
 				dto.setPassword(file.getParameter("password"));
 				dto.setEmail(file.getParameter("email"));
@@ -308,17 +317,18 @@ public class HomeController {
 		UserService user = ctx.getBean("user",UserService.class);
 		int num = -1;
 		
-		 HttpSession session = request.getSession();
-		 session.setAttribute("id", dto.getId());
-		 String id = (String) session.getAttribute("id");
+//		 HttpSession session = request.getSession();
+//		 session.setAttribute("id", dto.getId());
+//		 String id = (String) session.getAttribute("id");
+		 
 		
 		if(cookie.getName() != null) {
 //			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
-			if(id.equals("탈퇴한 회원입니다.")) return Integer.toString(num);
+//			if(id.equals("탈퇴한 회원입니다.")) return Integer.toString(num);
 			
 			try {
-//				num = user.delete(dto,cookie.getValue());
-				num = user.delete(dto,id);
+				num = user.delete(dto,cookie.getValue());
+//				num = user.delete(dto,id);
 //				Cookie[] cookies = request.getCookies();
 //				for(Cookie cookiee : cookies)
 //				{
@@ -329,7 +339,6 @@ public class HomeController {
 //				}
 //				return Integer.toString(num);
 				
-				session.invalidate();
 				
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
@@ -351,9 +360,9 @@ public class HomeController {
 		
 		int num = -1;
 		
-		 HttpSession session = request.getSession();
-		 session.setAttribute("id", dto.getId());
-		 String id = (String) session.getAttribute("id");
+//		 HttpSession session = request.getSession();
+//		 session.setAttribute("id", dto.getId());
+//		 String id = (String) session.getAttribute("id");
 		
 		if(cookie.getName() != null) {
 			try {
@@ -380,9 +389,10 @@ public class HomeController {
 		LikeListService like = ctx.getBean("likeList",LikeListService.class);
 		
 		UserDto userDto=new UserDto();
-		 HttpSession session = request.getSession();
-		 session.setAttribute("id", userDto.getId());
-		 String id = (String) session.getAttribute("id");
+//		 HttpSession session = request.getSession();
+//		 session.setAttribute("id", userDto.getId());
+//		 String id = (String) session.getAttribute("id");
+		 String id = cookie.getValue();
 		
 		List<LikeListDto> list = null;
 		Long uNum;
