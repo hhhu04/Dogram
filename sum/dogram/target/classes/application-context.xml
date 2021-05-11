@@ -42,6 +42,10 @@
     </bean>
 
 
+
+
+
+
     
     <bean id="datenow" class="configuration.DateNow"></bean>
     

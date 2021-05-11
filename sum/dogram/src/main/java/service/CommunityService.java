@@ -20,7 +20,6 @@ import configuration.DateNow;
 import configuration.MailConfig;
 import model.dao.CommunityDao;
 import model.dto.CommunityDto;
-import model.dto.FeedDto;
 import model.dto.UserDto;
 import service.servicei.CommunityServiceI;
 
@@ -58,22 +57,22 @@ public class CommunityService  implements CommunityServiceI{
 		// TODO Auto-generated method stub
 		
 		dao.checkAddress(userDto);
-		List<CommunityDto> list = dao.read(dto);
+		List<CommunityDto> list = dao.read2(dto);
 		
 		
 		return list;
 	}
 	
 	
-	public List<CommunityDto> read2(UserDto userDto,CommunityDto dto) throws SQLException {
-		// TODO Auto-generated method stub
-		
-		dao.checkAddress(userDto);
-		List<CommunityDto> list = dao.read(dto);
-		
-		
-		return list;
-	}
+//	public List<CommunityDto> read2(UserDto userDto,CommunityDto dto) throws SQLException {
+//		// TODO Auto-generated method stub
+//		
+//		dao.checkAddress(userDto);
+//		List<CommunityDto> list = dao.read2(dto);
+//		
+//		
+//		return list;
+//	}
 	
 	
 
@@ -105,7 +104,7 @@ public class CommunityService  implements CommunityServiceI{
 
 	public List<CommunityDto> read(CommunityDto dto) throws SQLException {
 		// TODO Auto-generated method stub
-		List<CommunityDto> list = dao.read2(dto);
+		List<CommunityDto> list = dao.read(dto);
 		
 		return list;
 	}
@@ -127,6 +126,14 @@ public class CommunityService  implements CommunityServiceI{
 		
 		System.out.println("4");
 		return img;
+	}
+
+	public CommunityDto readOne(CommunityDto dto, int num) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		dao.readOne(dto,num);
+		
+		return dto;
 	}
     
     

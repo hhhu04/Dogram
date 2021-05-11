@@ -9,18 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class Get {
 
 	
-	@RequestMapping("/chat2")
-	public ModelAndView chat() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("chat2");
-		return mv;
-	}
+	@RequestMapping(value="/chat")
+    public ModelAndView getChatViewPage(ModelAndView mav) {
+        mav.setViewName("chat");
+        return mav;
+    }
 	
-	@GetMapping("/tes")
-	public String tes() {
-		return "img";
-	}
-	
+
 	
 	
 	@GetMapping("/")

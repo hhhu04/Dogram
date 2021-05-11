@@ -32,7 +32,7 @@ public class WebSocketChat  {
 	    }
 	    @RequestMapping(value="/chat.do")
 	    public ModelAndView getChatViewPage(ModelAndView mav) {
-	        mav.setViewName("chat");
+	        mav.setViewName("chat3");
 	        return mav;
 	    }
 	    @OnOpen

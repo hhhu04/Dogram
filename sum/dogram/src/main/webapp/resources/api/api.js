@@ -43,7 +43,7 @@ class API {
 
   async getFirstFeedLoad() {
     // let url = "http://192.168.1.71:8070/feed/";
-    let url = "http://101.101.211.145:8080/feed/";
+    let url = "http://192.168.1.71:8070/feed/";
     // let url = "http://127.0.0.1:5501/data/status.json";
     let response = await sendRequest("POST", url);
     console.log(response);
@@ -57,7 +57,7 @@ class API {
   }
 
   async deleteUser() {
-    let url = "http://127.0.0.1:5501/data/status.json";
+    let url = "http://192.168.1.71:8070/data/status.json";
     let response = await sendRequest("POST", url);
     console.log("api call");
     return response;
