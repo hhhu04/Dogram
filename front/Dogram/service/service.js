@@ -22,7 +22,7 @@ class Service {
 
     const loginResult = await this.API.postLogin(data);
 
-    document.cookie = `user=${data.id}`;
+    document.cookie = `id=${data.id}`;
     this.userinfo = this.getCookie("id");
     return JSON.parse(loginResult.response);
   };

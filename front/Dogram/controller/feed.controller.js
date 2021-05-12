@@ -19,54 +19,76 @@ class FeedController extends Controller {
     this.router.hashChange();
     this.didRenderMount();
     this.fistContainerLoad();
-    this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+
+    this.moveFeedHash();
+    this.router.view.FeedView.shareKakao();
     this.feedState = 1;
     this.likeState = 0;
     // this.userinfo = this.getCookie("user");
     this.router.view.bindAddFeed(this.containerLoad);
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+
     this.feedRenderMount();
+    this.loadCommentShow();
 
     console.log("feedController");
   }
 
-  moveFeedHash = () => {
+  moveFeedHash = async () => {
     const currHash = window.location.hash;
+    console.log(currHash);
     const hashId = currHash.replace(/[^0-9]/g, "");
     console.log(currHash.replace(/[^0-9]/g, ""));
-    const id = 0;
-    console.log(this.router.view.FeedView.feedAllArr);
-    window.addEventListener("hashchange", (e) => {
-      console.log(e);
-      // scrollTo(0);
+    window.addEventListener("load", () => {
+      this.router.view.FeedView.feedAllArr.forEach((item, idx) => {
+        // console.log(item.offsetTop);
+        if (hashId == item.id) {
+          console.log(item.clientHeight);
+          window.scrollTo(0, item.offsetTop + 50);
+          // window.scrollTo(
+          //   0,
+          //   window.pageYOffset + item.getBoundingClientRect().top + 1050
+          // );
+        }
+      });
     });
-    this.router.view.FeedView.feedAllArr.filter((listitem) => {
-      listitem.id;
-    });
-    this.router.view.FeedView.feedAllArr.forEach((item) => {
-      return;
-    });
-    window.scrollTo(0);
+
+    this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+    // const id = 0;
+    // console.log(this.router.view.FeedView.feedAllArr);
+    // window.addEventListener("hashchange", (e) => {
+    //   console.log(e);
+    //   // window.scrollTo(0, 500);
+    // });
+    // this.router.view.FeedView.feedAllArr.filter((listitem) => {
+    //   listitem.id;
+    // });
   };
 
   feedHashChange = () => {
-    const windowTop = window.scrollY || document.documentElement.scrollTop;
-    if (windowTop % 100 === 0) {
-      const feedId = this.router.view.FeedView.feedAllArr.map((item) => {
-        return item.id;
-      });
-      const currHash = window.location.hash;
-      const regex = /[0-9]{0,10}/g;
-      const changeCurrHash = currHash.replace(regex, "");
-      let addHeight = 0;
-      let itemId = "";
-      for (let i = 0; addHeight < windowTop; i++) {
-        addHeight += this.router.view.FeedView.feedAllArr[i].clientHeight;
-        itemId = this.router.view.FeedView.feedAllArr[i].id;
-        // console.log(addHeight);
-      }
-      window.location.hash = changeCurrHash + itemId;
+    // const windowTop = Math.round(
+    //   window.scrollY || document.documentElement.scrollTop
+    // );
+    const windowTop = window.pageYOffset;
+
+    // if (windowTop % 200 === 0) {
+    //   console.log(windowTop % 200);
+    // const feedId = this.router.view.FeedView.feedAllArr.map((item) => {
+    //   return item.id;
+    // });
+    const currHash = window.location.hash;
+    const regex = /[0-9]{0,10}/g;
+    const changeCurrHash = currHash.replace(regex, "");
+    let addHeight = 0;
+    let itemId = "";
+    for (let i = 0; addHeight < windowTop; i++) {
+      addHeight += this.router.view.FeedView.feedAllArr[i].clientHeight;
+      itemId = this.router.view.FeedView.feedAllArr[i].id;
+      // console.log(addHeight);
     }
+
+    window.location.hash = changeCurrHash + itemId;
+    // }
     this.router.view.FeedView.feedAllArr.forEach((item) => {
       // console.log(item.id);
       item.setAttribute(
@@ -134,6 +156,7 @@ class FeedController extends Controller {
       console.log(this.numberCheck[0].list);
 
       this.numberCheck[0]["heart"] = "far";
+      this.numberCheck[0]["heartColor"] = "heartColor";
       this.service.addAndDeleteLike(this.numberCheck[0].num);
     } else {
       this.numberCheck[0].list.push({ id: this.service.userinfo });
@@ -154,7 +177,8 @@ class FeedController extends Controller {
           "",
           "",
           item.num,
-          item.heart
+          item.heart,
+          item.heartColor
         );
       }
     });
@@ -176,6 +200,10 @@ class FeedController extends Controller {
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
     this.router.view.FeedView.bindFeedHash(this.feedHashChange);
     this.router.view.FeedView.bindAddComment(this.addComment);
+    this.router.view.FeedView.shareKakao();
+    this.commentBtnChange();
+    this.loadCommentShow();
+
     // this.moveFeedHash();
   };
   getFeedData = async () => {
@@ -185,9 +213,106 @@ class FeedController extends Controller {
   };
   addComment = async (e) => {
     e.preventDefault();
-    const form = document.commentForm;
-    this.service.postComment(new FormData(form));
+    const form = e.path[1];
+    console.log(form.comment);
+    console.log(form.comment.name);
+    console.log(form.comment.value);
+
+    const data = {
+      comment: form.comment.value,
+      communityNum: e.target.id,
+    };
+    // const commentTag = document.createElement("p");
+    // const commentWrap = document.createElement("div");
+    const commentId = document.createElement("p");
+    const commentText = document.createElement("span");
+    const commentIn = document.createTextNode(`${this.service.userinfo}`);
+    const commentTextIn = document.createTextNode(`${form.comment.value}`);
+    commentText.classList.add("js-commentText");
+    commentId.appendChild(commentIn);
+    commentText.appendChild(commentTextIn);
+    commentId.appendChild(commentText);
+    // commentTag.appendChild(commentId);
+    // commentWrap.prepend(commentId);
+    form.prepend(commentId);
+    form.comment.value = "";
+    console.log(e.target);
+
+    await this.service.postComment(data);
+    // await this.loadCommentShow();
   };
+  loadCommentShow = async () => {
+    console.log(this.feedData);
+    await this.feedData.forEach((data) => {
+      const num = data.num;
+      const clist = data.clist;
+      const form = document.getElementById(`${data.num}comment`);
+      const commentWrap = document.createElement("div");
+      commentWrap.classList.add("commentWrap");
+      console.log(form);
+      clist.forEach((item, idx) => {
+        const comment = item.comment;
+        const userId = item.userId;
+        // const commentTag = document.createElement("p");
+
+        const commentIds = document.createElement("p");
+        commentIds.classList.add("js-commentWrap");
+        const deleteBtn = document.createElement("div");
+        deleteBtn.textContent = "삭제";
+        deleteBtn.classList.add("js-deleteBtn");
+        commentIds.appendChild(deleteBtn);
+        deleteBtn.dataset.userNum = item.userNum;
+        deleteBtn.dataset.num = item.num;
+        deleteBtn.dataset.communityNum = item.communityNum;
+        console.log(deleteBtn.dataset);
+        const commentText = document.createElement("span");
+        const commentIn = document.createTextNode(`${userId}`);
+        const commentTextIn = document.createTextNode(`${comment}`);
+        commentText.classList.add("js-commentText");
+        commentIds.appendChild(commentIn);
+        commentText.appendChild(commentTextIn);
+        commentIds.appendChild(commentText);
+        // commentTag.appendChild(commentId);
+        commentWrap.prepend(commentIds);
+      });
+      form.prepend(commentWrap);
+
+      // for (let i = 0; i < 2; i++) {
+      //   form.prepend(commentWrap);
+      // }
+      console.log(clist);
+    });
+    // this.deleteComment();
+  };
+  commentBtnChange() {
+    const commentBtnArr = Array.from(this.router.view.FeedView.commentBtn);
+    // console.log(commentBtnArr);
+    commentBtnArr.forEach((btn, idx) => {
+      // console.log(idx);
+      // console.log(btn);
+      btn.style.color = "lightgray";
+      btn.form[0].addEventListener("input", () => {
+        if (btn.form[0].value != "") {
+          btn.style.color = "#5550b4";
+        } else {
+          btn.style.color = "lightgray";
+        }
+      });
+    });
+
+    // if ((form.comment.value = "")) {
+    //   e.target.style.color = "red";
+    // }
+  }
+  deleteComment() {
+    const deleteBtnArr = Array.from(document.querySelectorAll(".js-deleteBtn"));
+    deleteBtnArr.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        console.log(e.target.dataset);
+      });
+    });
+    // console.log(document.querySelectorAll(".js-deleteBtn"));
+  }
   fistContainerLoad = async () => {
     // console.log(this.includeCheck);
     // const data = this.getFeedData();
@@ -196,12 +321,15 @@ class FeedController extends Controller {
     console.log(currHash);
     this.feedData = await this.service.getFirstFeed();
     this.feedItemShow = this.feedData.map((item, idx) => {
+      // console.log(item);
       const checkInfo = item.list.findIndex((item) => {
         return item.id == this.service.userinfo;
       });
-      console.log(checkInfo);
+
+      // console.log(checkInfo);
       if (checkInfo > -1) {
         item.heart = "fas";
+        item.heartColor = "heartColor";
       } else {
         item.heart = "far";
       }
@@ -214,7 +342,8 @@ class FeedController extends Controller {
           "",
           "",
           item.num,
-          item.heart
+          item.heart,
+          item.heartColor
         );
       } else if (currHash) {
         return feedItem(
@@ -225,7 +354,8 @@ class FeedController extends Controller {
           "",
           "",
           item.num,
-          item.heart
+          item.heart,
+          item.heartColor
         );
       }
     });
@@ -239,8 +369,12 @@ class FeedController extends Controller {
       )
     );
     this.router.hashChange();
+    this.moveFeedHash();
     this.didRenderMount();
+
     this.feedRenderMount();
+    this.deleteComment();
+
     // this.moveFeedHash();
   };
 
@@ -263,8 +397,10 @@ class FeedController extends Controller {
           console.log(checkInfo);
           if (checkInfo > -1) {
             item.heart = "fas";
+            item.heartColor = "heartColor";
           } else {
             item.heart = "far";
+            // item.heartColor = "heartColor";
           }
           if (idx < this.feedState * 5 + 5) {
             return feedItem(
@@ -317,11 +453,11 @@ class FeedController extends Controller {
       this.router.view.FeedView.likeBtnFar.classList.remove("fas");
     }
   };
-  addLikeCount = () => {};
-  fillLike = () => {
-    if (this.userinfo) {
-    }
-  };
+  // addLikeCount = () => {};
+  // fillLike = () => {
+  //   if (this.userinfo) {
+  //   }
+  // };
   linkUpload = (e) => {
     e.preventDefault();
     window.location.hash = "#/feed/upload";

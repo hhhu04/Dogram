@@ -28,7 +28,7 @@ class API {
     return response;
   }
   async postComment(formData) {
-    let url = "http://192.168.1.71:8070/feed/commentadd";
+    let url = "http://101.101.211.145:8080/feed/commentadd";
 
     let response = await sendRequest("POST", url, formData);
     console.log(response);
@@ -68,7 +68,7 @@ class API {
 
   async addLike(data) {
     // let url = "http://101.101.211.145:8080/feed/addlike";
-    let url = "http://192.168.1.71:8070/feed/addlike";
+    let url = "http://101.101.211.145:8080/feed/addlike";
 
     let response = await sendRequest("POST", url, data);
     console.log("api call");

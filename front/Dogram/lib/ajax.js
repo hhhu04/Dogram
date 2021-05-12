@@ -5,7 +5,7 @@ var sendRequest = (method, url, data = null) => {
     ajax.open(method, url, false);
     ajax.setRequestHeader("Content-type", "application/json");
     ajax.setRequestHeader("Access-Control-Allow-Origin", "*");
-    // ajax.setRequestHeader("Set-Cookie", "id=hhh");
+    // ajax.setRequestHeader("Cookie", "id=hhh");
 
     // POST
     if (data) {
