@@ -11,13 +11,17 @@ import ModifyController from "/controller/modify.controller.js";
 import MypageController from "/controller/mypage.controller.js";
 
 // import API from "/api/api.js";
-
 const app = new Controller(new Service(), new Router(new View()));
 // hash controller를 확장하자
 // console.log(window.location.hash);
 
-const windowHashChange = () => {
-  let hash = window.location.hash;
+const windowHashChange = (e) => {
+  console.log(e);
+  const regex = /[0-9]{0,10}/g;
+  const hash = window.location.hash.replace(regex, "");
+  // const hash = window.location.hash;
+
+  console.log(hash);
   console.log(window.location.hash);
 
   console.log("aaaaaaaaaaaa");
@@ -26,8 +30,11 @@ const windowHashChange = () => {
       new IntroController(app.service, app.router);
       console.log("IntroController");
       break;
-    case "#/feed":
-      new FeedController(app.service, app.router);
+    case "#/feed/":
+      if (e.newURL.replace(regex, "") !== e.oldURL.replace(regex, "")) {
+        new FeedController(app.service, app.router);
+      }
+
       console.log("FeedController");
       break;
     case "#/feed/upload":
@@ -49,5 +56,5 @@ const windowHashChange = () => {
       break;
   }
 };
-windowHashChange();
+windowHashChange({ newURL: "aaa", oldURL: "xxx" });
 window.addEventListener("hashchange", windowHashChange);

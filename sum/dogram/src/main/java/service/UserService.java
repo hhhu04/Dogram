@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import configuration.DateNow2;
 import model.dao.UserDao;
 import model.dto.UserDto;
 
@@ -127,19 +130,27 @@ public class UserService {
 
 	
 	public String upload(MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
-		String img;
+String img;
 		
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+    	DateNow2 date = ctx.getBean("datenow2",DateNow2.class);
+		String name = date.date()+".jpg";
+		
+		
+		file.getOriginalFilename();
 		if(!file.getOriginalFilename().isEmpty()) {
-			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", file.getOriginalFilename()));
+//			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", name));
+//			file.transferTo(new File("/usr/local/apache-tomcat-9.0.45/webapps/ROOT/resources/img", name));
+			file.transferTo(new File("/usr/local/apache-tomcat-9.0.45/webapps/dogram/resources/img", name));
 			model.addAttribute("msg", "File uploaded successfully.");
-			img = "img/"+file.getOriginalFilename();
+			img = "img/"+name;
 			System.out.println("99");
 		}else {
 			model.addAttribute("msg", "Please select a valid mediaFile..");
 			img = "-1";
+			System.out.println("4");
 		}
-		
-		
+		System.out.println("4");
 		return img;
 	}
     

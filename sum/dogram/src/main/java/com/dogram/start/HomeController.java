@@ -463,7 +463,7 @@ public class HomeController {
 //			uNum = like.ckeckCookie(cookie.getValue());
 			uNum = commu.ckeckCookie(id);
 			dto.setUserNum(uNum);
-			list = commu.read(dto);
+			list = commu.readMe(dto);
 			
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block

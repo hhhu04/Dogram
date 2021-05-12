@@ -15,7 +15,10 @@ public class Get {
         return mav;
     }
 	
-
+	@GetMapping("/imggg")
+	public String img() {
+		return "img";
+	}
 	
 	
 	@GetMapping("/")

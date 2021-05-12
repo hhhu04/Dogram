@@ -9,22 +9,88 @@ class FeedController extends Controller {
     super(service, router);
     this.router.addRoute(
       "feed",
-      "#/feed",
-      feedTemp(navBarTemp("logoutbtn", this.service.userinfo))
+      "#/feed/",
+      // ["#/feed", "#/feed/"],
+      // /#\/feed\/?/,
+      feedTemp(navBarTemp("logoutbtn", this.service.userinfo)),
+      "#/feed/"
     );
 
     this.router.hashChange();
     this.didRenderMount();
     this.fistContainerLoad();
-
+    this.router.view.FeedView.bindFeedHash(this.feedHashChange);
     this.feedState = 1;
     this.likeState = 0;
     // this.userinfo = this.getCookie("user");
     this.router.view.bindAddFeed(this.containerLoad);
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
     this.feedRenderMount();
+
     console.log("feedController");
   }
+
+  moveFeedHash = () => {
+    const currHash = window.location.hash;
+    const hashId = currHash.replace(/[^0-9]/g, "");
+    console.log(currHash.replace(/[^0-9]/g, ""));
+    const id = 0;
+    console.log(this.router.view.FeedView.feedAllArr);
+    window.addEventListener("hashchange", (e) => {
+      console.log(e);
+      // scrollTo(0);
+    });
+    this.router.view.FeedView.feedAllArr.filter((listitem) => {
+      listitem.id;
+    });
+    this.router.view.FeedView.feedAllArr.forEach((item) => {
+      return;
+    });
+    window.scrollTo(0);
+  };
+
+  feedHashChange = () => {
+    const windowTop = window.scrollY || document.documentElement.scrollTop;
+    if (windowTop % 100 === 0) {
+      const feedId = this.router.view.FeedView.feedAllArr.map((item) => {
+        return item.id;
+      });
+      const currHash = window.location.hash;
+      const regex = /[0-9]{0,10}/g;
+      const changeCurrHash = currHash.replace(regex, "");
+      let addHeight = 0;
+      let itemId = "";
+      for (let i = 0; addHeight < windowTop; i++) {
+        addHeight += this.router.view.FeedView.feedAllArr[i].clientHeight;
+        itemId = this.router.view.FeedView.feedAllArr[i].id;
+        // console.log(addHeight);
+      }
+      window.location.hash = changeCurrHash + itemId;
+    }
+    this.router.view.FeedView.feedAllArr.forEach((item) => {
+      // console.log(item.id);
+      item.setAttribute(
+        "href",
+        `http://127.0.0.1:5501/app.html#/feed/${item.id}`
+      );
+    });
+
+    // this.router.view.FeedView.feedAllArr.forEach((item) => {
+    //   // console.log(item.offsetTop);
+    //   // console.log(item.clientHeight);
+    //   // console.log(windowTop);
+    //   if (
+    //     windowTop > item.offsetTop &&
+    //     item.offsetTop + item.clientHeight > windowTop
+    //   ) {
+    //     // console.log(item.id + "피드의 id 도착");
+
+    //     console.log(changeCurrHash);
+    //     console.log(item.id);
+    //     window.location.hash = changeCurrHash + item.id;
+    //   }
+    // });
+  };
   // 좋아요 눌렀을때 모델 변경
   modelChange = (e) => {
     // console.log(e.target.classList.add("fas")); // String
@@ -66,13 +132,14 @@ class FeedController extends Controller {
         }
       }
       console.log(this.numberCheck[0].list);
-      // this.numberCheck[0].list.pop();
-      console.log(this.numberCheck[0].list);
 
       this.numberCheck[0]["heart"] = "far";
+      this.service.addAndDeleteLike(this.numberCheck[0].num);
     } else {
       this.numberCheck[0].list.push({ id: this.service.userinfo });
       this.numberCheck[0]["heart"] = "fas";
+      console.log(this.numberCheck[0].num);
+      this.service.addAndDeleteLike(this.numberCheck[0].num);
     }
     console.log(this.feedData);
     console.log(this.numberCheck[0].list);
@@ -93,7 +160,7 @@ class FeedController extends Controller {
     });
     this.router.addRoute(
       "feed",
-      "#/feed",
+      "#/feed/",
       feedTemp(
         navBarTemp("logoutbtn", this.service.userinfo),
         likeCount.join(" ")
@@ -107,17 +174,26 @@ class FeedController extends Controller {
     // this.router.view.FeedView.bindAddLike(this.addLike);
     this.router.view.FeedView.bindAddLike(this.modelChange);
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+    this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+    this.router.view.FeedView.bindAddComment(this.addComment);
+    // this.moveFeedHash();
   };
   getFeedData = async () => {
     this.feedData = await this.service.getFirstFeed();
     console.log(1);
     // return this.feedData;
   };
-
+  addComment = async (e) => {
+    e.preventDefault();
+    const form = document.commentForm;
+    this.service.postComment(new FormData(form));
+  };
   fistContainerLoad = async () => {
     // console.log(this.includeCheck);
     // const data = this.getFeedData();
-
+    const regex = /\/[0-9]{0,10}/g;
+    const currHash = window.location.hash.replace(regex, "");
+    console.log(currHash);
     this.feedData = await this.service.getFirstFeed();
     this.feedItemShow = this.feedData.map((item, idx) => {
       const checkInfo = item.list.findIndex((item) => {
@@ -129,9 +205,18 @@ class FeedController extends Controller {
       } else {
         item.heart = "far";
       }
-      console.log(item);
-
-      if (idx < 5) {
+      if (!currHash && idx < 5) {
+        return feedItem(
+          item.userName,
+          item.img,
+          item.list.length,
+          "",
+          "",
+          "",
+          item.num,
+          item.heart
+        );
+      } else if (currHash) {
         return feedItem(
           item.userName,
           item.img,
@@ -144,10 +229,10 @@ class FeedController extends Controller {
         );
       }
     });
-    // console.log(feedItemShow);
+    console.log(this.feedItemShow);
     this.router.addRoute(
       "feed",
-      "#/feed",
+      "#/feed/",
       feedTemp(
         navBarTemp("logoutbtn", this.service.userinfo),
         this.feedItemShow.join(" ")
@@ -156,6 +241,7 @@ class FeedController extends Controller {
     this.router.hashChange();
     this.didRenderMount();
     this.feedRenderMount();
+    // this.moveFeedHash();
   };
 
   containerLoad = () => {
@@ -200,7 +286,7 @@ class FeedController extends Controller {
         // // console.log(this.containerLoad());
         this.router.addRoute(
           "feed",
-          "#/feed",
+          "#/feed/",
           feedTemp(
             navBarTemp("logoutbtn", this.service.userinfo),
             feedItemShow.join(" ")

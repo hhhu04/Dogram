@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import configuration.DateNow;
+import configuration.DateNow2;
 import configuration.MailConfig;
 import model.dao.CommunityDao;
 import model.dto.CommunityDto;
@@ -53,16 +54,21 @@ public class CommunityService  implements CommunityServiceI{
     
     
 
-	public List<CommunityDto> read(UserDto userDto,CommunityDto dto) throws SQLException {
+	public List<CommunityDto> readMe(CommunityDto dto) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		dao.checkAddress(userDto);
-		List<CommunityDto> list = dao.read2(dto);
+		List<CommunityDto> list = dao.readMe(dto);
 		
 		
 		return list;
 	}
 	
+	public List<CommunityDto> read(CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		List<CommunityDto> list = dao.read(dto);
+		
+		return list;
+	}
 	
 //	public List<CommunityDto> read2(UserDto userDto,CommunityDto dto) throws SQLException {
 //		// TODO Auto-generated method stub
@@ -102,28 +108,28 @@ public class CommunityService  implements CommunityServiceI{
 		return -1;
 	}
 
-	public List<CommunityDto> read(CommunityDto dto) throws SQLException {
-		// TODO Auto-generated method stub
-		List<CommunityDto> list = dao.read(dto);
-		
-		return list;
-	}
+	
 
 	public String upload(MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
 		// TODO Auto-generated method stub
 		String img;
 		
+		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+    	DateNow2 date = ctx.getBean("datenow2",DateNow2.class);
+		String name = date.date()+".jpg";
+		
+		file.getOriginalFilename();
 		if(!file.getOriginalFilename().isEmpty()) {
-			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", file.getOriginalFilename()));
+//			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", name));
+			file.transferTo(new File("/usr/local/apache-tomcat-9.0.45/webapps/dogram/resources/img", name));
 			model.addAttribute("msg", "File uploaded successfully.");
-			img = "img/"+file.getOriginalFilename();
+			img = "img/"+name;
 			System.out.println("99");
 		}else {
 			model.addAttribute("msg", "Please select a valid mediaFile..");
 			img = "-1";
 			System.out.println("4");
 		}
-		
 		System.out.println("4");
 		return img;
 	}

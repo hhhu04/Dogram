@@ -145,11 +145,12 @@ class Controller {
   };
   linkFeed = (e) => {
     e.preventDefault();
-    window.location.hash = "#/feed";
+    window.location.hash = "#/feed/";
   };
   linkStore = (e) => {
     e.preventDefault();
-    window.location.hash = "#/store";
+    // window.location.hash = "#/store";
+    alert("서비스 준비중입니다👶");
   };
   linkLogin = (e) => {
     e.preventDefault();

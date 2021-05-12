@@ -154,62 +154,7 @@ public String img(Long cookie) throws ClassNotFoundException, SQLException {
 //	 public List<CommunityDto> read(CommunityDto cdto) throws SQLException {
 //		 List<CommunityDto> list = new ArrayList<CommunityDto>();
 		 
-	 public List<CommunityDto> read2(CommunityDto cdto) throws SQLException {
-		 List<CommunityDto> list = new ArrayList<CommunityDto>();
-		 System.out.println(list);
-		 Connection c = db.connect();
-			Statement stat = c.createStatement();
-			
-			PreparedStatement preparedStatement = 
-					c.prepareStatement("select * from community");
-			
-			
-			 ResultSet rs = preparedStatement.executeQuery();
-			
-		        while(rs.next()) {
-		        	CommunityDto dto = new CommunityDto();
-		        	Long num = rs.getLong("num");
-		        	String img = rs.getString("img");
-		        	String title = rs.getString("title");
-		        	String body = rs.getString("content");
-		        	int commentCount = rs.getInt("comment_count");
-		        	int likeCount = rs.getInt("like_count");
-		        	String tag = rs.getString("category");
-		        	String createdAt = rs.getString("created_at");
-		        	String updatedAt = rs.getString("updated_at");
-		        	String address = rs.getString("address");
-		        	Long userNum = rs.getLong("user_num");
-		        	
-		        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
-		        	System.out.println(title);
-		        	dto.setNum(num);
-		        	dto.setImg(img);
-		        	dto.setTitle(title);
-		        	dto.setContent(body);
-		        	dto.setCommentCount(commentCount);
-		        	dto.setLikeCount(likeCount);
-		        	dto.setCategory(tag);
-		        	dto.setCreatedAt(dateTime);
-		        	dto.setAddress(address);
-		        	dto.setUserNum(userNum);
-		        	dto.setUpdatedAt(dateTime);
-//		        	System.out.println(dto);
-		        	
-		        	
-		        	list.add(dto);
-		        	
-//		        	System.out.println(list);
-		        }
-		        stat.close();
-		        db.disconnect();
-		 return list;
-	 }
-	 
-	 
-	 
-	 
-	 public List<CommunityDto> read(CommunityDto cdto) throws SQLException {
+	 public List<CommunityDto> readMe(CommunityDto cdto) throws SQLException {
 		 List<CommunityDto> list = new ArrayList<CommunityDto>();
 		 List<LikeListDto> list2 = new ArrayList<LikeListDto>();
 		 List<CommentDto> list3 = new ArrayList<CommentDto>();
@@ -265,6 +210,93 @@ public String img(Long cookie) throws ClassNotFoundException, SQLException {
 		        	
 		        	list2 = like.readAll(dto2,num);
 		        	list3 = comme.read2(dto3,num);
+		        	if(list2.equals( null)) {
+		        		dto2.setId("없음");
+		        		list2.add(dto2);
+		        	}
+		        	if(list3.equals( null)) {
+		        		dto3.setComment("없음");
+		        		list3.add(dto3);
+		        	}
+		        	
+		        	dto.setList(list2);
+		        	dto.setClist(list3);
+//		        	System.out.println(dto2);
+		        	list.add(dto);
+		        	
+//		        	System.out.println(list);
+		        }
+		        stat.close();
+		        db.disconnect();
+		 return list;
+	 }
+	 
+	 
+	 
+	 
+	 public List<CommunityDto> read(CommunityDto cdto) throws SQLException {
+		 List<CommunityDto> list = new ArrayList<CommunityDto>();
+		 List<LikeListDto> list2 = new ArrayList<LikeListDto>();
+		 List<CommentDto> list3 = new ArrayList<CommentDto>();
+		 System.out.println(list);
+		 
+		 GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
+		LikeListService like = ctx.getBean("likeList",LikeListService.class);
+		CommentService comme = ctx.getBean("comment",CommentService.class);
+		 
+		 Connection c = db.connect();
+			Statement stat = c.createStatement();
+			
+			PreparedStatement preparedStatement = 
+					c.prepareStatement("select * from community");
+			
+			
+			 ResultSet rs = preparedStatement.executeQuery();
+			
+		        while(rs.next()) {
+		        	CommunityDto dto = new CommunityDto();
+		        	LikeListDto dto2 = new LikeListDto();
+		        	CommentDto dto3 = new CommentDto();
+		        	
+		        	Long num = rs.getLong("num");
+		        	String img = rs.getString("img");
+		        	String title = rs.getString("title");
+		        	String body = rs.getString("content");
+		        	int commentCount = rs.getInt("comment_count");
+		        	int likeCount = rs.getInt("like_count");
+		        	String tag = rs.getString("category");
+		        	String createdAt = rs.getString("created_at");
+		        	String updatedAt = rs.getString("updated_at");
+		        	String address = rs.getString("address");
+		        	Long userNum = rs.getLong("user_num");
+		        	String userImg = rs.getString("user_img");
+		        	
+		        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+		        	dto.setNum(num);
+		        	dto.setImg(img);
+		        	dto.setTitle(title);
+		        	dto.setContent(body);
+		        	dto.setCommentCount(commentCount);
+		        	dto.setLikeCount(likeCount);
+		        	dto.setCategory(tag);
+		        	dto.setCreatedAt(dateTime);
+		        	dto.setAddress(address);
+		        	dto.setUserNum(userNum);
+		        	dto.setUpdatedAt(dateTime);
+		        	dto.setUserImg(userImg);
+		        	
+		        	
+		        	list2 = like.readAll(dto2,num);
+		        	list3 = comme.read2(dto3,num);
+		        	if(list2.equals( null)) {
+		        		dto2.setId("없음");
+		        		list2.add(dto2);
+		        	}
+		        	if(list3.equals( null)) {
+		        		dto3.setComment("없음");
+		        		list3.add(dto3);
+		        	}
 		        	
 		        	dto.setList(list2);
 		        	dto.setClist(list3);
@@ -423,7 +455,14 @@ public String img(Long cookie) throws ClassNotFoundException, SQLException {
 //	        	System.out.println(dto);
 	        	list2 = like.readAll(dto2,num);
 	        	list3 = comme.read2(dto3,num);
-	        	
+	        	if(list2.equals( null)) {
+	        		dto2.setId("없음");
+	        		list2.add(dto2);
+	        	}
+	        	if(list3.equals( null)) {
+	        		dto3.setComment("없음");
+	        		list3.add(dto3);
+	        	}
 	        	dto.setList(list2);
 	        	dto.setClist(list3);
 	        	
