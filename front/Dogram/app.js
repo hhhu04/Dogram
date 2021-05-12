@@ -11,6 +11,7 @@ import ModifyController from "/controller/modify.controller.js";
 import MypageController from "/controller/mypage.controller.js";
 
 // import API from "/api/api.js";
+Kakao.init("82c600addecf046386c493fb1b97eb6b");
 const app = new Controller(new Service(), new Router(new View()));
 // hash controller를 확장하자
 // console.log(window.location.hash);
