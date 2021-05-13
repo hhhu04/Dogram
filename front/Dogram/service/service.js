@@ -34,6 +34,10 @@ class Service {
     const commentResult = await this.API.postComment(data);
     return JSON.parse(commentResult.response);
   };
+  deleteComment = async (data) => {
+    const delCommentResult = await this.API.deleteComment(data);
+    return JSON.parse(delCommentResult.response);
+  };
   postJoin = async (data) => {
     const joinResult = await this.API.postJoin(data);
     return JSON.parse(joinResult.response);

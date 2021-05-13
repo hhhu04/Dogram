@@ -11,7 +11,7 @@ const feedItem = (
   heart = "far",
   heartColor = ""
 ) => {
-  return `<div class="feed_item" id="${contentNum}">
+  return `<div class="feed_item" id="${contentNum}" data-desc="${feedTitle}">
     <div class="feed_header">
         <div class="user_area">
             <img src="/img/main-logo.png" alt="" style="width: 50px">
@@ -40,7 +40,7 @@ const feedItem = (
         </div>
         <div class="comment_area">
           <span class="name">${commentName}</span> <span class="">${commentText}</span>
-          <div><button>댓글 더보기...</button></div>
+          <div><button class="moreBtn">댓글 더보기...</button></div>
         </div>
         <div class="commentForm">
         <form method="POST" name="commentForm" class="commentForm" id="${contentNum}comment">
