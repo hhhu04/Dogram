@@ -115,9 +115,9 @@ public class CommunityController {
 			try {
 				System.out.println("2");
 								
-				Long userNum = comm.ckeckCookie(cookie.getValue());
+//				Long userNum = comm.ckeckCookie(cookie.getValue());
 //				Long userNum = comm.ckeckCookie(id);
-//				Long userNum = comm.ckeckCookie("hhh");
+				Long userNum = comm.ckeckCookie("hhh");
 				cdto.setImg(comm.upload(img, mv,model));
 				int num = comm.create(cdto, userNum);
 				return num;
@@ -141,7 +141,7 @@ public class CommunityController {
 
 	
 	
-	
+	//모든 게시글
 	@PostMapping("/")
 	@ResponseBody
 	public List<CommunityDto> read(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody UserDto userDto,CommunityDto dto,HttpServletRequest request ) {
@@ -152,14 +152,14 @@ public class CommunityController {
 //		if(cookie.getName() != null) {
 				try {
 //					Long userNum = comm.ckeckCookie(cookie.getValue());
-//					String id = "hhh";
-					String  id = cookie.getValue();
+					String id = "hhh";
+//					String  id = cookie.getValue();
 					System.out.println(id+"------------------");
 					Long userNum = comm.ckeckCookie(id);
 					System.out.println(userNum);
 					userDto.setNum(userNum);
 					dto.setUserNum(userNum);
-					List<CommunityDto> list = comm.read(userDto,dto);
+					List<CommunityDto> list = comm.read(dto);
 					
 					return list;
 					
@@ -173,6 +173,8 @@ public class CommunityController {
 		return null;
 		
 	}
+	
+	
 	
 	@PostMapping(value = "/{num}")	
 	@ResponseBody
@@ -229,7 +231,8 @@ public class CommunityController {
 //		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
 //		String id = "dogram";
-		String id = cookie.getValue();
+//		String id = cookie.getValue();
+		String id = "hhh";
 		
 		int num = -1;
 //		if(cookie.getName() != null) {
@@ -286,7 +289,8 @@ public class CommunityController {
 			e1.printStackTrace();
 		}
 		
-		String id=cookie.getValue();
+//		String id=cookie.getValue();
+		String id="hhh";
 //		if(cookie.getName() != null) {
 //		if(cookie.getName().equals("id")){
 			try {
@@ -314,7 +318,8 @@ public class CommunityController {
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 //		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
-		String id = cookie.getValue();
+//		String id = cookie.getValue();
+		String id = "hhh";
 		
 //		if(cookie.getName() != null) {
 			try {
@@ -340,14 +345,14 @@ public class CommunityController {
 		CommentService comme = ctx.getBean("comment",CommentService.class);
 		int num = -1;
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
 //		if(cookie.getName() != null) {
 			try {
-				comme.ckeckCookie(cookie.getValue(),dto);
+//				comme.ckeckCookie(cookie.getValue(),dto);
+				num = comme.ckeckCookie("hhh",dto);
 //				comme.ckeckCookie(id,dto);
+				if(num == 1) {
 				num = comme.create(dto);
-					
+				}
 				return num;
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
@@ -372,7 +377,8 @@ public class CommunityController {
 //		String id = (String) session.getAttribute("id");
 //		if(cookie.getName() != null) {
 			try {
-				comme.ckeckCookie(cookie.getValue(),dto);
+//				comme.ckeckCookie(cookie.getValue(),dto);
+				comme.ckeckCookie("hhh",dto);
 //				comme.ckeckCookie(id,dto);
 				list = comme.read(dto);
 				return list;
@@ -399,7 +405,8 @@ public class CommunityController {
 		
 //		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
-		String id = cookie.getValue();
+//		String id = cookie.getValue();
+		String id = "hhh";
 		System.out.println(id);
 //		if(cookie.getName() != null) {
 			try {
@@ -432,7 +439,9 @@ public class CommunityController {
 		
 //		HttpSession session = request.getSession();
 //		String id = (String) session.getAttribute("id");
-		String id = cookie.getValue();
+//		String id = cookie.getValue();
+		String id = "hhh";
+		
 		
 		try {
 //			comme.ckeckCookie(cookie.getValue(),dto);

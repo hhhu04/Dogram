@@ -8,14 +8,15 @@ class Router {
     // window.addEventListener("hashchange", this.hashChange);
     // window.addEventListener("DOMContentLoaded", this.hashChange);
   }
-  addRoute = (name, url, model) => {
+  addRoute = (name, url, model, urlsub = "") => {
     this.routes[url] = { name, model };
   };
 
   hashChange = () => {
     console.log("hash change!");
-
-    const hash = window.location.hash;
+    const regex = /[0-9]{0,10}/g;
+    const hash = window.location.hash.replace(regex, "");
+    console.log(hash);
 
     // const route = this.routes.filter((route) =>
     //   hash.match(new RegExp(route["url"]))
@@ -25,6 +26,7 @@ class Router {
     // const route = hash.match(new RegExp(this.routes[`^${hash}$`].name));
     const route = this.routes[hash];
     console.log(route);
+    console.log(this.routes);
 
     // 페이지(해쉬)별 css, tempelete, view render
     if (route) {

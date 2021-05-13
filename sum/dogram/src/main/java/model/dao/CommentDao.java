@@ -61,7 +61,7 @@ public int checkCookie(String cookie,CommentDto dto) throws SQLException {
 
 	        PreparedStatement preparedStatement = c.prepareStatement(
 	                "insert into comment (comment,created_at,community_num,user_num,user_id) value(?,?,?,?,?)");
-
+	        System.out.println(dto);
 	        preparedStatement.setString(1, dto.getComment());
 	        preparedStatement.setString(2, date.date());
 	        preparedStatement.setLong(3, dto.getCommunityNum());

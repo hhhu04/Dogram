@@ -11,7 +11,19 @@ const feedItem = (
   heart = "far",
   numberCheck = ""
 ) => {
-  return `<div class="feed_item">
+  window.onload = () => {
+    document
+      .querySelector(".shareBtn")
+      .addEventListener("click", sendLinkCustom);
+  };
+  function sendLinkCustom() {
+    Kakao.init("82c600addecf046386c493fb1b97eb6b");
+    Kakao.Link.sendCustom({
+      templateId: 53329,
+    });
+  }
+
+  return `<div class="feed_item" id="${contentNum}">
     <div class="feed_header">
         <div class="user_area">
             <img src="/img/main-logo.png" alt="" style="width: 50px">
@@ -20,12 +32,12 @@ const feedItem = (
     </div>
     <div class="main_photo">
         <!-- <img src="/img/mindog.jpg" alt=""> -->
-        <img src="http://192.168.1.71:8070/${photo}" alt="">
+        <img src="http://101.101.211.145:8080/${photo}" alt="">
     </div>
     <div class="desc_area">
         <div class="btn_area">
             <button type="button" style="width: 15px;padding: 0;" class="likebtn" id="${contentNum}"><i class="${heart} fa-heart" id="${contentNum}"></i></button>
-            <button type="button"><i class="far fa-paper-plane"></i></button>
+            <button type="button" class="shareBtn"><i class="far fa-paper-plane"></i></button>
             <button type="button"><i class="far fa-comment-alt"></i></button>
             <a href="#" class="message_btn"><i class="far fa-envelope"></i></a>
         </div>
@@ -42,7 +54,7 @@ const feedItem = (
         <div>
         <form method="POST" name="commentForm" class="commentForm">
           <textarea class="commentInput" autofocus="true"  placeholder="댓글 달기" autocomplete="off" autocorrect="off"></textarea>
-          <button type="submit" disabled class="commentBtn">게시</button>
+          <button type="submit" class="commentBtn">게시</button>
         </form>
         </div>
     </div>

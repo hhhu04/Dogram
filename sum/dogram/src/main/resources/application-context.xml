@@ -48,6 +48,7 @@
 
     
     <bean id="datenow" class="configuration.DateNow"></bean>
+    <bean id="datenow2" class="configuration.DateNow2"></bean>
     
     <bean id="mail2" class="configuration.MailConfig"></bean>
   

@@ -7,6 +7,9 @@ class FeedView {
     this.likeBtn = document.querySelectorAll(".likebtn");
     this.likeBtnFar = document.querySelectorAll(".likebtn > i");
     this.uploadBtn = document.querySelector(".upload_btn");
+    this.feedAll = document.querySelectorAll(".feed_item");
+    this.feedAllArr = Array.from(this.feedAll);
+    this.commentBtn = document.querySelectorAll(".commentBtn");
     console.log(this.container);
   }
   bindLinkUpload(linkUpload) {
@@ -14,6 +17,9 @@ class FeedView {
   }
   bindAddFeed(containerLoad) {
     window.addEventListener("scroll", containerLoad, { passive: true });
+  }
+  bindFeedHash(feedHashChange) {
+    window.addEventListener("scroll", feedHashChange, { passive: true });
   }
   bindAddLike(addLike) {
     console.log(this.likeBtn);
@@ -23,7 +29,11 @@ class FeedView {
     Array.from(this.likeBtn).map((item) =>
       item.addEventListener("click", addLike)
     );
-    // this.likeBtn.addEventListener("click", addLike);
+  }
+  bindAddComment(addComment) {
+    Array.from(this.commentBtn).map((item) =>
+      item.addEventListener("click", addComment)
+    );
   }
 }
 export default FeedView;
