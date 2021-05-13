@@ -34,8 +34,29 @@
     <script type="module" src="router.js"></script>
     <script type="module" src="app.js"></script>
     <script>
-        // Kakao.init('82c600addecf046386c493fb1b97eb6b'); 
-        // console.log("카카오 인잇!!!!!")
+        document.addEventListener("readystatechange", () => {
+            const state = document.readyState;
+            console.log(state)
+            if (state === "interactive") {
+                const loding = document.createElement('div')
+                const lodingText = document.createElement('h6')
+                const text = document.createTextNode('로딩중입니다')
+                lodingText.appendChild(text)
+                loding.classList.add('loding')
+                loding.innerHTML = "<img src='img/loding.gif' class='loadimg'></img>"
+                loding.appendChild(lodingText)
+                loding.style.width = "100px"
+                lodingText.style.marginTop = "30px"
+                document.querySelector("#app").style.background = "rgb(216, 193, 173)"
+                document.querySelector("#app").style.height = "100vh"
+                document.querySelector("#app").style.display = "flex"
+                document.querySelector("#app").style.justifyContent = "center"
+                document.querySelector("#app").style.alignItems = "center"
+                document.querySelector("#app").appendChild(loding)
+            } else if (state === "complete") {
+                document.querySelector("#app").style.background = ""
+            }
+        })
     </script>
 
 </body>

@@ -21,7 +21,7 @@ class FeedController extends Controller {
     this.fistContainerLoad();
 
     this.moveFeedHash();
-    this.router.view.FeedView.shareKakao();
+
     this.feedState = 1;
     this.likeState = 0;
     // this.userinfo = this.getCookie("user");
@@ -29,7 +29,8 @@ class FeedController extends Controller {
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
 
     this.feedRenderMount();
-    this.loadCommentShow();
+
+    // this.loadCommentShow();
 
     console.log("feedController");
   }
@@ -193,18 +194,32 @@ class FeedController extends Controller {
     this.router.hashChange();
     this.didRenderMount();
     this.feedRenderMount();
+    this.loadCommentShow();
   };
   feedRenderMount = () => {
     // this.router.view.FeedView.bindAddLike(this.addLike);
     this.router.view.FeedView.bindAddLike(this.modelChange);
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
     this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+    this.router.view.FeedView.bindMoreComment(this.moreComment);
     this.router.view.FeedView.bindAddComment(this.addComment);
-    this.router.view.FeedView.shareKakao();
     this.commentBtnChange();
-    this.loadCommentShow();
+
+    this.router.view.FeedView.shareKakao(this.shareKakao);
 
     // this.moveFeedHash();
+  };
+  shareKakao = (e) => {
+    console.log("share event!");
+    console.log(e);
+    Kakao.Link.sendDefault({
+      objectType: "text",
+      text: "기본 템플릿으로 제공되는 텍스트 템플릿은 텍스트를 최대 200자까지 표시할 수 있습니다. 텍스트 템플릿은 텍스트 영역과 하나의 기본 버튼을 가집니다. 임의의 버튼을 설정할 수도 있습니다. 여러 장의 이미지, 프로필 정보 등 보다 확장된 형태의 카카오링크는 다른 템플릿을 이용해 보낼 수 있습니다.",
+      link: {
+        mobileWebUrl: e.path[4].getAttribute("href"),
+        webUrl: e.path[4].getAttribute("href"),
+      },
+    });
   };
   getFeedData = async () => {
     this.feedData = await this.service.getFirstFeed();
@@ -222,9 +237,15 @@ class FeedController extends Controller {
       comment: form.comment.value,
       communityNum: e.target.id,
     };
+    console.log(e.path[1].children[1]);
     // const commentTag = document.createElement("p");
     // const commentWrap = document.createElement("div");
     const commentId = document.createElement("p");
+    commentId.classList.add("js-commentWrap");
+    const deleteBtn = document.createElement("div");
+    deleteBtn.textContent = "삭제";
+    deleteBtn.classList.add("js-deleteBtn");
+    commentId.appendChild(deleteBtn);
     const commentText = document.createElement("span");
     const commentIn = document.createTextNode(`${this.service.userinfo}`);
     const commentTextIn = document.createTextNode(`${form.comment.value}`);
@@ -234,12 +255,27 @@ class FeedController extends Controller {
     commentId.appendChild(commentText);
     // commentTag.appendChild(commentId);
     // commentWrap.prepend(commentId);
-    form.prepend(commentId);
+    // form.prepend(commentId);
+    e.path[1].children[1].prepend(commentId);
     form.comment.value = "";
     console.log(e.target);
 
     await this.service.postComment(data);
-    // await this.loadCommentShow();
+    // this.loadCommentShow();
+    this.deleteComment();
+  };
+  moreComment = (e) => {
+    console.log(
+      e.target.parentElement.parentElement.nextElementSibling.querySelector(
+        ".commentWrap"
+      )
+    );
+    const commentWrap =
+      e.target.parentElement.parentElement.nextElementSibling.querySelector(
+        ".commentWrap"
+      );
+
+    commentWrap.classList.add("commentDetail");
   };
   loadCommentShow = async () => {
     console.log(this.feedData);
@@ -282,7 +318,6 @@ class FeedController extends Controller {
       // }
       console.log(clist);
     });
-    // this.deleteComment();
   };
   commentBtnChange() {
     const commentBtnArr = Array.from(this.router.view.FeedView.commentBtn);
@@ -304,15 +339,22 @@ class FeedController extends Controller {
     //   e.target.style.color = "red";
     // }
   }
-  deleteComment() {
+  deleteComment = () => {
     const deleteBtnArr = Array.from(document.querySelectorAll(".js-deleteBtn"));
     deleteBtnArr.forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        console.log(e.target.dataset);
+        // console.log(e.path[1]);
+        e.path[1].remove();
+        const data = {
+          userNum: e.target.dataset.userNum,
+          num: e.target.dataset.num,
+          communityNum: e.target.dataset.communityNum,
+        };
+        this.service.deleteComment(data);
       });
     });
     // console.log(document.querySelectorAll(".js-deleteBtn"));
-  }
+  };
   fistContainerLoad = async () => {
     // console.log(this.includeCheck);
     // const data = this.getFeedData();
@@ -371,7 +413,7 @@ class FeedController extends Controller {
     this.router.hashChange();
     this.moveFeedHash();
     this.didRenderMount();
-
+    this.loadCommentShow();
     this.feedRenderMount();
     this.deleteComment();
 
@@ -431,6 +473,7 @@ class FeedController extends Controller {
         );
         this.router.hashChange();
         this.didRenderMount();
+        this.loadCommentShow();
         this.feedRenderMount();
       }
     };
