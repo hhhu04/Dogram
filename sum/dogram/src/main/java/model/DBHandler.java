@@ -20,10 +20,8 @@ public class DBHandler implements DataBase{
             GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
             DataSource ds = (DataSource) ctx.getBean("dataSource");
             con = ds.getConnection();
-            System.out.println("정상적으로 연결되었습니다.");
 
         } catch(SQLException e) {
-            System.err.println("con 오류:" + e.getMessage());
             e.printStackTrace();
         }
 

@@ -53,6 +53,27 @@ public int checkCookie(String cookie,CommentDto dto) throws SQLException {
 		
 		return -1;
 	}
+
+public int readNum(CommentDto dto) throws SQLException {
+	
+	Connection c = db.connect();
+	Statement stat = c.createStatement();
+	
+	PreparedStatement preparedStatement = 
+			c.prepareStatement("select num from comment order by created_at desc limit 1 ");
+	
+	
+	 ResultSet rs = preparedStatement.executeQuery();
+        if(rs.next()) {
+        	dto.setNum(rs.getLong("num"));
+            return 1;
+        }
+        stat.close();
+
+        db.disconnect();
+	
+	return -1;
+}
 	
 	 public int create(CommentDto dto) throws ClassNotFoundException, SQLException{
 		 GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
@@ -89,7 +110,7 @@ public int checkCookie(String cookie,CommentDto dto) throws SQLException {
 			
 			
 			 int rs = preparedStatement.executeUpdate();
-			 
+			 System.out.println(rs);
 			 
 			  stat.close();
 
@@ -154,7 +175,6 @@ public int checkCookie(String cookie,CommentDto dto) throws SQLException {
 				c.prepareStatement("select * from comment where community_num=?");
 		
 		preparedStatement.setLong(1, cnum);
-		System.out.println(dto.getCommunityNum());
 		 ResultSet rs = preparedStatement.executeQuery();
 		
 	        while(rs.next()) {
