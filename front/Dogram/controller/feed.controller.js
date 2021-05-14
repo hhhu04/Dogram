@@ -28,13 +28,20 @@ class FeedController extends Controller {
     this.router.view.bindAddFeed(this.containerLoad);
     this.router.view.FeedView.bindLinkUpload(this.linkUpload);
 
-    this.feedRenderMount();
+    // this.feedRenderMount();
 
     // this.loadCommentShow();
 
     console.log("feedController");
   }
-
+  linkChat = () => {
+    console.log("go go chat!");
+    window.open(
+      "http://192.168.1.71:8070/chat",
+      "_blank",
+      "width=700, height=700"
+    );
+  };
   moveFeedHash = async () => {
     const currHash = window.location.hash;
     console.log(currHash);
@@ -115,7 +122,7 @@ class FeedController extends Controller {
     // });
   };
   // 좋아요 눌렀을때 모델 변경
-  modelChange = (e) => {
+  modelChange = async (e) => {
     // console.log(e.target.classList.add("fas")); // String
 
     // console.log(e.target.id); // String
@@ -126,6 +133,7 @@ class FeedController extends Controller {
 
     // 변경
     // feeddata
+
     this.numberCheck = this.feedData.filter((item) => {
       if (item["num"] === targetId) return true;
     });
@@ -138,11 +146,12 @@ class FeedController extends Controller {
     });
     console.log(this.includeCheck);
     console.log(this.numberCheck);
-    const userCheck = this.numberCheck[0].list.filter((item) => {
-      if (item["id"] === this.service.userinfo) return true;
-    });
+    // const userCheck = this.numberCheck[0].list.filter((item) => {
+    //   if (item["id"] === this.service.userinfo) return true;
+    // });
     console.log(this.numberCheck[0].list); // 게시물에 좋아요한사람
-    console.log(userCheck[0]); // 이용자의 아이디가 있는지? 나옴
+    // console.log(userCheck[0]);
+    // 이용자의 아이디가 있는지? 나옴
     console.log(this.includeCheck);
     if (this.includeCheck > -1) {
       for (let i = 0; i < this.numberCheck[0].list.length; i++) {
@@ -155,66 +164,100 @@ class FeedController extends Controller {
         }
       }
       console.log(this.numberCheck[0].list);
+      const likeCount = e.path[3].children[1].children[1];
+      likeCount.innerHTML = parseInt(likeCount.innerHTML) - 1;
+      // this.numberCheck[0]["heart"] = "far";
+      // this.numberCheck[0]["heartColor"] = "heartColor";
+      e.target.classList.remove("fas");
+      e.target.classList.add("far");
 
-      this.numberCheck[0]["heart"] = "far";
-      this.numberCheck[0]["heartColor"] = "heartColor";
-      this.service.addAndDeleteLike(this.numberCheck[0].num);
+      await this.service.addAndDeleteLike(this.numberCheck[0].num);
     } else {
-      this.numberCheck[0].list.push({ id: this.service.userinfo });
-      this.numberCheck[0]["heart"] = "fas";
-      console.log(this.numberCheck[0].num);
-      this.service.addAndDeleteLike(this.numberCheck[0].num);
-    }
-    console.log(this.feedData);
-    console.log(this.numberCheck[0].list);
-    console.log(this.numberCheck[0].list.length);
-    const likeCount = this.feedData.map((item, idx) => {
-      if (idx < this.feedState * 5) {
-        return feedItem(
-          item.userName,
-          item.img,
-          item.list.length,
-          "",
-          "",
-          "",
-          item.num,
-          item.heart,
-          item.heartColor
-        );
-      }
-    });
-    this.router.addRoute(
-      "feed",
-      "#/feed/",
-      feedTemp(
-        navBarTemp("logoutbtn", this.service.userinfo),
-        likeCount.join(" ")
-      )
-    );
-    this.router.hashChange();
-    this.didRenderMount();
-    this.feedRenderMount();
-    this.loadCommentShow();
-  };
-  feedRenderMount = () => {
-    // this.router.view.FeedView.bindAddLike(this.addLike);
-    this.router.view.FeedView.bindAddLike(this.modelChange);
-    this.router.view.FeedView.bindLinkUpload(this.linkUpload);
-    this.router.view.FeedView.bindFeedHash(this.feedHashChange);
-    this.router.view.FeedView.bindMoreComment(this.moreComment);
-    this.router.view.FeedView.bindAddComment(this.addComment);
-    this.commentBtnChange();
+      const likeCount = e.path[3].children[1].children[1];
+      likeCount.innerHTML = parseInt(likeCount.innerHTML) + 1;
 
-    this.router.view.FeedView.shareKakao(this.shareKakao);
+      e.target.classList.remove("far");
+      e.target.classList.add("fas");
+
+      console.log(e.target.classList);
+      this.numberCheck[0].list.push({ id: this.service.userinfo });
+      // this.numberCheck[0]["heart"] = "fas";
+      console.log(this.numberCheck[0].num);
+      await this.service.addAndDeleteLike(this.numberCheck[0].num);
+    }
+
+    //   console.log(this.feedData);
+    //   console.log(this.numberCheck[0].list);
+    //   console.log(this.numberCheck[0].list.length);
+    //   this.feedData = await this.service.getFirstFeed();
+    //   const likeCount = this.feedData.map((item, idx) => {
+    //     const checkInfo = item.list.findIndex((item) => {
+    //       return item.id == this.service.userinfo;
+    //     });
+    //     if (checkInfo > -1) {
+    //       item.heart = "fas";
+    //       item.heartColor = "heartColor";
+    //     } else {
+    //       item.heart = "far";
+    //     }
+    //     if (idx < this.feedState * 5) {
+    //       return feedItem(
+    //         item.userName,
+    //         item.img,
+    //         item.list.length,
+    //         "",
+    //         "",
+    //         "",
+    //         item.num,
+    //         item.heart,
+    //         item.heartColor
+    //       );
+    //     }
+    //   });
+    //   this.router.addRoute(
+    //     "feed",
+    //     "#/feed/",
+    //     feedTemp(
+    //       navBarTemp("logoutbtn", this.service.userinfo),
+    //       likeCount.join(" ")
+    //     )
+    //   );
+    //   this.router.hashChange();
+    //   this.didRenderMount();
+    //   this.loadCommentShow();
+    //   this.router.view.FeedView.bindMoreComment(this.moreComment);
+    //   this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+    //   this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+    //   this.router.view.FeedView.bindMoreComment(this.moreComment);
+    //   this.router.view.FeedView.shareKakao(this.shareKakao);
+    //   this.router.view.FeedView.bindAddLike(this.modelChange);
+    //   this.router.view.FeedView.bindAddComment(this.addComment);
+    //   this.commentBtnChange();
+    //   this.deleteComment();
+    // };
+    // feedRenderMount = () => {
+    //   // this.router.view.FeedView.bindAddLike(this.addLike);
+
+    //   // this.router.view.FeedView.bindAddLike(this.modelChange);
+    //   // this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+    //   // this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+    //   // this.router.view.FeedView.bindMoreComment(this.moreComment);
+    //   // this.router.view.FeedView.bindAddComment(this.addComment);
+    //   this.commentBtnChange();
+
+    //   this.router.view.FeedView.shareKakao(this.shareKakao);
 
     // this.moveFeedHash();
   };
   shareKakao = (e) => {
     console.log("share event!");
     console.log(e);
+    // console.log(e.path[4].children[2].children[2].innerText);
+    const content = e.path[4].children[2].children[2].innerText;
+
     Kakao.Link.sendDefault({
       objectType: "text",
-      text: "기본 템플릿으로 제공되는 텍스트 템플릿은 텍스트를 최대 200자까지 표시할 수 있습니다. 텍스트 템플릿은 텍스트 영역과 하나의 기본 버튼을 가집니다. 임의의 버튼을 설정할 수도 있습니다. 여러 장의 이미지, 프로필 정보 등 보다 확장된 형태의 카카오링크는 다른 템플릿을 이용해 보낼 수 있습니다.",
+      text: `제목/내용 : ${content}`,
       link: {
         mobileWebUrl: e.path[4].getAttribute("href"),
         webUrl: e.path[4].getAttribute("href"),
@@ -256,11 +299,15 @@ class FeedController extends Controller {
     // commentTag.appendChild(commentId);
     // commentWrap.prepend(commentId);
     // form.prepend(commentId);
-    e.path[1].children[1].prepend(commentId);
+    const commentWrap = e.path[1].children[0];
+    console.log(e.path[1].children[0]);
+    commentWrap.prepend(commentId);
     form.comment.value = "";
     console.log(e.target);
 
-    await this.service.postComment(data);
+    const commentNum = await this.service.postComment(data);
+    console.log(e);
+    deleteBtn.dataset.num = commentNum;
     // this.loadCommentShow();
     this.deleteComment();
   };
@@ -274,13 +321,19 @@ class FeedController extends Controller {
       e.target.parentElement.parentElement.nextElementSibling.querySelector(
         ".commentWrap"
       );
-
-    commentWrap.classList.add("commentDetail");
+    if (!commentWrap.classList.contains("commentDetail")) {
+      commentWrap.classList.add("commentDetail");
+    } else {
+      commentWrap.classList.remove("commentDetail");
+    }
   };
+
+  // feed data의 댓글을 보여준다
   loadCommentShow = async () => {
     console.log(this.feedData);
+
     await this.feedData.forEach((data) => {
-      const num = data.num;
+      // const num = data.num;
       const clist = data.clist;
       const form = document.getElementById(`${data.num}comment`);
       const commentWrap = document.createElement("div");
@@ -309,9 +362,14 @@ class FeedController extends Controller {
         commentText.appendChild(commentTextIn);
         commentIds.appendChild(commentText);
         // commentTag.appendChild(commentId);
+        console.log(commentIds);
         commentWrap.prepend(commentIds);
+        console.log(commentWrap);
       });
-      form.prepend(commentWrap);
+      console.log(form);
+      if (form) {
+        form.prepend(commentWrap);
+      }
 
       // for (let i = 0; i < 2; i++) {
       //   form.prepend(commentWrap);
@@ -358,12 +416,13 @@ class FeedController extends Controller {
   fistContainerLoad = async () => {
     // console.log(this.includeCheck);
     // const data = this.getFeedData();
+
     const regex = /\/[0-9]{0,10}/g;
     const currHash = window.location.hash.replace(regex, "");
     console.log(currHash);
     this.feedData = await this.service.getFirstFeed();
     this.feedItemShow = this.feedData.map((item, idx) => {
-      // console.log(item);
+      console.log(item);
       const checkInfo = item.list.findIndex((item) => {
         return item.id == this.service.userinfo;
       });
@@ -377,27 +436,31 @@ class FeedController extends Controller {
       }
       if (!currHash && idx < 5) {
         return feedItem(
-          item.userName,
+          item.userId,
           item.img,
           item.list.length,
-          "",
+          item.title,
           "",
           "",
           item.num,
           item.heart,
-          item.heartColor
+          item.heartColor,
+          item.userImg,
+          item.content
         );
       } else if (currHash) {
         return feedItem(
-          item.userName,
+          item.userId,
           item.img,
           item.list.length,
-          "",
+          item.title,
           "",
           "",
           item.num,
           item.heart,
-          item.heartColor
+          item.heartColor,
+          item.userImg,
+          item.content
         );
       }
     });
@@ -410,12 +473,30 @@ class FeedController extends Controller {
         this.feedItemShow.join(" ")
       )
     );
+
     this.router.hashChange();
-    this.moveFeedHash();
+    this.router.view.FeedView.feedAllArr.forEach((item) => {
+      // console.log(item.id);
+      item.setAttribute(
+        "href",
+        `http://127.0.0.1:5501/app.html#/feed/${item.id}`
+      );
+    });
     this.didRenderMount();
+    this.moveFeedHash();
     this.loadCommentShow();
-    this.feedRenderMount();
+    // this.feedRenderMount();
+
+    this.router.view.FeedView.bindMoreComment(this.moreComment);
+    this.router.view.FeedView.bindAddLike(this.modelChange);
+    this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+    this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+    this.router.view.FeedView.bindMoreComment(this.moreComment);
+    this.router.view.FeedView.bindAddComment(this.addComment);
+    this.commentBtnChange();
     this.deleteComment();
+    this.router.view.FeedView.shareKakao(this.shareKakao);
+    this.router.view.FeedView.bindChat(this.linkChat);
 
     // this.moveFeedHash();
   };
@@ -446,14 +527,16 @@ class FeedController extends Controller {
           }
           if (idx < this.feedState * 5 + 5) {
             return feedItem(
-              item.userName,
+              item.userId,
               item.img,
               item.list.length,
-              "",
+              item.title,
               "",
               "",
               item.num,
-              item.heart
+              item.heart,
+              item.userImg,
+              item.content
             );
           } else {
             return "";
@@ -474,7 +557,18 @@ class FeedController extends Controller {
         this.router.hashChange();
         this.didRenderMount();
         this.loadCommentShow();
-        this.feedRenderMount();
+        // this.feedRenderMount();
+
+        this.router.view.FeedView.bindMoreComment(this.moreComment);
+        this.router.view.FeedView.bindAddLike(this.modelChange);
+        this.router.view.FeedView.bindLinkUpload(this.linkUpload);
+        this.router.view.FeedView.bindFeedHash(this.feedHashChange);
+        this.router.view.FeedView.bindMoreComment(this.moreComment);
+        this.router.view.FeedView.bindAddComment(this.addComment);
+        this.commentBtnChange();
+        this.deleteComment();
+        this.router.view.FeedView.shareKakao(this.shareKakao);
+        this.router.view.FeedView.bindChat(this.linkChat);
       }
     };
     // console.log(fullHeight - screenHeight / 1.5);
@@ -485,17 +579,17 @@ class FeedController extends Controller {
       madeBox();
     }
   };
-  addLike = () => {
-    if (this.likeState === 0) {
-      this.likeState = 1;
-      this.router.view.FeedView.likeBtnFar.classList.remove("far");
-      this.router.view.FeedView.likeBtnFar.classList.add("fas");
-    } else {
-      this.likeState = 0;
-      this.router.view.FeedView.likeBtnFar.classList.add("far");
-      this.router.view.FeedView.likeBtnFar.classList.remove("fas");
-    }
-  };
+  // addLike = () => {
+  //   if (this.likeState === 0) {
+  //     this.likeState = 1;
+  //     this.router.view.FeedView.likeBtnFar.classList.remove("far");
+  //     this.router.view.FeedView.likeBtnFar.classList.add("fas");
+  //   } else {
+  //     this.likeState = 0;
+  //     this.router.view.FeedView.likeBtnFar.classList.add("far");
+  //     this.router.view.FeedView.likeBtnFar.classList.remove("fas");
+  //   }
+  // };
   // addLikeCount = () => {};
   // fillLike = () => {
   //   if (this.userinfo) {

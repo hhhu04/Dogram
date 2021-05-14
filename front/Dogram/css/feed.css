@@ -77,11 +77,28 @@ html {
   border-radius: 50%;
   text-align: center;
   bottom: 15px;
-  right: 15px;
+  right: 20px;
   transition: all 0.3s;
 }
 .upload_btn:hover {
   transform: rotate(180deg);
+}
+.chat_btn {
+  position: fixed;
+  font-size: 20px;
+  line-height: 35px;
+  height: 35px;
+  width: 35px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  text-align: center;
+  bottom: 65px;
+  right: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.chat_btn:hover {
+  color: #000;
 }
 
 /*

@@ -29,10 +29,16 @@ class MypageController extends Controller {
 
   deleteUser = async (e) => {
     e.preventDefault();
-    await this.service.deleteUser();
+    // window.alert("탈퇴가 정상적으로 이루어졌습니다");
+    // window.location.hash = "#/";
+
+    const a = await this.service.deleteUser();
+    console.log(a);
   };
 
-  paging = () => {
+  paging = async () => {
+    this.myfeed = await this.service.getMyFeedList();
+    console.log(this.myfeed);
     const list = [
       { num: 1, content: "가" },
       { num: 2, content: "a" },

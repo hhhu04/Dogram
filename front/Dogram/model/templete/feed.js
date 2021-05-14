@@ -16,6 +16,7 @@ const feedTemp = (navBarTemp, feedItem = "") => {
         <div class="content ">
         ${feedItem ? feedItem : ""}
           <a href="write.html" class="upload_btn"><i class="fas fa-plus" style="font-weight: 500;"></i></a>
+          <div class="chat_btn"><i class="fas fa-headset"></i></div>
       </div>
   </div>
 

@@ -69,6 +69,8 @@ class FeedUploadController extends Controller {
     for (var value of a.values()) {
       console.log(value);
     }
+    window.location.hash = "#/feed/";
+    // this.router.hashChange();
     this.service.postUpload(new FormData(form));
   };
 }
