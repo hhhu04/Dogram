@@ -54,6 +54,12 @@ class Service {
     console.log(typeof JSON.parse(getLoadFeed.response));
     return JSON.parse(getLoadFeed.response);
   };
+  getMyFeedList = async () => {
+    console.log("get call");
+    const getMyFeed = await this.API.getMyFeedList();
+    // console.log(getMyFeed.response);
+    return JSON.parse(getMyFeed.response);
+  };
 
   deleteUser = async () => {
     const deleteResult = await this.API.deleteUser();

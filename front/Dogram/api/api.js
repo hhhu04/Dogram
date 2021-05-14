@@ -16,20 +16,20 @@ class API {
     return response;
   }
   async postUpload(formData) {
-    let url = "http://192.168.1.71:8070/feed/newfeed";
+    let url = "http://101.101.211.145:8080/feed/newfeed";
     let response = await sendRequestFormData("POST", url, formData);
 
     return response;
   }
   async postJoin(formData) {
-    let url = "http://192.168.1.71:8070/user/join2";
+    let url = "http://101.101.211.145:8080/user/join2";
     let response = await sendRequestFormData("POST", url, formData);
 
     return response;
   }
   async postComment(formData) {
     // let url = "http://101.101.211.145:8080/feed/commentadd";
-    let url = "http://192.168.1.71:8070/feed/commentadd";
+    let url = "http://101.101.211.145:8080/feed/commentadd";
 
     let response = await sendRequest("POST", url, formData);
     console.log(response);
@@ -37,7 +37,7 @@ class API {
     return response;
   }
   async postLogin(data) {
-    let url = "http://192.168.1.71:8070/user/login";
+    let url = "http://101.101.211.145:8080/user/login";
 
     let response = await sendRequest("POST", url, data);
     console.log(response);
@@ -45,7 +45,7 @@ class API {
     return response;
   }
   async deleteComment(data) {
-    let url = "http://192.168.1.71:8070/feed/commentdel";
+    let url = "http://101.101.211.145:8080/feed/commentdel";
 
     // let url = "http://101.101.211.145:8080/feed/commentdel";
     let response = await sendRequest("POST", url, data);
@@ -54,7 +54,7 @@ class API {
     return response;
   }
   async getFirstFeedLoad() {
-    let url = "http://192.168.1.71:8070/feed/";
+    let url = "http://101.101.211.145:8080/feed/";
     // let url = "http://101.101.211.145:8080/feed/";
     // let url = "http://127.0.0.1:5501/data/status.json";
     let response = await sendRequest("POST", url);
@@ -68,8 +68,14 @@ class API {
     return response;
   }
 
+  async getMyFeedList() {
+    // let url = "http://101.101.211.145:8080/user/feedList";
+    let url = "http://192.168.1.71:8070/user/feedList";
+    let response = await sendRequest("POST", url);
+    return response;
+  }
   async deleteUser() {
-    let url = "http://127.0.0.1:5501/data/status.json";
+    let url = "http://101.101.211.145:8080/user/delete";
     let response = await sendRequest("POST", url);
     console.log("api call");
     return response;
@@ -77,7 +83,7 @@ class API {
 
   async addLike(data) {
     // let url = "http://101.101.211.145:8080/feed/addlike";
-    let url = "http://127.0.0.1:5501/feed/addlike";
+    let url = "http://101.101.211.145:8080/feed/addlike";
 
     let response = await sendRequest("POST", url, data);
     console.log("api call");

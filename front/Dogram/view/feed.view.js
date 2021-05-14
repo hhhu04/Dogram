@@ -12,6 +12,8 @@ class FeedView {
     this.commentBtn = document.querySelectorAll(".commentBtn");
     this.kakaoBtn = document.querySelectorAll(".kakaoBtn");
     this.moreBtn = document.querySelectorAll(".moreBtn");
+    this.searchBtn = document.querySelector(".feed_searchBtn");
+    this.chat_btn = document.querySelector(".chat_btn");
     // this.deleteBtnArr = Array.from(document.querySelectorAll(".js-deleteBtn"));
     console.log(this.container);
   }
@@ -22,6 +24,10 @@ class FeedView {
   //     btn.addEventListener("click", deleteComment);
   //   });
   // }
+
+  bindChat(chat) {
+    this.chat_btn.addEventListener("click", chat);
+  }
   bindLinkUpload(linkUpload) {
     this.uploadBtn.addEventListener("click", linkUpload);
   }

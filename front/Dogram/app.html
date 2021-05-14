@@ -20,43 +20,36 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-    <!-- <script type="module" src="model/templete/intro.js"></script>
-    <script type="module" src="model/templete/feed.js"></script>
-    <script type="module" src="model/templete/login.js"></script>
-    <script type="module" src="model/templete/join.js"></script>
-    <script type="module" src="model/templete/store.js"></script>
-    <script type="module" src="model/templete/navbar.js"></script>
-    <script type="module" src="model/templete/feeditem.js"></script>
-    <script type="module" src="service/feed.service.js"></script> -->
-    <!-- <script type="module" src="service/auth.service.js"></script> -->
     
     <script type="module" src="model/model.js"></script>
     <script type="module" src="router.js"></script>
     <script type="module" src="app.js"></script>
     <script>
         document.addEventListener("readystatechange", () => {
-            const state = document.readyState;
-            console.log(state)
-            if (state === "interactive") {
-                const loding = document.createElement('div')
-                const lodingText = document.createElement('h6')
-                const text = document.createTextNode('로딩중입니다')
-                lodingText.appendChild(text)
-                loding.classList.add('loding')
-                loding.innerHTML = "<img src='img/loding.gif' class='loadimg'></img>"
-                loding.appendChild(lodingText)
-                loding.style.width = "100px"
-                lodingText.style.marginTop = "30px"
-                document.querySelector("#app").style.background = "rgb(216, 193, 173)"
-                document.querySelector("#app").style.height = "100vh"
-                document.querySelector("#app").style.display = "flex"
-                document.querySelector("#app").style.justifyContent = "center"
-                document.querySelector("#app").style.alignItems = "center"
-                document.querySelector("#app").appendChild(loding)
-            } else if (state === "complete") {
-                document.querySelector("#app").style.background = ""
-            }
-        })
+  const state = document.readyState;
+  console.log(state);
+  if (state === "interactive") {
+    const loding = document.createElement("div");
+    const lodingText = document.createElement("h6");
+    const text = document.createTextNode("도그램, 반려동물이 주는 평화");
+    lodingText.appendChild(text);
+    loding.classList.add("loding");
+    loding.innerHTML = "<img src='img/loding.gif' class='loadimg'></img>";
+    loding.appendChild(lodingText);
+    loding.style.width = "100px";
+    lodingText.style.marginTop = "30px";
+    document.querySelector("#app").style.background = "rgb(216, 193, 173)";
+    document.querySelector("#app").style.height = "100vh";
+    document.querySelector("#app").style.display = "flex";
+    document.querySelector("#app").style.justifyContent = "center";
+    document.querySelector("#app").style.alignItems = "center";
+    document.querySelector("#app").appendChild(loding);
+  } else if (state === "complete") {
+    document.querySelector("#app").style.background = "";
+    document.querySelector("#app").style.height = "auto";
+    document.querySelector("#app").style.display = "block";
+  }
+});
     </script>
 
 </body>
