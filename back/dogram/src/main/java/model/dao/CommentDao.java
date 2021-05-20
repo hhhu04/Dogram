@@ -143,6 +143,51 @@ public int checkCookie(String cookie,CommentDto dto) throws SQLException {
 	        db.disconnect();
 	 return list;
 	}
+	
+	public List<CommentDto> read2(CommentDto dto,Long cnum) throws SQLException {
+		// TODO Auto-generated method stub
+		List<CommentDto> list = new ArrayList<CommentDto>();
+		Connection c = db.connect();
+		Statement stat = c.createStatement();
+		
+		PreparedStatement preparedStatement = 
+				c.prepareStatement("select * from comment where community_num=?");
+		
+		preparedStatement.setLong(1, cnum);
+		System.out.println(dto.getCommunityNum());
+		 ResultSet rs = preparedStatement.executeQuery();
+		
+	        while(rs.next()) {
+	        	CommentDto dto2 = new CommentDto();
+	        	
+	        	Long num = rs.getLong("num");
+	        	String comment = rs.getString("comment");
+	        	String createdAt = rs.getString("created_at");
+	        	String updatedAt = rs.getString("updated_at");
+	        	Long communityNum = rs.getLong("community_num");
+	        	Long userNum = rs.getLong("user_num");
+	        	String userId =rs.getString("user_id");
+	        	
+	        	
+	        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        	LocalDateTime dateTime = LocalDateTime.parse(createdAt, formatter);
+	        	LocalDateTime dateTime2 = null; 
+	        	if(updatedAt != null) dateTime2 = LocalDateTime.parse(updatedAt, formatter);
+	        	
+	        	dto2.setNum(num);
+	        	dto2.setComment(comment);
+	        	dto2.setCreatedAt(dateTime);
+	        	dto2.setUpdatedAt(dateTime2);
+	        	dto2.setCommunityNum(communityNum);
+	        	dto2.setUserNum(userNum);
+	        	dto2.setUserId(userId);
+	        	
+	        	list.add(dto2);
+	        }
+	        stat.close();
+	        db.disconnect();
+	 return list;
+	}
 
 	public Long checkself(String cookie, CommentDto dto) throws SQLException {
 		

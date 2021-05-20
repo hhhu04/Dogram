@@ -65,6 +65,14 @@ public class CommentService implements CommentServiceI{
 		
 		return list;
 	}
+	
+	public List<CommentDto> read2(CommentDto dto,Long num) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		List<CommentDto> list = dao.read2(dto,num);
+		
+		return list;
+	}
 
 
 	public int upComment(CommentDto dto) throws SQLException {

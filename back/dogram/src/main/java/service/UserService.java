@@ -63,28 +63,24 @@ public class UserService {
     
     
     
-    public int login(UserDto dto,HttpServletResponse response, HttpServletRequest request) throws SQLException, ClassNotFoundException{
+    public int login(UserDto dto) throws SQLException, ClassNotFoundException{
     	
     	int num = dao.loginUser(dto);
+    	System.out.println(num);
     	
-    	
-    	if(num == 0) {
+    	if(num == 1) {
     		if(dto.getPassword().equals("탈퇴한 회원입니다.")) return -1;
     		else {
-			Cookie cookie = new Cookie("id",dto.getId());
-			response.addCookie(cookie);
 			
-			 HttpSession session = request.getSession();
-			 session.setAttribute("id", dto.getId());
-			 String id = (String) session.getAttribute("id");
-
-			
-			num = 1;
+//			 HttpSession session = request.getSession();
+//			 session.setAttribute("id", dto.getId());
+//			 String id = (String) session.getAttribute("id");
+    			System.out.println("Check User Success");
 			return num;
     		}
 		}
     	
-    	System.out.println("Check User Success");
+    	
     	return num;
     }
     
@@ -130,13 +126,13 @@ public class UserService {
 	}
 
 	
-	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
+	public String upload(MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
 		String img;
 		
 		if(!file.getOriginalFilename().isEmpty()) {
 			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", file.getOriginalFilename()));
 			model.addAttribute("msg", "File uploaded successfully.");
-			img = "resources/img/"+file.getOriginalFilename();
+			img = "img/"+file.getOriginalFilename();
 			System.out.println("99");
 		}else {
 			model.addAttribute("msg", "Please select a valid mediaFile..");

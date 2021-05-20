@@ -1,5 +1,7 @@
 package service;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import configuration.DateNow;
 import configuration.MailConfig;
 import model.dao.CommunityDao;
 import model.dto.CommunityDto;
+import model.dto.FeedDto;
 import model.dto.UserDto;
 import service.servicei.CommunityServiceI;
 
@@ -57,6 +63,19 @@ public class CommunityService  implements CommunityServiceI{
 		
 		return list;
 	}
+	
+	
+	public List<CommunityDto> read2(UserDto userDto,CommunityDto dto) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		dao.checkAddress(userDto);
+		List<CommunityDto> list = dao.read(dto);
+		
+		
+		return list;
+	}
+	
+	
 
 	public int update(CommunityDto dto) throws SQLException {
 		// TODO Auto-generated method stub
@@ -89,6 +108,25 @@ public class CommunityService  implements CommunityServiceI{
 		List<CommunityDto> list = dao.read2(dto);
 		
 		return list;
+	}
+
+	public String upload(MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
+		// TODO Auto-generated method stub
+		String img;
+		
+		if(!file.getOriginalFilename().isEmpty()) {
+			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", file.getOriginalFilename()));
+			model.addAttribute("msg", "File uploaded successfully.");
+			img = "img/"+file.getOriginalFilename();
+			System.out.println("99");
+		}else {
+			model.addAttribute("msg", "Please select a valid mediaFile..");
+			img = "-1";
+			System.out.println("4");
+		}
+		
+		System.out.println("4");
+		return img;
 	}
     
     

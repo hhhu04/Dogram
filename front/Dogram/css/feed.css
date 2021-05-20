@@ -8,6 +8,9 @@ input[type="submit"] {
   background-color: #fff;
   border: 1px solid #000;
 }
+.heartColor {
+  color: #5550b4;
+}
 body,
 html {
   background-color: var(--bs-light);
@@ -230,7 +233,45 @@ html {
 .desc_title {
   margin-bottom: 10px;
 }
-
+.comment_area {
+  margin-bottom: 20px;
+}
+.commentForm {
+  position: relative;
+}
+.commentInput {
+  width: 100%;
+  line-height: 20px;
+  min-height: 50px;
+  border: 1px solid #aaa;
+  border-left: none;
+  border-right: none;
+  resize: none;
+  text-indent: 8px;
+  overflow: hidden;
+  background-color: transparent;
+  padding-top: 20px;
+  outline: none;
+}
+.commentBtn {
+  position: absolute;
+  right: 10px;
+  bottom: 25px;
+}
+.commentWrap {
+}
+.js-commentWrap {
+  position: relative;
+}
+.js-deleteBtn {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+.js-commentText {
+  margin-left: 20px;
+  font-weight: normal;
+}
 /*
        * Footer
        */

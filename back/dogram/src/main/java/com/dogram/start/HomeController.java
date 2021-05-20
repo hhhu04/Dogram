@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -90,12 +91,28 @@ public class HomeController {
 		UserService user = ctx.getBean("user",UserService.class);
 		UserDto dto = new UserDto();
 		
-		dto.setId(file.getParameter("id"));
-		dto.setPassword(file.getParameter("password"));
-		dto.setEmail(file.getParameter("email"));
-		dto.setName(file.getParameter("name"));
-		dto.setAddress(file.getParameter("address"));
-		dto.setPhoneNumber(file.getParameter("phoneNumber"));
+		String id = file.getParameter("id");
+		String password = file.getParameter("password");
+		String email = file.getParameter("email");
+		String name = file.getParameter("name");
+		String phoneNumber = file.getParameter("phoneNumber");
+		
+		try {
+			id = new String(id.getBytes("8859_1"),"utf-8");
+			password = new String(password.getBytes("8859_1"),"utf-8");
+			email = new String(email.getBytes("8859_1"),"utf-8");
+			name = new String(name.getBytes("8859_1"),"utf-8");
+			phoneNumber = new String(phoneNumber.getBytes("8859_1"),"utf-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		dto.setId(id);
+		dto.setPassword(password);
+		dto.setEmail(email);
+		dto.setName(name);
+		dto.setPhoneNumber(phoneNumber);
 		
 		int check = -1;
 		
@@ -121,8 +138,6 @@ public class HomeController {
 		System.out.println(file.getParameter("password"));
 		
 		
-
-		
 		return check;
 	}
 	
@@ -134,10 +149,7 @@ public class HomeController {
 	}
 	
 	
-	@GetMapping("/intro")
-	public String intro() {
-		return "intro";
-	}
+	
 	
 	
 	@GetMapping("/logout")
@@ -167,9 +179,16 @@ public class HomeController {
 		return "login";
 	}
 	
+	@GetMapping("/test")
+	public String te(@CookieValue(value="id", required=false) Cookie cookie) {
+		System.out.println(cookie.getValue());
+		return "ex";
+	}
+	
+	
 	@PostMapping("/login")
 	@ResponseBody
-	public String login(@RequestBody UserDto dto, HttpServletResponse response, HttpServletRequest request) {
+	public int login(@RequestBody UserDto dto, HttpServletResponse response, HttpServletRequest request) {
 		
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
@@ -178,18 +197,20 @@ public class HomeController {
 		
 		try {
 			
+			check = user.login(dto);
 			
-			
-			check = user.login(dto, response, request);
-			return Integer.toString(check);
-		
+			if(check == 1) {
+				Cookie cookie = new Cookie("id",dto.getId());
+				System.out.println(cookie.getValue());
+				response.addCookie(cookie);
+			return check;
+			}
+			else return -1;
 		}catch (Exception e) {
             e.printStackTrace();
         }
 		
-	
-		
-		return Integer.toString(check);
+		return check;
 	}
 	
 	@GetMapping("/join")
@@ -225,21 +246,18 @@ public class HomeController {
 
 	@RequestMapping("/update")
 	@ResponseBody
-	public int update(@CookieValue(value="id", required=false) Cookie cookie,HttpServletResponse response, 
-			HttpServletRequest request,@RequestParam("file") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv) {
+	public int update(@CookieValue(value="id", required=false) Cookie cookie,
+			@RequestParam("file") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		UserService user = ctx.getBean("user",UserService.class);
 		int num = -1;
 		
 		UserDto dto = new UserDto();
 		
-		 HttpSession session = request.getSession();
-		 session.setAttribute("id", dto.getId());
-		 String id = (String) session.getAttribute("id");
 //		if(cookie.getName() != null) {
 //			if(cookie.getValue().equals("탈퇴한 회원입니다.")) return Integer.toString(num);
 			try {
-				
+				String id = "hhh";
 				dto.setId(file.getParameter("id"));
 				dto.setPassword(file.getParameter("password"));
 				dto.setEmail(file.getParameter("email"));

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form action="/user/upload" method="post" enctype="multipart/form-data">
+		  <table>
+		    <tr>
+		      <td>Select File</td>
+		      <td><input type="file" name="uploadFile" /></td>
+		      <td>
+		        <button type="submit">Upload</button>
+		      </td>
+		    </tr>
+		  </table>
+		</form>
+		
+
+<form id="joinform" name="joinform" method="POST" enctype="multipart/form-data">
+<input type="text" id="id" name="id" placeholder="id"><br>
+<input type="text" id="password" name="password" placeholder="password"><br>
+<input type="text" id="email" name="email" placeholder="email"><br>
+<input type="text" id="address" name="address" placeholder="address"><br>
+<input type="text" id="phoneNumber" name="phoneNumber" placeholder="phone"><br>
+<input type="text" id="name" name="name" placeholder="pet"><br>
+<input type="file" id="upload" name="upload" placeholder="pet"><br>
+<input type="button" id="add" value="버튼">
+</form>
+
+
+<script>
+$(function(){
+	
+	 $('#add').on('click', function(e) {
+	 	var str = $("#joinform").serializeArray();
+	    	 var id = document.getElementById('id').value;
+	         var password = document.getElementById('password').value;
+	         var email = document.getElementById('email').value;
+	         var address = document.getElementById('address').value;
+	         var phoneNumber = document.getElementById('phoneNumber').value;
+	         var name = document.getElementById('name').value;
+	         
+	 	var login = {"id":id,"password":password,"email":email,"address":address,"phoneNumber":phoneNumber,"name":name};
+	 	$.ajax({
+	        	url:'/user/join',
+	        	type:'POST',
+	        	data : JSON.stringify(login),
+	        	dataType : 'json',
+	        	processData: false,
+	        	contentType : false,
+	        	success : function(data){
+	        			console.log(data);
+	                    document.cookie = "id="+id;
+	            },
+	        	
+	        		error:function(data){
+	        			console.log(data);
+	        	}
+	        	
+	        });
+	 	});
+	}); </script>
+
+</body>
+</html>

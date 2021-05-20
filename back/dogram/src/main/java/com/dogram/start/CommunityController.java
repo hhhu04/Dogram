@@ -2,6 +2,7 @@ package com.dogram.start;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.http.HttpRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpCookie;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import model.dao.CommunityDao;
 import model.dto.CommentDto;
 import model.dto.CommunityDto;
+import model.dto.FeedDto;
 import model.dto.LikeListDto;
 import model.dto.UserDto;
 import service.CommentService;
@@ -41,64 +44,103 @@ import service.CommunityService;
 import service.LikeListService;
 import service.UserService;
 
+@CrossOrigin
 @Controller
 @RequestMapping(value="/feed", produces="application/json; charset=utf-8")
 public class CommunityController {
 
-	@GetMapping("/newfeed")
-	public String community() {
-		return "newfeed";
-	}
+//	@GetMapping("/newfeed")
+//	public String community() {
+//		return "newfeed";
+//	}
 	
 	
 	private static final String FILE_SERVER_PATH = "/home/cat/img";
 	private static String img = null;
 	
-	@RequestMapping("/upload")
-	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
-		if(!file.getOriginalFilename().isEmpty()) {
-			file.transferTo(new File("/home/cat/img", file.getOriginalFilename()));
-			model.addAttribute("msg", "File uploaded successfully.");
-			img = FILE_SERVER_PATH+"/"+file.getOriginalFilename();
-		}else {
-			model.addAttribute("msg", "Please select a valid mediaFile..");
-		}
-		
-		return "join";
-	}
+//	@RequestMapping("/upload")
+//	public String upload(@RequestParam("uploadFile") MultipartFile file, ModelAndView mv, Model model) throws IllegalStateException, IOException {
+//		if(!file.getOriginalFilename().isEmpty()) {
+//			file.transferTo(new File("/home/cat/img", file.getOriginalFilename()));
+//			model.addAttribute("msg", "File uploaded successfully.");
+//			img = FILE_SERVER_PATH+"/"+file.getOriginalFilename();
+//		}else {
+//			model.addAttribute("msg", "Please select a valid mediaFile..");
+//		}
+//		
+//		return "join";
+//	}
 	
 	
 	@PostMapping("/newfeed")
 	@ResponseBody
-	public int newfeed(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie,HttpServletRequest request) {
+	public int newfeed(@CookieValue(value="id", required=false) Cookie cookie,
+			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv, HttpServletResponse response) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+//		HttpSession session = request.getSession();
+//		String id = (String) session.getAttribute("id");
 		
-		if(img != null) {
-			dto.setImg(img);
-			img = null;
+		CommunityDto cdto = new CommunityDto();
+		
+		try {
+			System.out.println("실행확인");
+			
+			file.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
+			String title = file.getParameter("title");
+			String content = file.getParameter("content");
+			String category = file.getParameter("category");
+			String address = file.getParameter("address");
+			
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			content = new String(content.getBytes("8859_1"),"utf-8");
+			category = new String(category.getBytes("8859_1"),"utf-8");
+
+			System.out.println(title);
+			cdto.setTitle(title);
+			cdto.setContent(content);
+			cdto.setCategory(category);
+			cdto.setAddress(address);
+			
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+		System.out.println("1");
 		
 //		if(cookie.getName() != null) {
 //		if(cookie.getName().equals("id")){
 			try {
+				System.out.println("2");
+								
 //				Long userNum = comm.ckeckCookie(cookie.getValue());
-				Long userNum = comm.ckeckCookie(id);
-//				Long userNum = comm.ckeckCookie("hhh");
-				int num = comm.create(dto, userNum);
+//				Long userNum = comm.ckeckCookie(id);
+				Long userNum = comm.ckeckCookie("hhh");
+				cdto.setImg(comm.upload(img, mv,model));
+				int num = comm.create(cdto, userNum);
 				return num;
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return -2;
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 //		}
 //		}
-//		return -1;
+			System.out.println("3");
+		return -1;
 	}
+	
+
+	
 	
 	
 	@PostMapping("/")
@@ -107,12 +149,13 @@ public class CommunityController {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+//		HttpSession session = request.getSession();
+//		String id = (String) session.getAttribute("id");
 		
 //		if(cookie.getName() != null) {
 				try {
 //					Long userNum = comm.ckeckCookie(cookie.getValue());
+					String id = "hhh";
 					Long userNum = comm.ckeckCookie(id);
 					userDto.setNum(userNum);
 					dto.setUserNum(userNum);
@@ -131,6 +174,8 @@ public class CommunityController {
 		
 	}
 	
+
+	
 	
 	@PostMapping("/addlike")
 	@ResponseBody
@@ -139,15 +184,17 @@ public class CommunityController {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		LikeListService like = ctx.getBean("likeList",LikeListService.class);
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+//		HttpSession session = request.getSession();
+//		String id = (String) session.getAttribute("id");
+		String id = "hhh";
 		
 		int num = -1;
-//		if(cookie.getName() != null) {
+		if(cookie.getName() != null) {
 			try {
 //				Long uNum = like.ckeckCookie(cookie.getValue());
 				Long uNum = like.ckeckCookie(id);
 				dto.setUserNum(uNum);
+				dto.setId(id);
 				Long c = like.checkLike(dto);
 					if(c == 0L) num = like.create(dto);
 					else num = like.delete(dto);
@@ -156,36 +203,57 @@ public class CommunityController {
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return -2;
+				return -1;
 			}
-//		}
+		}
 //		
-//		return -3;
+		return -2;
 	}
 	
 	
 	@PostMapping("/update")
 	@ResponseBody
-	public int update(@RequestBody CommunityDto dto,@CookieValue(value="id", required=false) Cookie cookie,HttpServletRequest request) {
+	public int update(@CookieValue(value="id", required=false) Cookie cookie,
+			@RequestParam("img") MultipartFile img, HttpServletRequest file,Model model,ModelAndView mv, HttpServletResponse response) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommunityService comm = ctx.getBean("community",CommunityService.class);
-		
-		if(img != null) {
-			dto.setImg(img);
-			img = null;
+		CommunityDto cdto = new CommunityDto();
+		try {
+			System.out.println("실행확인");
+			
+			file.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
+			String title = file.getParameter("title");
+			String content = file.getParameter("content");
+			String category = file.getParameter("category");
+			String address = file.getParameter("address");
+			
+			title = new String(title.getBytes("8859_1"),"utf-8");
+			content = new String(content.getBytes("8859_1"),"utf-8");
+			category = new String(category.getBytes("8859_1"),"utf-8");
+
+			System.out.println(title);
+			cdto.setTitle(title);
+			cdto.setContent(content);
+			cdto.setCategory(category);
+			cdto.setAddress(address);
+			
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+		String id=cookie.getValue();
 //		if(cookie.getName() != null) {
 //		if(cookie.getName().equals("id")){
 			try {
 //				Long userNum = comm.ckeckCookie(cookie.getValue());
 				Long userNum = comm.ckeckCookie(id);
-				dto.setUserNum(userNum);
-				int num = comm.update(dto);
+				cdto.setUserNum(userNum);
+				cdto.setImg(comm.upload(img, mv,model));
+				int num = comm.update(cdto);
 				return num;
-			} catch (ClassNotFoundException | SQLException e) {
+			} catch (ClassNotFoundException | SQLException | IllegalStateException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return -2;
