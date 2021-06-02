@@ -257,15 +257,23 @@ html {
   position: absolute;
   right: 10px;
   bottom: 25px;
+  transition: all 0.3s ease;
 }
+
 .commentWrap {
+  max-height: 200px;
+  overflow-y: hidden;
+}
+.commentDetail {
+  max-height: 200px;
+  overflow-y: scroll !important;
 }
 .js-commentWrap {
   position: relative;
 }
 .js-deleteBtn {
   position: absolute;
-  right: 0;
+  right: 10px;
   cursor: pointer;
 }
 .js-commentText {
