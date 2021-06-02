@@ -248,7 +248,7 @@ public String img(Long cookie) throws ClassNotFoundException, SQLException {
 			Statement stat = c.createStatement();
 			
 			PreparedStatement preparedStatement = 
-					c.prepareStatement("select * from community");
+					c.prepareStatement("select * from community order by created_at desc");
 			
 			
 			 ResultSet rs = preparedStatement.executeQuery();

@@ -1,0 +1,205 @@
+/* STRUCTURE */
+body {
+  background-color: var(--bs-light);
+  background-color: rgb(216, 193, 173);
+}
+button {
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+}
+input[type="submit"] {
+  background-color: #fff;
+  border: 1px solid #000;
+}
+.innner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 170px;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-height: 100%;
+}
+.login_title {
+  text-align: left;
+  color: #6661d5;
+}
+.main_logo {
+  display: block;
+  width: 50px;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 700px;
+  width: 100%;
+}
+
+.gnb_btn {
+  position: absolute;
+  top: 45px;
+  right: 50px;
+  cursor: pointer;
+  font-size: 20px;
+}
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+.content {
+  position: relative;
+  margin-top: 100px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: antiquewhite;
+  border-radius: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.modify_title {
+  margin-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+#imageFileOpenInput {
+  margin-bottom: 20px;
+}
+.login-button {
+  background-color: #6661d5;
+}
+
+/*
+     * Header
+     */
+.main-title {
+  color: #6661d5;
+}
+.main-title:hover {
+  color: #6661d5;
+}
+.masthead {
+  position: fixed;
+  max-width: 700px;
+  width: 100%;
+  z-index: 1;
+}
+.masthead-brand {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: left;
+  max-width: 700px;
+}
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 20px;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff; /* IE8 proofing */
+  color: rgba(255, 255, 255, 0.75);
+  border-bottom: 2px solid transparent;
+}
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255, 255, 255, 0.25);
+}
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+.learn-btn {
+  color: var(--bs-light);
+}
+
+/*
+       * Cover
+       */
+
+.cover {
+  padding: 0 33px;
+  color: var(--bs-light);
+  color: #000;
+  text-align: left;
+}
+.cover .btn-lg {
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+/*
+       * Footer
+       */
+
+.mastfoot {
+  color: #999; /* IE8 proofing */
+  color: rgba(255, 255, 255, 0.5);
+}
+/*
+     * Affix and center
+     */
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  /* .masthead-brand {
+    float: left;
+  }
+  .masthead-nav {
+    float: right;
+  } */
+  .masthead {
+    position: fixed;
+    top: 0;
+  }
+  .mastfoot {
+    position: fixed;
+    bottom: 0;
+  }
+  .inner.content {
+    margin-top: 100px;
+  }
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+  /* Handle the widths */
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (max-width: 768px) {
+  .masthead-brand {
+    text-align: left;
+  }
+  .content {
+    margin-top: 100px;
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 700px;
+  }
+}

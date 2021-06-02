@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dogram?sueSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    password: 12345678
+    username: sample
+  jpa:
+    properties:
+          hibernate:
+            format_sql: true
+  #    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ShinTest94@gmail.com
+    password: q1w2e3r4!1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type : trace

@@ -36,11 +36,12 @@ public class CommentService implements CommentServiceI{
     }
 
 
-	public int create(CommentDto dto) throws ClassNotFoundException, SQLException {
+	public Long create(CommentDto dto) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-		 dao.create(dto);
+		  int num = dao.create(dto);
+		  dao.readNum(dto);
          System.out.println("create comment Success");
-			return 1;
+			return 1L;
 	}
 
 

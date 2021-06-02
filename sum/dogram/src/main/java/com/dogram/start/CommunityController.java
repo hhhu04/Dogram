@@ -340,24 +340,25 @@ public class CommunityController {
 	
 	@PostMapping("/commentadd")
 	@ResponseBody
-	public int addComment(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody CommentDto dto,HttpServletRequest request) {
+	public Long addComment(@CookieValue(value="id", required=false) Cookie cookie,@RequestBody CommentDto dto,HttpServletRequest request) {
 		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:application-context.xml");
 		CommentService comme = ctx.getBean("comment",CommentService.class);
 		int num = -1;
 		
 //		if(cookie.getName() != null) {
 			try {
-//				comme.ckeckCookie(cookie.getValue(),dto);
+//				num = comme.ckeckCookie(cookie.getValue(),dto);
 				num = comme.ckeckCookie("hhh",dto);
 //				comme.ckeckCookie(id,dto);
 				if(num == 1) {
-				num = comme.create(dto);
+				comme.create(dto);
+				return dto.getNum();
 				}
-				return num;
+				return dto.getNum();
 			} catch (ClassNotFoundException | SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				return -2;
+				return -1L;
 			}
 	
 		

@@ -66,7 +66,7 @@ public class CommunityService  implements CommunityServiceI{
 	public List<CommunityDto> read(CommunityDto dto) throws SQLException {
 		// TODO Auto-generated method stub
 		List<CommunityDto> list = dao.read(dto);
-		
+		System.out.println("read Community Success");
 		return list;
 	}
 	
@@ -120,8 +120,8 @@ public class CommunityService  implements CommunityServiceI{
 		
 		file.getOriginalFilename();
 		if(!file.getOriginalFilename().isEmpty()) {
-//			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", name));
-			file.transferTo(new File("/usr/local/apache-tomcat-9.0.45/webapps/dogram/resources/img", name));
+			file.transferTo(new File("/home/cat/eclipse-web/dogram/src/main/webapp/resources/img", name));
+//			file.transferTo(new File("/usr/local/apache-tomcat-9.0.45/webapps/dogram/resources/img", name));
 			model.addAttribute("msg", "File uploaded successfully.");
 			img = "img/"+name;
 			System.out.println("99");
