@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form action="/feed/newFeed" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+<input type="text"  name="title" placeholder="email" accept="application/json" ><br>
+<input type="text" id="content" name="content" placeholder="address"><br>
+<input type="text" id="category" name="category" placeholder="phone"><br>
+		  <table>
+		    <tr>
+		      <td>Select File</td>
+		      <td><input type="file" name="img" id="img" /></td>
+		      <td>
+		        <button type="submit">Upload</button>
+		      </td>
+		    </tr>
+		  </table>
+		</form>
+		
+
+<form id="joinform" name="joinform" method="POST" enctype="multipart/form-data">
+<input type="text" id="title" name="title" placeholder="email"><br>
+<input type="text" id="body" name="body" placeholder="address"><br>
+<input type="text" id="tag" name="tag" placeholder="phone"><br>
+<input type="file" id="upload" name="upload" placeholder="pet"><br>
+<input type="button" id="add" value="버튼">
+</form>
+
+
+<script>
+$(function(){
+	
+	 $('#add').on('click', function(e) {
+	 	var str = $("#joinform").serializeArray();
+	    	 var id = document.getElementById('title').value;
+	         var password = document.getElementById('body').value;
+	         var email = document.getElementById('tag').value;
+	         
+	 	var login = {"id":id,"password":password,"email":email};
+	 	$.ajax({
+	        	url:'/user/join',
+	        	type:'POST',
+	        	data : JSON.stringify(login),
+	        	dataType : 'json',
+	        	processData: false,
+	        	contentType : false,
+	        	success : function(data){
+	        			console.log(data);
+	                    document.cookie = "id="+id;
+	            },
+	        	
+	        		error:function(data){
+	        			console.log(data);
+	        	}
+	        	
+	        });
+	 	});
+	}); </script>
+
+</body>
+</html>
